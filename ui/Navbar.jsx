@@ -2,8 +2,8 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const Nav = styled.nav`
-  background-color: #333;
-  padding: 1rem;
+  background-color: var(--color-silver-700);
+  padding: 0.3rem;
 `;
 
 const Ul = styled.ul`
