@@ -10,10 +10,12 @@ import News from "../pages/News";
 import Disqualifications from "../pages/Disqualifications";
 import Login from "../pages/Login";
 import PageNotFound from "../pages/PageNotFound";
+import GlobalStyles from "../Styles/GlobalStyles";
 
 function App() {
   return (
     <div>
+      <GlobalStyles />
       <BrowserRouter>
         <Routes>
           <Route element={<AppLayout />}>
