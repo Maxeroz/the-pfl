@@ -1,7 +1,8 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "./Navbar";
-import Heading from "./Heading";
 import styled from "styled-components";
+import Row from "./Row";
+import Title from "./Title";
 
 const Container = styled.div`
   width: 100%;
@@ -13,8 +14,10 @@ const Container = styled.div`
 function AppLayout() {
   return (
     <>
-      <Heading>Покровская футбольная лига. Сезон:</Heading>
-      <NavBar />
+      <Row>
+        <Title />
+        <NavBar />
+      </Row>
 
       <Container>
         <Outlet />
