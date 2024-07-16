@@ -5,4 +5,7 @@ import eslint from "vite-plugin-eslint";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), eslint()],
+  resolve: {
+    alias: { "@mui/styled-engine": "@mui/styled-engine-sc" },
+  },
 });

@@ -16,12 +16,6 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
 
-  /* ${(props) =>
-    props.align === true &&
-    css`
-      align-items: center;
-    `} */
-
   flex: 1;
   width: 90%;
   max-width: 800px; /* Максимальная ширина контейнера */

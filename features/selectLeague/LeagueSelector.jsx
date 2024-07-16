@@ -2,12 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLeague } from "./leagueSlice";
 import { useUpdateLeague } from "./useUpdateLeague";
 import { useEffect } from "react";
-import styled from "styled-components";
-
-const StyledLabel = styled.label`
-  font-weight: 600;
-  color: var(--color-brand-900);
-`;
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const LeagueSelector = () => {
   const league = useSelector((state) => state.league.leagueTier);
@@ -27,19 +22,22 @@ const LeagueSelector = () => {
   };
 
   return (
-    <div>
-      <StyledLabel htmlFor="league-select">Выберите лигу: </StyledLabel>
-      <select
-        id="league-select"
+    <FormControl variant="standard" sx={{ m: 1, minWidth: 130 }}>
+      <InputLabel id="league-select" sx={{ fontSize: 20 }}>
+        Выберите лигу
+      </InputLabel>
+      <Select
+        labelId="league-select"
         value={league}
         onChange={handleSelectChange}
         disabled={isUpdating}
+        label="Выберите лигу"
       >
-        <option value="ПФЛ ЛИГА 1">ПФЛ ЛИГА 1</option>
-        <option value="ПФЛ ЛИГА 2">ПФЛ ЛИГА 2</option>
-        <option value="ПФЛ ЛИГА 3">ПФЛ ЛИГА 3</option>
-      </select>
-    </div>
+        <MenuItem value="ПФЛ ЛИГА 1">ПФЛ ЛИГА 1</MenuItem>
+        <MenuItem value="ПФЛ ЛИГА 2">ПФЛ ЛИГА 2</MenuItem>
+        <MenuItem value="ПФЛ ЛИГА 3">ПФЛ ЛИГА 3</MenuItem>
+      </Select>
+    </FormControl>
   );
 };
 
