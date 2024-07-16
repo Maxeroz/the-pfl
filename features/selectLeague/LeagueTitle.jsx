@@ -14,15 +14,18 @@ const StyledTitleDiv = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  background-color: var(--color-grey-50);
-  border-bottom-left-radius: 2rem;
-  border-bottom-right-radius: 2rem;
-  border: 1px solid;
+  box-shadow: var(--shadow-lg);
+
+  background-color: var(--color-grey-100);
+  border-bottom-left-radius: var(--border-radius-lg);
+  border-bottom-right-radius: var(--border-radius-lg);
+
   border-top: none;
 
-  min-width: 550px;
+  margin: 0 auto;
+  width: 90%;
+  /* min-width: 550px; */
 
-  margin: 0 2rem;
   padding: 1rem 2rem;
 `;
 
@@ -60,7 +63,7 @@ function Title() {
           {season ? (
             <SeasonSpan>{season}</SeasonSpan>
           ) : (
-            <Spinner isLoading={isLoading} />
+            <Spinner isLoading={isLoading} size={15} display={true} />
           )}
         </Row>
       </Heading>

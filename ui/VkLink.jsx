@@ -1,10 +1,9 @@
 import styled from "styled-components";
 
-const TelegramLink = styled.a`
+const VkLink = styled.a`
   display: flex;
   align-items: center;
-  gap: 0.2rem;
-  color: #0088cc; /* Цвет ссылки */
+  color: #0088cc; /* Цвет ссылки VK */
   text-decoration: none; /* Убирает подчеркивание */
 
   font-size: 2rem;
@@ -16,4 +15,4 @@ const TelegramLink = styled.a`
   }
 `;
 
-export default TelegramLink;
+export default VkLink;

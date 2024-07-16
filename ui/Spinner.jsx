@@ -5,11 +5,16 @@ const StyledSpan = styled.span`
   color: var(--color-green-700);
 `;
 
-function Spinner({ isLoading }) {
+function Spinner({ isLoading, size, display }) {
   return (
-    <div className="season-row">
-      <ClipLoader size={15} color={"#15803d"} loading={isLoading} />
-      <StyledSpan>Loading...</StyledSpan>
+    <div>
+      <ClipLoader
+        size={size}
+        color={"#15803d"}
+        loading={isLoading}
+        speedMultiplier="1"
+      />
+      {display && <StyledSpan>Loading...</StyledSpan>}
     </div>
   );
 }

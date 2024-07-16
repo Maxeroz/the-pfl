@@ -1,13 +1,11 @@
 import styled from "styled-components";
 
-const TelegramLink = styled.a`
+const EmailLink = styled.a`
   display: flex;
   align-items: center;
-  gap: 0.2rem;
+
   color: #0088cc; /* Цвет ссылки */
   text-decoration: none; /* Убирает подчеркивание */
-
-  font-size: 2rem;
 
   &:hover {
     text-decoration: underline; /* Подчеркивание при наведении */
@@ -16,4 +14,4 @@ const TelegramLink = styled.a`
   }
 `;
 
-export default TelegramLink;
+export default EmailLink;

@@ -1,5 +1,5 @@
 function Table() {
-  return <div>Table</div>;
+  return;
 }
 
 export default Table;

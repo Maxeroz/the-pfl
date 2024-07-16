@@ -42,6 +42,12 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const LinkTitle = styled.span`
+  @media (max-width: 900px) {
+    display: none;
+  }
+`;
+
 const Navbar = () => {
   return (
     <Nav>
@@ -49,49 +55,49 @@ const Navbar = () => {
         <Li>
           <StyledNavLink to="/profile">
             <HiHome />
-            Профиль
+            <LinkTitle>Профиль</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/applications">
             <HiClipboardDocumentList />
-            Заявки
+            <LinkTitle>Заявки</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/games">
             <HiOutlineSquare3Stack3D />
-            Игры
+            <LinkTitle>Игры</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/table">
             <HiMiniTableCells />
-            Таблица
+            <LinkTitle>Таблица</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/statistics">
             <HiQueueList />
-            Статистика
+            <LinkTitle>Статистика</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/news">
             <HiOutlineNewspaper />
-            Новости
+            <LinkTitle>Новости</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/disqualifications">
             <HiOutlineUserGroup />
-            Дисквалификации
+            <LinkTitle>Дисквалификации</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/login">
             <HiMiniUserCircle />
-            Войти
+            <LinkTitle>Войти</LinkTitle>
           </StyledNavLink>
         </Li>
       </Ul>

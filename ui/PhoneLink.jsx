@@ -7,7 +7,7 @@ const PhoneLink = styled.a`
   text-decoration: none; /* Убирает подчеркивание */
   &:hover {
     text-decoration: underline; /* Подчеркивание при наведении */
-    color: var(--color-blue-700);
+    color: var(--color-red-700);
   }
 `;
 export default PhoneLink;

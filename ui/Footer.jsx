@@ -3,24 +3,26 @@ import Row from "./Row";
 
 import { HiMiniPhoneArrowDownLeft } from "react-icons/hi2";
 import { FaTelegramPlane } from "react-icons/fa";
+
 import PhoneLink from "./PhoneLink";
 import TelegramLink from "./TelegramLink";
+import { SlSocialVkontakte } from "react-icons/sl";
+import { HiEnvelope } from "react-icons/hi2";
+import VkLink from "./VkLink";
+import EmailLink from "./EmailLink";
 
 const FooterContainer = styled.footer`
   background-color: var(--color-grey-100);
 
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
-  border: 1px solid;
-  border-bottom: none;
+  border-top-left-radius: var(--border-radius-lg);
+  border-top-right-radius: var(--border-radius-lg);
 
-  margin: 0 2rem;
+  box-shadow: var(--shadow-lg);
+
   padding: 1rem 2rem;
 
-  min-width: 550px;
-
-  /* position: relative; */
-  /* bottom: 0; */
+  margin: 0 auto;
+  width: 90%;
 `;
 
 const Information = styled.div`
@@ -37,10 +39,12 @@ const YearSpan = styled.span`
   font-weight: 600;
 `;
 
-function Footer() {
-  const phoneNumber = "+79297720004";
-  const telegramUrl = "https://t.me/pkr_e";
+const phoneNumber = "+79297720004";
+const telegramUrl = "https://t.me/pkr_e";
+const vkUrl = "https://vk.com/pfl2023";
+const emailUrl = "2023pfl@gmail.com";
 
+function Footer() {
   return (
     <FooterContainer>
       <Row type="horizontal">
@@ -58,11 +62,18 @@ function Footer() {
             rel="noopener noreferrer"
           >
             <FaTelegramPlane />
-            {telegramUrl}
           </TelegramLink>
+
+          <VkLink href={vkUrl} target="_blank" rel="noopener noreferrer">
+            <SlSocialVkontakte />
+          </VkLink>
+
+          <EmailLink href={`mailto:${emailUrl}`}>
+            <HiEnvelope />
+          </EmailLink>
         </Information>
 
-        <YearSpan>2024 - 2024 © The PFL</YearSpan>
+        <YearSpan>2023 - 2024 © The PFL</YearSpan>
       </Row>
     </FooterContainer>
   );

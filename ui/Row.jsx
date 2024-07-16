@@ -14,8 +14,9 @@ const Row = styled.div`
   ${(props) =>
     props.type === "vertical" &&
     css`
+      flex: 1;
       flex-direction: column;
-      gap: 1.6rem;
+      gap: ${props.gap}rem;
     `}
 `;
 
