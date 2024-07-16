@@ -3,7 +3,7 @@ import NavBar from "./Navbar";
 import styled from "styled-components";
 import Row from "./Row";
 import Title from "../features/selectLeague/LeagueTitle";
-import FooterContainer from "./Footer";
+import Footer from "./Footer";
 
 const AppContainer = styled.div`
   display: flex;
@@ -31,7 +31,7 @@ function AppLayout() {
         <Outlet />
       </Container>
 
-      <FooterContainer />
+      <Footer />
     </AppContainer>
   );
 }
