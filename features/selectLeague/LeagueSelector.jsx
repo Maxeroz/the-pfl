@@ -1,6 +1,13 @@
 import { useSelector, useDispatch } from "react-redux";
 import { setLeague } from "./leagueSlice";
 import { useUpdateLeague } from "./useUpdateLeague";
+import { useEffect } from "react";
+import styled from "styled-components";
+
+const StyledLabel = styled.label`
+  font-weight: 600;
+  color: var(--color-brand-900);
+`;
 
 const LeagueSelector = () => {
   const league = useSelector((state) => state.league.leagueTier);
@@ -8,14 +15,20 @@ const LeagueSelector = () => {
 
   const { isUpdating, updateLeague } = useUpdateLeague();
 
-  const handleSelectChange = (event) => {
-    dispatch(setLeague(event.target.value));
+  useEffect(() => {
     updateLeague(league);
+  }, []);
+
+  const handleSelectChange = (event) => {
+    const newLeague = event.target.value;
+
+    dispatch(setLeague(newLeague));
+    updateLeague(newLeague);
   };
 
   return (
     <div>
-      <label htmlFor="league-select">Выберите лигу: </label>
+      <StyledLabel htmlFor="league-select">Выберите лигу: </StyledLabel>
       <select
         id="league-select"
         value={league}

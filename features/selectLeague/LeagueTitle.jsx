@@ -14,13 +14,31 @@ const StyledTitleDiv = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  padding: 1.2rem;
+  background-color: var(--color-grey-50);
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  border: 1px solid;
+  border-top: none;
+
+  min-width: 550px;
+
+  margin: 0 2rem;
+  padding: 1rem 2rem;
 `;
 
 const Img = styled.img`
   height: 7rem;
   width: auto;
   border-radius: 1rem;
+`;
+
+const LeagueHeading = styled.span`
+  font-weight: 500;
+  color: var(--color-grey-700);
+`;
+
+const SeasonSpan = styled.span`
+  color: var(--color-blue-700);
 `;
 
 function Title() {
@@ -37,9 +55,13 @@ function Title() {
         <LeagueSelector />
       </Row>
       <Heading>
-        <Row type="gorizontal">
-          {leagueTier}. Сезон:{" "}
-          {season ? season : <Spinner isLoading={isLoading} />}
+        <Row type="horizontal">
+          <LeagueHeading>{leagueTier}. Сезон:</LeagueHeading>
+          {season ? (
+            <SeasonSpan>{season}</SeasonSpan>
+          ) : (
+            <Spinner isLoading={isLoading} />
+          )}
         </Row>
       </Heading>
     </StyledTitleDiv>

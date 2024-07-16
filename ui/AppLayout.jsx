@@ -3,8 +3,16 @@ import NavBar from "./Navbar";
 import styled from "styled-components";
 import Row from "./Row";
 import Title from "../features/selectLeague/LeagueTitle";
+import FooterContainer from "./Footer";
+
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Убедитесь, что высота минимальна на всю высоту вьюпорта */
+`;
 
 const Container = styled.div`
+  flex: 1;
   width: 100%;
   max-width: 800px; /* Максимальная ширина контейнера */
   margin: 0 auto; /* Центрирование контейнера */
@@ -13,7 +21,7 @@ const Container = styled.div`
 
 function AppLayout() {
   return (
-    <>
+    <AppContainer>
       <Row>
         <Title />
         <NavBar />
@@ -22,7 +30,9 @@ function AppLayout() {
       <Container>
         <Outlet />
       </Container>
-    </>
+
+      <FooterContainer />
+    </AppContainer>
   );
 }
 
