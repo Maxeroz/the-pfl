@@ -16,6 +16,7 @@ import {
 } from "react-icons/hi2";
 import { HiArrowsUpDown } from "react-icons/hi2";
 import { useSettings } from "../features/selectLeague/useSettings";
+import { useTable } from "../features/table/useTable";
 
 const tableMapping = {
   "ПФЛ ЛИГА 1": 0,
@@ -51,14 +52,18 @@ const BounderDiv = styled.div`
 
 function Profile() {
   const league = useSelector((state) => state.league.leagueTier);
-  const { settings: { season } = {} } = useSettings();
+  const { tableData = [] } = useTable();
 
+  const teamAmount = tableData.length;
+  const teamsToPlay = tableData.map((team) => team.teamName);
+
+  const { settings: { season } = {} } = useSettings();
   const { profile = [], isLoading } = useProfile();
 
   // Проверяем наличие профиля и правильного индекса
   const profileData = profile[tableMapping[league]];
 
-  const { leagueName, transferWindow, email, number, city } = profileData
+  const { leagueName, transferWindow, city } = profileData
     ? profileData
     : "Нет данных";
 
@@ -116,7 +121,13 @@ function Profile() {
             {city}
           </ProfileInfoSpan>
 
-          <TableTitle>Команды, участвующие в турнире - X</TableTitle>
+          <TableTitle>Команды, участвующие в турнире - {teamAmount}</TableTitle>
+
+          <ProfileInfoSpan>
+            {teamsToPlay.map((teamName) => (
+              <span key={teamName}>{teamName} / </span>
+            ))}
+          </ProfileInfoSpan>
         </Row>
       )}
     </Row>

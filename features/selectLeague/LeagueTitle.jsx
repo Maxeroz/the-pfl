@@ -24,7 +24,7 @@ const StyledTitleDiv = styled.div`
 
   margin: 0 auto;
   width: 90%;
-  /* min-width: 550px; */
+  min-width: 700px;
 
   padding: 1rem 2rem;
 `;

@@ -3,6 +3,6 @@ export function getLastElement(str, delimiter = " ") {
   return arr.pop();
 }
 
-// Примеры использования:
-console.log(getLastElement("Hello world")); // Output: "world"
-console.log(getLastElement("apple,banana,orange", ",")); // Output: "orange"
+export function removeStringFromArray(arr, str) {
+  return arr.filter((item) => item !== str);
+}

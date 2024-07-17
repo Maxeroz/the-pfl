@@ -18,7 +18,8 @@ const Container = styled.div`
 
   flex: 1;
   width: 90%;
-  max-width: 800px; /* Максимальная ширина контейнера */
+  max-width: 1000px; /* Максимальная ширина контейнера */
+  min-width: 700px;
   margin: 0 auto; /* Центрирование контейнера */
   padding: 1rem 3rem; /* Отступы слева и справа */
 

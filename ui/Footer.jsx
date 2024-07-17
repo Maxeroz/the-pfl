@@ -20,6 +20,7 @@ const FooterContainer = styled.footer`
   box-shadow: var(--shadow-lg);
 
   padding: 1rem 2rem;
+  min-width: 700px;
 
   margin: 0 auto;
   width: 90%;

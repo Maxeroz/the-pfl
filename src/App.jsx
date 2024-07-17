@@ -7,7 +7,7 @@ import AppLayout from "../ui/AppLayout";
 import Profile from "../pages/Profile";
 import Applications from "../pages/Applications";
 import Games from "../pages/Games";
-import Table from "../pages/Table";
+import TournamentTable from "../pages/TournamentTable";
 import Statistics from "../pages/Statistics";
 import News from "../pages/News";
 import Disqualifications from "../pages/Disqualifications";
@@ -41,7 +41,7 @@ function App() {
               <Route path="profile" element={<Profile />} />
               <Route path="applications" element={<Applications />} />
               <Route path="games" element={<Games />} />
-              <Route path="table" element={<Table />} />
+              <Route path="table" element={<TournamentTable />} />
               <Route path="statistics" element={<Statistics />} />
               <Route path="news" element={<News />} />
               <Route path="disqualifications" element={<Disqualifications />} />
