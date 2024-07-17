@@ -6,3 +6,7 @@ export function getLastElement(str, delimiter = " ") {
 export function removeStringFromArray(arr, str) {
   return arr.filter((item) => item !== str);
 }
+
+export function getDifference(num1, num2) {
+  return num1 - num2;
+}

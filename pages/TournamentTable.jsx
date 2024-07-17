@@ -35,8 +35,8 @@ const LastGameSpan = styled.span`
   padding: 4px;
   border-radius: 4px;
   background-color: ${({ result }) =>
-    result === "W" ? "green" : result === "D" ? "yellow" : "red"};
-  color: white;
+    result === "W" ? "#15803d" : result === "D" ? "#eadf46" : "#991b1b"};
+  color: ${({ result }) => (result === "D" ? "#1f2937" : "#fff")};
 `;
 
 const StyledImg = styled.img`
