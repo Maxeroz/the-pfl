@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { act } from "react";
 
 const initialTeamState = {
+  id: null,
   teamName: "",
   scored: "",
   missed: "",
   playersScoredGoals: [],
+  imgUrl: "",
 };
 
 const initialState = {
@@ -22,10 +23,14 @@ const createMatchSlice = createSlice({
       state.opponentTeam = action.payload.opponentTeam;
     },
     pickCurrentTeam: (state, action) => {
-      state.currentTeam.teamName = action.payload;
+      state.currentTeam.id = action.payload.id;
+      state.currentTeam.teamName = action.payload.teamName;
+      state.currentTeam.imgUrl = action.payload.imgUrl;
     },
     pickOpponentTeam: (state, action) => {
-      state.opponentTeam.teamName = action.payload;
+      state.opponentTeam.id = action.payload.id;
+      state.opponentTeam.teamName = action.payload.teamName;
+      state.opponentTeam.imgUrl = action.payload.imgUrl;
     },
     pickCurrentTeamResult: (state, action) => {
       state.currentTeam.scored = action.payload;

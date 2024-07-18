@@ -47,14 +47,26 @@
 
 // export default AppLayout;
 
+// Создание собственной темы с переопределением цвета primary для LinearProgress
+const theme = createTheme({
+  palette: {
+    primary: { main: "#141522" },
+    secondary: { main: "#8E92BC" },
+  },
+});
+
 // Импорт необходимых библиотек и компонентов
 import React from "react";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { Outlet } from "react-router-dom";
 
-import LeagueTitle from "../features/selectLeague/LeagueTitle";
 import Navbar from "./Navbar";
 import MainNavBarTitle from "./MainNavBarTitle";
+import { createTheme } from "@mui/material";
+import NavBarContainer from "./NavBarContainer";
+import MainContent from "./MainContent";
+
+import Sidebar from "./Sidebar";
 
 // Создание styled-components
 const Layout = styled.div`
@@ -62,52 +74,27 @@ const Layout = styled.div`
   height: 100vh;
 `;
 
-const NavBarContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-  align-items: center;
-
-  width: 15%;
-  background-color: #ffffff;
-  padding: 20px;
-`;
-
-const MainContent = styled.div`
-  width: 60%;
-  background-color: #fafafa;
-  padding: 20px;
-  overflow-y: auto;
-`;
-
-const RightSidebar = styled.div`
-  width: 25%;
-  background-color: #f5f5f7;
-  padding: 20px;
-`;
-
 // Определение компонента AppLayout
 const AppLayout = () => {
   return (
-    <Layout>
-      <NavBarContainer>
-        <MainNavBarTitle
-          titleHeading="The PFL"
-          imgUrl="/logo-pfl1.png"
-        ></MainNavBarTitle>
+    <ThemeProvider theme={theme}>
+      <Layout>
+        <NavBarContainer>
+          <MainNavBarTitle
+            titleHeading="The PFL"
+            imgUrl="/logo-pfl1.png"
+            width="50"
+          ></MainNavBarTitle>
 
-        {/* Здесь можно разместить компоненты навигации */}
-        <Navbar />
-      </NavBarContainer>
-      <MainContent>
-        {/* Основная часть приложения */}
-        <Outlet />
-      </MainContent>
-      <RightSidebar>
-        {/* Дополнительная область */}
-        <h2>Right Sidebar</h2>
-      </RightSidebar>
-    </Layout>
+          <Navbar />
+        </NavBarContainer>
+        <MainContent>
+          {/* Основная часть приложения */}
+          <Outlet />
+        </MainContent>
+        <Sidebar>{/* Дополнительная область */}</Sidebar>
+      </Layout>
+    </ThemeProvider>
   );
 };
 

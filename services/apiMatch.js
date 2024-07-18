@@ -114,3 +114,20 @@ export async function addMatch(newMatch) {
     throw error;
   }
 }
+
+export async function getMatchesFromLast24Hours() {
+  const { data, error } = await supabase
+    .from("allMatches")
+    .select("*")
+    .gte(
+      "created_at",
+      new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    );
+
+  if (error) {
+    console.error("Ошибка получения данных:", error);
+    return [];
+  }
+
+  return data;
+}

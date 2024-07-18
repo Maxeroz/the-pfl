@@ -13,6 +13,7 @@ import {
   TableHead,
   TableRow,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import CreateMatchModal from "../features/matchModal/CreateMatchModal";
 import { useDispatch } from "react-redux";
@@ -25,9 +26,11 @@ const StyledTableCell = styled(TableCell)`
 
 const CenterSpinnerDiv = styled.div`
   display: flex;
-  margin: auto 0;
+  text-align: center;
   align-items: center;
   justify-content: center;
+
+  height: 90vh;
 `;
 
 const LastGameSpan = styled.span`
@@ -51,8 +54,13 @@ const TeamName = styled.div`
   gap: 1rem;
 `;
 
+const TableWrapperBlock = styled.div`
+  background-color: #f5f5f7;
+  border-radius: var(--border-radius-lg-pfl);
+`;
+
 function TournamentTable() {
-  const { isLoading, tableData } = useTable();
+  const { isLoading = true, tableData } = useTable();
   const [isModalOpen, setModalOpen] = useState(false);
   // const { currentTeam } = useSelector((state) => state.match);
 
@@ -67,109 +75,118 @@ function TournamentTable() {
     // Например, можно использовать функцию updateTableData(matchData)
   };
 
-  const handleCurrentTeam = (id) => {
-    dispatch(pickCurrentTeam(id));
+  const handleCurrentTeam = (obj) => {
+    dispatch(pickCurrentTeam(obj));
   };
 
   return (
-    <Row>
+    <Row gap={2}>
       <TableTitle>Таблица турнира</TableTitle>
 
-      {isLoading ? (
-        <CenterSpinnerDiv>
-          <Loader isLoading={isLoading} size={50} display={false} />
-        </CenterSpinnerDiv>
-      ) : (
-        <>
-          {/* <Button onClick={handleOpenModal} variant="contained" color="primary">
+      <TableWrapperBlock>
+        {isLoading ? (
+          <CenterSpinnerDiv>
+            <CircularProgress />
+            {/* <Loader isLoading={isLoading} size={50} display={false} /> */}
+          </CenterSpinnerDiv>
+        ) : (
+          <>
+            {/* <Button onClick={handleOpenModal} variant="contained" color="primary">
             Создать матч
           </Button> */}
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="center">М</StyledTableCell>
-                  <StyledTableCell align="center">Команда</StyledTableCell>
-                  <StyledTableCell align="right">И</StyledTableCell>
-                  <StyledTableCell align="right">В</StyledTableCell>
-                  <StyledTableCell align="right">Н</StyledTableCell>
-                  <StyledTableCell align="right">П</StyledTableCell>
-                  <StyledTableCell align="right">ГЗ</StyledTableCell>
-                  <StyledTableCell align="right">ГП</StyledTableCell>{" "}
-                  <StyledTableCell align="right">+/-</StyledTableCell>
-                  <StyledTableCell align="right">О</StyledTableCell>
-                  <StyledTableCell align="center">
-                    Последние игры
-                  </StyledTableCell>
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {tableData.map((item) => (
-                  <TableRow
-                    key={item.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+            <TableContainer component={Paper} sx={{ borderRadius: 10 }}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">М</StyledTableCell>
+                    <StyledTableCell align="center">Команда</StyledTableCell>
+                    <StyledTableCell align="right">И</StyledTableCell>
+                    <StyledTableCell align="right">В</StyledTableCell>
+                    <StyledTableCell align="right">Н</StyledTableCell>
+                    <StyledTableCell align="right">П</StyledTableCell>
+                    <StyledTableCell align="right">ГЗ</StyledTableCell>
+                    <StyledTableCell align="right">ГП</StyledTableCell>{" "}
+                    <StyledTableCell align="right">+/-</StyledTableCell>
+                    <StyledTableCell align="right">О</StyledTableCell>
                     <StyledTableCell align="center">
-                      {item.place}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      <TeamName>
-                        <StyledImg src={item.imageUrl} />
-                        <Button
-                          variant="text"
-                          sx={{ fontSize: 11 }}
-                          onClick={() => {
-                            handleCurrentTeam(item.teamName);
-                            handleOpenModal();
-                          }}
-                        >
-                          {item.teamName}
-                        </Button>
-                      </TeamName>
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {item.games}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">{item.wins}</StyledTableCell>
-                    <StyledTableCell align="right">
-                      {item.draws}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {item.losses}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {item.scored}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {item.missed}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {item.difference}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {item.points}
-                    </StyledTableCell>{" "}
-                    <StyledTableCell align="right">
-                      {item.lastGames.map((result, index) => (
-                        <LastGameSpan key={index} result={result}>
-                          {result}
-                        </LastGameSpan>
-                      ))}
+                      Последние игры
                     </StyledTableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <CreateMatchModal
-            open={isModalOpen}
-            handleClose={handleCloseModal}
-            teams={tableData} // Передайте данные о командах в модальное окно
-            handleSubmit={handleSubmit}
-          />
-        </>
-      )}
+                </TableHead>
+
+                <TableBody>
+                  {tableData.map((item) => (
+                    <TableRow
+                      key={item.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <StyledTableCell align="center">
+                        {item.place}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <TeamName>
+                          <StyledImg src={item.imageUrl} />
+                          <Button
+                            variant="text"
+                            sx={{ fontSize: 11 }}
+                            onClick={() => {
+                              handleCurrentTeam({
+                                teamName: item.teamName,
+                                id: item.id,
+                                imgUrl: item.imageUrl,
+                              });
+                              handleOpenModal();
+                            }}
+                          >
+                            {item.teamName}
+                          </Button>
+                        </TeamName>
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.games}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.wins}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.draws}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.losses}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.scored}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.missed}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.difference}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.points}
+                      </StyledTableCell>{" "}
+                      <StyledTableCell align="right">
+                        {item.lastGames.map((result, index) => (
+                          <LastGameSpan key={index} result={result}>
+                            {result}
+                          </LastGameSpan>
+                        ))}
+                      </StyledTableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <CreateMatchModal
+              open={isModalOpen}
+              handleClose={handleCloseModal}
+              teams={tableData} // Передайте данные о командах в модальное окно
+              handleSubmit={handleSubmit}
+            />
+          </>
+        )}
+      </TableWrapperBlock>
     </Row>
   );
 }

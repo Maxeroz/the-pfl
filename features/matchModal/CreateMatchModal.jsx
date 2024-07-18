@@ -1,11 +1,11 @@
 // Импорт необходимых компонентов из MUI и React
+import React from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { useDispatch, useSelector } from "react-redux";
-import { removeStringFromArray } from "../../utils/helpers";
 import { HiFolderOpen } from "react-icons/hi2";
 import {
   Accordion,
@@ -14,9 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 import Row from "../../ui/Row";
+import LoadingModal from "../../ui/LoadingModal";
+import { removeObjectById } from "../../utils/helpers";
 import { useCreateMatch } from "./useCreateMatch";
 import { usePlayersByTeam } from "./usePlayersByTeam";
-import LoadingModal from "../../ui/LoadingModal";
+import { useAddMatch } from "./useAddMatch";
 import {
   handleGoalsChange,
   handlePlayerClick,
@@ -25,10 +27,10 @@ import {
   pickOpponentTeamResult,
   resetMatchState,
 } from "./matchModalSlice";
-import { useAddMatch } from "./useAddMatch";
 
 // Стили для модального окна
 const style = {
+  borderRadius: 3,
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -51,34 +53,32 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
 
   // Получение данных о текущей и противоположной командах из Redux состояния
   const {
+    id: team1Id,
     teamName: team1,
     scored: score1,
     playersScoredGoals: playersScoredGoalsCurrentTeam,
   } = useSelector((state) => state.match.currentTeam);
-
   const {
+    id: team2Id,
     teamName: team2,
     scored: score2,
     playersScoredGoals: playersScoredGoalsOpponentTeam,
   } = useSelector((state) => state.match.opponentTeam);
 
-  // Хук для обновления данных команды текущей и противоположной команды
+  // Хуки для обновления данных команды текущей и противоположной команды
   const { updateTeamRow: updateTeamRowCurrent, isPending: isPendingCurrent } =
     useCreateMatch("currentTeam");
   const { updateTeamRow: updateTeamRowOpponent, isPending: isPendingOpponent } =
     useCreateMatch("opponentTeam");
 
-  // Формирование списка названий команд без текущей
-  const teamsNames = removeStringFromArray(
-    teams.map((team) => team.teamName),
-    team1
-  );
+  // Формирование списка команд без текущей команды
+  const teamsToPickOpponent = removeObjectById(teams, team1Id);
 
   const { addMatch } = useAddMatch();
 
   // Обработчик подтверждения изменений (submit)
   const onSubmit = async () => {
-    // Асинхронно обновляем данные команд
+    // Асинхронное обновление данных команд и добавление матча
     await Promise.all([
       updateTeamRowCurrent(),
       updateTeamRowOpponent(),
@@ -110,6 +110,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
             value={team1}
             fullWidth
             margin="normal"
+            disabled
           >
             <MenuItem value={team1}>{team1}</MenuItem>
           </TextField>
@@ -118,16 +119,27 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
           <TextField
             select
             label="Команда 2"
-            value={team2}
+            value={team2Id || ""}
             onChange={(e) => {
-              dispatch(pickOpponentTeam(e.target.value));
+              const selectedTeamId = e.target.value;
+              const selectedTeam = teamsToPickOpponent.find(
+                (team) => team.id === selectedTeamId
+              );
+              console.log(selectedTeam);
+              dispatch(
+                pickOpponentTeam({
+                  id: selectedTeam.id,
+                  teamName: selectedTeam.teamName,
+                  imgUrl: selectedTeam.imageUrl,
+                })
+              );
             }}
             fullWidth
             margin="normal"
           >
-            {teamsNames.map((teamName) => (
-              <MenuItem key={teamName} value={teamName}>
-                {teamName}
+            {teamsToPickOpponent.map((team) => (
+              <MenuItem key={team.id} value={team.id}>
+                {team.teamName}
               </MenuItem>
             ))}
           </TextField>
@@ -161,13 +173,11 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                   Игроки команды {team1}, забившие гол
                 </Typography>
               </AccordionSummary>
-
               <AccordionDetails sx={{ maxHeight: 200, overflowY: "auto" }}>
                 {playersCurrentTeam.map((player) => {
                   const isSelected = playersScoredGoalsCurrentTeam?.some(
                     (p) => p.id === player.id
                   );
-
                   const playerGoals =
                     playersScoredGoalsCurrentTeam?.find(
                       (p) => p.id === player.id
@@ -229,13 +239,11 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                     Игроки команды {team2}, забившие гол
                   </Typography>
                 </AccordionSummary>
-
                 <AccordionDetails sx={{ maxHeight: 200, overflowY: "auto" }}>
                   {playersOpponentTeam.map((player) => {
                     const isSelected = playersScoredGoalsOpponentTeam?.some(
                       (p) => p.id === player.id
                     );
-
                     const playerGoals =
                       playersScoredGoalsOpponentTeam?.find(
                         (p) => p.id === player.id

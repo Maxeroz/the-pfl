@@ -10,3 +10,7 @@ export function removeStringFromArray(arr, str) {
 export function getDifference(num1, num2) {
   return num1 - num2;
 }
+
+export function removeObjectById(array, idToRemove) {
+  return array.filter((obj) => obj.id !== idToRemove);
+}

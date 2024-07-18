@@ -17,6 +17,7 @@ import {
 import { HiArrowsUpDown } from "react-icons/hi2";
 import { useSettings } from "../features/selectLeague/useSettings";
 import { useTable } from "../features/table/useTable";
+import InfoBlock from "../ui/InfoBlock";
 
 const tableMapping = {
   "ПФЛ ЛИГА 1": 0,
@@ -68,70 +69,98 @@ function Profile() {
     : "Нет данных";
 
   return (
-    <Row gap={2}>
-      <TableTitle>Общая информация</TableTitle>
+    <Row gap={3}>
+      <Row>
+        <TableTitle>Общая информация</TableTitle>
+      </Row>
+      <Row type="horizontal" gap={2}>
+        {/* Отображение информации о сезоне */}
+        <InfoBlock
+          text="Текущий сезон:"
+          dataString={season}
+          width="450px"
+          isLoading={isLoading}
+          light="light"
+          height="64px"
+        ></InfoBlock>
 
-      {isLoading ? (
-        <CenterSpinnerDiv>
-          <Loader isLoading={isLoading} size={50} display={false} />
-        </CenterSpinnerDiv>
-      ) : (
-        <Row gap={1}>
-          <BounderDiv>
-            <ProfileInfoSpan>
-              <ProfileInfoIcon>
-                <HiCheckCircle />
-              </ProfileInfoIcon>
-              Приглашаем команды в турнир
-            </ProfileInfoSpan>
-
-            <ProfileInfoSpan>
-              <ProfileInfoIcon>
-                <HiArrowsUpDown />
-              </ProfileInfoIcon>
-              Трансферное окно
-              {transferWindow ? (
-                <OpenWindowSpan> открыто</OpenWindowSpan>
-              ) : (
-                <ClosedWindowSpan> закрыто</ClosedWindowSpan>
-              )}
-            </ProfileInfoSpan>
-          </BounderDiv>
-
-          <BounderDiv>
-            <ProfileInfoSpan>
-              <ProfileInfoIcon>
-                <HiInformationCircle />
-              </ProfileInfoIcon>
-              {leagueName}
-            </ProfileInfoSpan>
-          </BounderDiv>
-
-          <ProfileInfoSpan>
-            <ProfileInfoIcon>
-              <HiCalendarDays />
-            </ProfileInfoIcon>
-            {season}
-          </ProfileInfoSpan>
-
-          <ProfileInfoSpan>
-            <ProfileInfoIcon>
-              <HiBuildingLibrary />
-            </ProfileInfoIcon>
-            {city}
-          </ProfileInfoSpan>
-
-          <TableTitle>Команды, участвующие в турнире - {teamAmount}</TableTitle>
-
-          <ProfileInfoSpan>
-            {teamsToPlay.map((teamName) => (
-              <span key={teamName}>{teamName} / </span>
-            ))}
-          </ProfileInfoSpan>
-        </Row>
-      )}
+        {/* Отображение информации о трансферном окне */}
+        <InfoBlock
+          text="Трансферное окно"
+          dataString={transferWindow}
+          width="200px"
+          isLoading={isLoading}
+          height="64px"
+        ></InfoBlock>
+      </Row>
     </Row>
   );
+
+  // return (
+  //   <Row gap={2}>
+  //     <TableTitle>Общая информация</TableTitle>
+
+  //     {isLoading ? (
+  //       <CenterSpinnerDiv>
+  //         <Loader isLoading={isLoading} size={50} display={false} />
+  //       </CenterSpinnerDiv>
+  //     ) : (
+  //       <Row gap={1}>
+  //         <BounderDiv>
+  //           <ProfileInfoSpan>
+  //             <ProfileInfoIcon>
+  //               <HiCheckCircle />
+  //             </ProfileInfoIcon>
+  //             Приглашаем команды в турнир
+  //           </ProfileInfoSpan>
+
+  //           <ProfileInfoSpan>
+  //             <ProfileInfoIcon>
+  //               <HiArrowsUpDown />
+  //             </ProfileInfoIcon>
+  //             Трансферное окно
+  //             {transferWindow ? (
+  //               <OpenWindowSpan> открыто</OpenWindowSpan>
+  //             ) : (
+  //               <ClosedWindowSpan> закрыто</ClosedWindowSpan>
+  //             )}
+  //           </ProfileInfoSpan>
+  //         </BounderDiv>
+
+  //         <BounderDiv>
+  //           <ProfileInfoSpan>
+  //             <ProfileInfoIcon>
+  //               <HiInformationCircle />
+  //             </ProfileInfoIcon>
+  //             {leagueName}
+  //           </ProfileInfoSpan>
+  //         </BounderDiv>
+
+  //         <ProfileInfoSpan>
+  //           <ProfileInfoIcon>
+  //             <HiCalendarDays />
+  //           </ProfileInfoIcon>
+  //           {season}
+  //         </ProfileInfoSpan>
+
+  //         <ProfileInfoSpan>
+  //           <ProfileInfoIcon>
+  //             <HiBuildingLibrary />
+  //           </ProfileInfoIcon>
+  //           {city}
+  //         </ProfileInfoSpan>
+
+  //         <TableTitle>Команды, участвующие в турнире - {teamAmount}</TableTitle>
+
+  //         <ProfileInfoSpan>
+  //           {teamsToPlay.map((teamName) => (
+  //             <span key={teamName}>{teamName} / </span>
+  //           ))}
+  //         </ProfileInfoSpan>
+  //       </Row>
+  //     )}
+  //   </Row>
+  // );
 }
 
 export default Profile;

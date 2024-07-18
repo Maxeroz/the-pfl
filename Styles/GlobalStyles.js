@@ -4,11 +4,20 @@ const GlobalStyles = createGlobalStyle`:root {
 /* Импорт шрифта */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-
+    // THE PFL
+    --border-radius-lg-pfl:10px;
     /* Secondary */
     --color-secondary--500: #141522;
     --color-secondary-300: #8E92BC;
+    --color-secondart-400: #54577A;
 
+    /* Success */
+
+    --color-success-500 :#9CD323;
+    --color-error-500: #FF4423;
+
+    /* brand */
+;
 
 
     /* Indigo */
@@ -60,8 +69,7 @@ const GlobalStyles = createGlobalStyle`:root {
     --border-radius-md: 7px;
     --border-radius-lg: 9px;
 
-    // THE PFL
-    --border-radius-lg-pfl:10px;
+   
   
     /* For dark mode */
     --image-grayscale: 0;
@@ -86,6 +94,8 @@ const GlobalStyles = createGlobalStyle`:root {
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: var(--color-secondary--500);
+
+    background-color: #FAFAFA;
   
     transition: color 0.3s, background-color 0.3s;
     min-height: 100vh;
