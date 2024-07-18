@@ -17,8 +17,7 @@ const StyledTitleDiv = styled.div`
   box-shadow: var(--shadow-lg);
 
   background-color: var(--color-grey-100);
-  border-bottom-left-radius: var(--border-radius-lg);
-  border-bottom-right-radius: var(--border-radius-lg);
+  border-radius: var(--border-radius-lg-pfl);
 
   border-top: none;
 
@@ -44,7 +43,7 @@ const SeasonSpan = styled.span`
   color: var(--color-blue-700);
 `;
 
-function Title() {
+function LeagueTitle() {
   // Local State
   const { leagueTier, leagueLogo } = useSelector((state) => state.league);
 
@@ -71,4 +70,4 @@ function Title() {
   );
 }
 
-export default Title;
+export default LeagueTitle;

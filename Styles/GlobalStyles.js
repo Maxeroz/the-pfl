@@ -1,6 +1,16 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`:root {
+/* Импорт шрифта */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+
+    /* Secondary */
+    --color-secondary--500: #141522;
+    --color-secondary-300: #8E92BC;
+
+
+
     /* Indigo */
     --color-brand-50: #eef2ff;
     --color-brand-100: #e0e7ff;
@@ -49,6 +59,9 @@ const GlobalStyles = createGlobalStyle`:root {
     --border-radius-sm: 5px;
     --border-radius-md: 7px;
     --border-radius-lg: 9px;
+
+    // THE PFL
+    --border-radius-lg-pfl:10px;
   
     /* For dark mode */
     --image-grayscale: 0;
@@ -71,8 +84,8 @@ const GlobalStyles = createGlobalStyle`:root {
   }
   
   body {
-    font-family: "Poppins", sans-serif;
-    color: var(--color-grey-700);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--color-secondary--500);
   
     transition: color 0.3s, background-color 0.3s;
     min-height: 100vh;

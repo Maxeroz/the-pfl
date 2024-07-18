@@ -10,35 +10,49 @@ import {
   HiOutlineUserGroup,
   HiQueueList,
 } from "react-icons/hi2";
+import Icon from "./Icon";
 
 const Nav = styled.nav`
-  border-top: 1px solid var(--color-grey-900);
-  border-bottom: 1px solid var(--color-grey-900);
-  padding: 0.3rem;
+  color: var(--color-secondary--500);
 `;
 
 const Ul = styled.ul`
-  list-style: none;
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
-  padding: 0;
-  margin: 0;
+
+  align-items: center;
+
+  gap: 24px;
+
+  list-style: none;
 `;
 
 const Li = styled.li`
+  width: 75%;
   margin: 0 1rem;
 `;
 
 const StyledNavLink = styled(NavLink)`
+  height: 44px;
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 12px;
 
-  color: var(--color-grey-800);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+
+  border-radius: var(--border-radius-lg-pfl);
+  padding: 10px 24px;
+
+  color: var(--color-secondary-300);
   text-decoration: none;
   &.active {
     font-weight: bold;
-    color: var(--color-green-700);
+
+    color: var(--color-secondary-500);
+    background-color: #f5f5f7;
   }
 `;
 
@@ -54,49 +68,66 @@ const Navbar = () => {
       <Ul>
         <Li>
           <StyledNavLink to="/profile">
-            <HiHome />
+            <Icon>
+              <HiHome />
+            </Icon>
+
             <LinkTitle>Профиль</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/applications">
-            <HiClipboardDocumentList />
+            <Icon>
+              <HiClipboardDocumentList />
+            </Icon>
             <LinkTitle>Заявки</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/games">
-            <HiOutlineSquare3Stack3D />
+            <Icon>
+              <HiOutlineSquare3Stack3D />
+            </Icon>
             <LinkTitle>Игры</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/table">
-            <HiMiniTableCells />
+            <Icon>
+              <HiMiniTableCells />
+            </Icon>
             <LinkTitle>Таблица</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/statistics">
-            <HiQueueList />
+            <Icon>
+              <HiQueueList />
+            </Icon>
             <LinkTitle>Статистика</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/news">
-            <HiOutlineNewspaper />
+            <Icon>
+              <HiOutlineNewspaper />
+            </Icon>
             <LinkTitle>Новости</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/disqualifications">
-            <HiOutlineUserGroup />
+            <Icon>
+              <HiOutlineUserGroup />
+            </Icon>
             <LinkTitle>Дисквалификации</LinkTitle>
           </StyledNavLink>
         </Li>
         <Li>
           <StyledNavLink to="/login">
-            <HiMiniUserCircle />
+            <Icon>
+              <HiMiniUserCircle />
+            </Icon>
             <LinkTitle>Войти</LinkTitle>
           </StyledNavLink>
         </Li>
