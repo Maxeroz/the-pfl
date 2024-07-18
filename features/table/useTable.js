@@ -19,9 +19,9 @@ export function useTable() {
     data: tableData,
     error,
   } = useQuery({
-    queryKey: ["table"],
+    queryKey: ["table", league],
     queryFn: () => getTable(selectedTable),
   });
 
-  return { isLoading, tableData, error };
+  return { isLoading, tableData: tableData || [], error };
 }
