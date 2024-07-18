@@ -88,7 +88,7 @@ function TournamentTable() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>М</StyledTableCell>
+                  <StyledTableCell align="center">М</StyledTableCell>
                   <StyledTableCell align="center">Команда</StyledTableCell>
                   <StyledTableCell align="right">И</StyledTableCell>
                   <StyledTableCell align="right">В</StyledTableCell>
@@ -98,7 +98,7 @@ function TournamentTable() {
                   <StyledTableCell align="right">ГП</StyledTableCell>{" "}
                   <StyledTableCell align="right">+/-</StyledTableCell>
                   <StyledTableCell align="right">О</StyledTableCell>
-                  <StyledTableCell align="right">
+                  <StyledTableCell align="center">
                     Последние игры
                   </StyledTableCell>
                 </TableRow>
@@ -110,7 +110,9 @@ function TournamentTable() {
                     key={item.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <StyledTableCell>{item.place}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.place}
+                    </StyledTableCell>
                     <StyledTableCell align="right">
                       <TeamName>
                         <StyledImg src={item.imageUrl} />

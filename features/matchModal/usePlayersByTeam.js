@@ -2,15 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { getPlayersByTeamName } from "../../services/apiMatch";
 import { useSelector } from "react-redux";
 
-export function usePlayersCurrentTeam() {
-  const { teamName = "" } = useSelector((state) => state.match.currentTeam);
+export function usePlayersByTeam(teamType) {
+  const { teamName = "" } = useSelector((state) => state.match[teamType]);
 
   const {
     isLoading,
     data: players,
     error,
   } = useQuery({
-    queryKey: ["playersCurrentTeam"],
+    queryKey: [`${teamType}`, teamName],
     queryFn: () => getPlayersByTeamName(teamName),
     enabled: !!teamName,
   });

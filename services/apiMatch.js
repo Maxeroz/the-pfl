@@ -94,3 +94,23 @@ export const updateLeagueTableByTeamName = async (teamName, updatedTeamRow) => {
 
   return updatedTeam;
 };
+
+export async function addMatch(newMatch) {
+  console.log(newMatch);
+  try {
+    // Выполнение запроса на вставку новой записи
+    const { data, error } = await supabase
+      .from("allMatches")
+      .insert([newMatch]);
+
+    if (error) {
+      throw error;
+    }
+
+    console.log("New match added:", data);
+    return data;
+  } catch (error) {
+    console.error("Error adding match:", error.message);
+    throw error;
+  }
+}

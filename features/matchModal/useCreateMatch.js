@@ -2,17 +2,17 @@ import { useSelector } from "react-redux";
 import { useGetTeam } from "./useGetTeam";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateLeagueTableByTeamName } from "../../services/apiMatch";
-import { getDifference } from "../../utils/helpers";
 
 export function useCreateMatch(pickTeam) {
   const queryClient = useQueryClient();
+
   // Проверяем, что pickTeam определен
   const teamName = useSelector((state) =>
     pickTeam ? state.match[pickTeam]?.teamName : null
   );
 
   const { scored, missed } = useSelector((state) =>
-    pickTeam ? state.match[pickTeam] : {}
+    pickTeam ? state.match[pickTeam] || {} : {}
   );
 
   const draw = scored === missed;
@@ -56,12 +56,11 @@ export function useCreateMatch(pickTeam) {
       points: teamData.points + points,
       difference:
         teamData.scored + Number(scored) - (teamData.missed + Number(missed)),
-      // Добавьте другие обновления для вашего случая
     };
   }
 
   const {
-    isLoading: isUpdating,
+    isPending,
     mutate: updateTeamRow,
     error: updatingError,
   } = useMutation({
@@ -73,5 +72,5 @@ export function useCreateMatch(pickTeam) {
     onSuccess: () => queryClient.invalidateQueries(["table"]),
   });
 
-  return { updateTeamRow, isUpdating, updatingError };
+  return { updateTeamRow, isPending, updatingError };
 }
