@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import MatchSideBarLoadingIndicator from "./MatchSideBarLoadingIndicator";
 
 // Определение стилей для элемента li
 const MatchLi = styled.li`
@@ -7,6 +8,7 @@ const MatchLi = styled.li`
   align-items: center;
   list-style: none;
 
+  height: 62px;
   padding: 8px 14px;
   border-radius: var(--border-radius-lg-pfl);
 
@@ -53,6 +55,8 @@ function MatchSideBar({ match }) {
   const isTeam2Won = match.team2Scored > match.team1Scored;
   const isDraw = match.team1Scored === match.team2Scored;
 
+  const { isLoading } = match;
+
   // Устанавливаем цвет границы в зависимости от результатов матча
   const team1BorderColor = isTeam1Won
     ? "#9CD323" // Зеленый для победы команды 1
@@ -68,16 +72,22 @@ function MatchSideBar({ match }) {
 
   return (
     <MatchLi>
-      <TeamImgContainer borderColor={team1BorderColor}>
-        <TeamImg src={match.team1ImgUrl} alt={`Logo of ${match.team1}`} />
-      </TeamImgContainer>
-      <TeamsScoredContainer>
-        <TeamScore>{match.team1Scored}</TeamScore>-
-        <TeamScore>{match.team2Scored}</TeamScore>
-      </TeamsScoredContainer>
-      <TeamImgContainer borderColor={team2BorderColor}>
-        <TeamImg src={match.team2ImgUrl} alt={`Logo of ${match.team2}`} />
-      </TeamImgContainer>
+      {isLoading ? (
+        <MatchSideBarLoadingIndicator />
+      ) : (
+        <>
+          <TeamImgContainer borderColor={team1BorderColor}>
+            <TeamImg src={match.team1ImgUrl} alt={`Logo of ${match.team1}`} />
+          </TeamImgContainer>
+          <TeamsScoredContainer>
+            <TeamScore>{match.team1Scored}</TeamScore>-
+            <TeamScore>{match.team2Scored}</TeamScore>
+          </TeamsScoredContainer>
+          <TeamImgContainer borderColor={team2BorderColor}>
+            <TeamImg src={match.team2ImgUrl} alt={`Logo of ${match.team2}`} />
+          </TeamImgContainer>
+        </>
+      )}
     </MatchLi>
   );
 }

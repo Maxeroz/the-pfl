@@ -1,7 +1,7 @@
-import { useSelector } from "react-redux";
 import { useGetTeam } from "./useGetTeam";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateLeagueTableByTeamName } from "../../services/apiMatch";
+import { useSelector } from "react-redux";
 
 export function useCreateMatch(pickTeam) {
   const queryClient = useQueryClient();
@@ -10,6 +10,8 @@ export function useCreateMatch(pickTeam) {
   const teamName = useSelector((state) =>
     pickTeam ? state.match[pickTeam]?.teamName : null
   );
+
+  // const dispatch = useDispatch();
 
   const { scored, missed } = useSelector((state) =>
     pickTeam ? state.match[pickTeam] || {} : {}
@@ -71,6 +73,15 @@ export function useCreateMatch(pickTeam) {
     },
     onSuccess: () => queryClient.invalidateQueries(["table"]),
   });
+
+  // // Использование useEffect для отслеживания изменения isPending
+  // useEffect(() => {
+  //   if (isPending) {
+  //     dispatch(setIsPending(true));
+  //   } else {
+  //     dispatch(setIsPending(false));
+  //   }
+  // }, [isPending, dispatch]);
 
   return { updateTeamRow, isPending, updatingError };
 }

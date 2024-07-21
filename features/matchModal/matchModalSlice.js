@@ -7,6 +7,7 @@ const initialTeamState = {
   missed: "",
   playersScoredGoals: [],
   imgUrl: "",
+  isPending: false,
 };
 
 const initialState = {
@@ -43,6 +44,9 @@ const createMatchSlice = createSlice({
     resetMatchState: (state) => {
       state.currentTeam = { ...initialTeamState };
       state.opponentTeam = { ...initialTeamState };
+    },
+    setIsPending(state, action) {
+      state.currentTeam.isPending = action.payload;
     },
     handlePlayerClick: (state, action) => {
       const { team, player } = action.payload;
@@ -88,6 +92,8 @@ export const {
   handleGoalsChange,
 
   resetMatchState,
+
+  setIsPending,
 } = createMatchSlice.actions;
 
 export default createMatchSlice.reducer;

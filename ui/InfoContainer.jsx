@@ -1,4 +1,14 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+// Анимация плавного появления
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 // Изменяемый стилизованный компонент с пропсами для ширины, высоты и фона
 const InfoContainer = styled.div`
@@ -17,6 +27,8 @@ const InfoContainer = styled.div`
 
   width: ${(props) => props.width || "100px"};
   height: ${(props) => props.height || "auto"};
+
+  animation: ${fadeIn} 0.1s ease-in-out; // Применение анимации
 `;
 
 export default InfoContainer;

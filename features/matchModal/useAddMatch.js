@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addMatch as addMatchAPI } from "../../services/apiMatch";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { setIsPending } from "./matchModalSlice";
 
 export function useAddMatch() {
   const queryClient = useQueryClient();
@@ -12,6 +14,8 @@ export function useAddMatch() {
     scored: currentTeamScored,
     imgUrl: team1ImgUrl,
   } = useSelector((state) => state.match.currentTeam);
+
+  const dispatch = useDispatch();
 
   // Получение данных команды соперника из Redux
   const {
@@ -40,9 +44,20 @@ export function useAddMatch() {
     error,
   } = useMutation({
     mutationFn: () => addMatchAPI(newMatch),
-    onSuccess: () => queryClient.invalidateQueries(["matches"]),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["matches"]);
+    },
   });
 
+  // Использование useEffect для отслеживания изменения isPending
+  useEffect(() => {
+    if (isPending) {
+      dispatch(setIsPending(true));
+    } else {
+      dispatch(setIsPending(false));
+    }
+  }, [isPending, dispatch]);
+
   // Возвращаем свойства мутации, которые можно использовать в компоненте
-  return { addMatch };
+  return { addMatch, isPending };
 }

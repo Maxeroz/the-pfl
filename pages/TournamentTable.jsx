@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useTable } from "../features/table/useTable";
-import Loader from "../ui/Loader";
 import Row from "../ui/Row";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -54,11 +53,22 @@ const TeamName = styled.div`
   gap: 1rem;
 `;
 
+// Анимация плавного появления
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
 const TableWrapperBlock = styled.div`
   background-color: #f5f5f7;
   border-radius: var(--border-radius-lg-pfl);
-`;
 
+  animation: ${fadeIn} 0.5s ease-in-out; // Применение анимации
+`;
 function TournamentTable() {
   const { isLoading = true, tableData } = useTable();
   const [isModalOpen, setModalOpen] = useState(false);

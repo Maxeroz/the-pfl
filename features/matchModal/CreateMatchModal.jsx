@@ -26,6 +26,7 @@ import {
   pickOpponentTeam,
   pickOpponentTeamResult,
   resetMatchState,
+  setIsPending,
 } from "./matchModalSlice";
 
 // Стили для модального окна
@@ -82,6 +83,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
     await Promise.all([
       updateTeamRowCurrent(),
       updateTeamRowOpponent(),
+      // dispatch(setIsPending(isPendingCurrent)),
       addMatch(),
     ]);
     // Сбрасываем состояние матча и закрываем модальное окно
