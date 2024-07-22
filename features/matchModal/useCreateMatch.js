@@ -71,17 +71,10 @@ export function useCreateMatch(pickTeam) {
         return updateLeagueTableByTeamName(teamName, updatedTeamRow);
       }
     },
-    onSuccess: () => queryClient.invalidateQueries(["table"]),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["table"]);
+    },
   });
-
-  // // Использование useEffect для отслеживания изменения isPending
-  // useEffect(() => {
-  //   if (isPending) {
-  //     dispatch(setIsPending(true));
-  //   } else {
-  //     dispatch(setIsPending(false));
-  //   }
-  // }, [isPending, dispatch]);
 
   return { updateTeamRow, isPending, updatingError };
 }

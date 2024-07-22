@@ -18,6 +18,7 @@ import { HiArrowsUpDown } from "react-icons/hi2";
 import { useSettings } from "../features/selectLeague/useSettings";
 import { useTable } from "../features/table/useTable";
 import InfoBlock from "../ui/InfoBlock";
+import ReusableResultsTable from "../ui/ReusableResultsTable";
 
 const tableMapping = {
   "ПФЛ ЛИГА 1": 0,
@@ -93,6 +94,7 @@ function Profile() {
           height="64px"
         ></InfoBlock>
       </Row>
+      <Row />
     </Row>
   );
 

@@ -28,6 +28,7 @@ import {
   resetMatchState,
   setIsPending,
 } from "./matchModalSlice";
+import toast from "react-hot-toast";
 
 // Стили для модального окна
 const style = {

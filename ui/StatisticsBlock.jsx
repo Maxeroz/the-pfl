@@ -4,8 +4,9 @@ import { useMatches } from "../features/matchStatistics/useMatches";
 import { Box, LinearProgress, Button } from "@mui/material";
 import MatchSideBar from "./MatchSideBar";
 import { useSelector } from "react-redux";
+import { getRandomNumberFromDate } from "../utils/helpers";
 
-// Анимация плавного появления
+// Анимация для плавного появления элементов
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -15,36 +16,35 @@ const fadeIn = keyframes`
   }
 `;
 
-// Стилизованный LinearProgress с использованием цвета из темы
+// Стилизованный компонент для отображения прогресса загрузки
 const StyledPrimaryLinearProgress = styled(LinearProgress)`
   && {
     background-color: ${(props) => props.theme.palette.secondary.main};
   }
 `;
 
+// Стилизованный контейнер для блока статистики
 const StatisticsDiv = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   width: ${(props) => props.width || "100px"};
-  height: ${(props) =>
-    props.isFixedHeight ? "390px" : "auto"}; // Устанавливаем высоту
+  height: ${(props) => (props.isFixedHeight ? "390px" : "auto")};
   padding: 24px;
-
   gap: 10px;
-
   background-color: ${(props) =>
     props.light === "light" ? "#F5F5F7" : "#141522"};
   border-radius: var(--border-radius-lg-pfl);
   position: relative;
-
-  transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out; // Переход для плавного изменения высоты и непрозрачности
+  transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
 `;
 
+// Стилизованный заголовок для блока статистики
 const StatisticsTitle = styled.h3`
   font-size: 14px;
 `;
 
+// Стилизованный контейнер для списка матчей
 const MatchesContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -52,18 +52,17 @@ const MatchesContainer = styled.div`
   background-color: #fff;
   padding: 14px;
   border-radius: var(--border-radius-lg-pfl);
-  height: ${(props) =>
-    props.isFixedHeight ? "324px" : "auto"}; // Устанавливаем высоту
-  overflow-y: auto; // Добавляем прокрутку по вертикали, если контент превышает высоту
-  transition: height 0.3s ease-in-out; // Переход для плавного изменения высоты
+  height: ${(props) => (props.isFixedHeight ? "324px" : "auto")};
+  overflow-y: auto;
+  transition: height 0.3s ease-in-out;
   position: relative;
 `;
 
+// Стилизованный список матчей
 const MatchesUl = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  /* transition: opacity 0.3s ease; // Переход для плавного изменения непрозрачности списка матчей */
   opacity: ${(props) => (props.fadeIn ? 1 : 0)};
 `;
 
@@ -76,15 +75,15 @@ const MatchLi = styled.li`
           ${fadeIn} 0.5s forwards
         `
       : "none"};
-  /* animation-delay: ${(props) =>
-    props.delay}s; // Задержка анимации для каскадного эффекта */
 `;
 
+// Стилизованный текстовый компонент
 const SupportTextSpan = styled.span`
   font-size: 12px;
   color: var(--color-secondart-400);
 `;
 
+// Стилизованный контейнер для элементов
 const ElementsWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -92,10 +91,27 @@ const ElementsWrapper = styled.div`
   gap: 10px;
 `;
 
+// Стилизованный контейнер для кнопок пагинации
 const PaginationButtons = styled.div`
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 10px;
+  width: 100%;
+
+  button {
+    /* Обычные стили для обеих кнопок */
+    /* padding: 10px 20px; */
+    border: 1px solid #eee; /* Или используйте нужный вам стиль */
+    border-radius: 4px;
+    /* font-size: 14px; */
+    cursor: pointer;
+  }
+
+  button:last-child {
+    /* Всегда перемещает последнюю кнопку (Следующая) вправо */
+    margin-left: auto;
+  }
 `;
 
 function StatisticsBlock({ light, width, height }) {
@@ -103,69 +119,76 @@ function StatisticsBlock({ light, width, height }) {
   const { isLoading, data: matches } = useMatches();
   const [currentPage, setCurrentPage] = useState(1);
   const [fadeIn, setFadeIn] = useState(true);
-  const [isVisible, setIsVisible] = useState(false); // Состояние видимости для анимации
-  const [visibleMatches, setVisibleMatches] = useState([]); // Изменено: инициализация состояния visibleMatches
+  const [isVisible, setIsVisible] = useState(false);
+  const [visibleMatches, setVisibleMatches] = useState([]);
 
   const { isPending } = useSelector((state) => state.match.currentTeam);
 
-  const matchesPerPage = 3; // Количество матчей на одной странице
-  // Определяем матчи для текущей страницы
+  const matchesPerPage = 3;
   const indexOfLastMatch = currentPage * matchesPerPage;
   const indexOfFirstMatch = indexOfLastMatch - matchesPerPage;
 
+  // Обновление списка видимых матчей при изменении состояния загрузки
   useEffect(() => {
     if (isPending) {
-      setVisibleMatches((prevMatches) =>
-        [...prevMatches, { id: 99, isLoading: true }].slice(
-          indexOfFirstMatch,
-          indexOfLastMatch
-        )
-      ); // Изменено: Обработка состояния загрузки isPending
+      setVisibleMatches((prevMatches) => {
+        const prevMatchesCheck = prevMatches.length % 3 === 0;
+
+        return [
+          ...prevMatches,
+          prevMatchesCheck
+            ? { id: getRandomNumberFromDate(), isLoading: "remainder" }
+            : { id: getRandomNumberFromDate(), isLoading: true },
+        ];
+      });
     }
   }, [isPending]);
 
+  // Обновление списка видимых матчей при изменении матчей или текущей страницы
   useEffect(() => {
-    if (matches && matches.length > 0) {
-      setVisibleMatches(matches.slice(indexOfFirstMatch, indexOfLastMatch)); // Изменено: Обновление visibleMatches при изменении текущей страницы и матчей
+    if (matches) {
+      setVisibleMatches(matches.slice(indexOfFirstMatch, indexOfLastMatch));
     }
-  }, [matches, currentPage]); // Изменено: Добавление currentPage в зависимости эффекта
+  }, [matches, currentPage]);
 
+  // Установка видимости после завершения загрузки
   useEffect(() => {
     if (!isLoading) {
-      setIsVisible(true); // Устанавливаем состояние видимости после завершения загрузки
+      setIsVisible(true);
     }
   }, [isLoading, visibleMatches]);
 
-  // Определение, если высота должна быть фиксированной
+  // Проверка, если высота должна быть фиксированной
   const isFixedHeight = matches?.length > 3;
 
   // Обработчик для перехода к следующей странице
   const handleNextPage = () => {
     if (currentPage * matchesPerPage < (matches?.length || 0)) {
-      setFadeIn(false); // Убираем плавность
+      setFadeIn(false);
       setTimeout(() => {
         setCurrentPage((prev) => prev + 1);
-        setFadeIn(true); // Добавляем плавность после изменения страницы
-      }, 300); // Задержка соответствует времени анимации
+        setFadeIn(true);
+      }, 300);
     }
   };
 
   // Обработчик для перехода к предыдущей странице
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      setFadeIn(false); // Убираем плавность
+      setFadeIn(false);
       setTimeout(() => {
         setCurrentPage((prev) => prev - 1);
-        setFadeIn(true); // Добавляем плавность после изменения страницы
-      }, 300); // Задержка соответствует времени анимации
+        setFadeIn(true);
+      }, 300);
     }
   };
 
-  useEffect(() => {
-    if (matches?.length < currentPage * matchesPerPage) {
-      setCurrentPage(1); // Изменено: Сброс текущей страницы, если количество матчей меньше
-    }
-  }, [matches]);
+  // // Сброс текущей страницы, если количество матчей меньше
+  // useEffect(() => {
+  //   if (matches?.length < currentPage * matchesPerPage) {
+  //     setCurrentPage(1);
+  //   }
+  // }, [matches]);
 
   return (
     <StatisticsDiv
@@ -190,7 +213,7 @@ function StatisticsBlock({ light, width, height }) {
                   <MatchLi
                     key={match.id}
                     isVisible={isVisible}
-                    delay={index * 0.1} // Задержка для создания каскадного эффекта
+                    delay={index * 0.1}
                   >
                     <MatchSideBar match={match} />
                   </MatchLi>

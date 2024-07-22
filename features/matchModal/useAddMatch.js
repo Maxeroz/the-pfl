@@ -3,6 +3,7 @@ import { addMatch as addMatchAPI } from "../../services/apiMatch";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { setIsPending } from "./matchModalSlice";
+import toast from "react-hot-toast";
 
 export function useAddMatch() {
   const queryClient = useQueryClient();
@@ -46,6 +47,7 @@ export function useAddMatch() {
     mutationFn: () => addMatchAPI(newMatch),
     onSuccess: () => {
       queryClient.invalidateQueries(["matches"]);
+      toast.success("Матч успешно добавлен");
     },
   });
 

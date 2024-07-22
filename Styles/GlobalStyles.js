@@ -5,9 +5,15 @@ const GlobalStyles = createGlobalStyle`:root {
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
     // THE PFL
+
+    /* Primary */
+    --color-primary-100: #DCE4FF;
+    --color-primary-500: #546FFF;
+    --color-primary-900:#10197A;
+
     --border-radius-lg-pfl:10px;
     /* Secondary */
-    --color-secondary--500: #141522;
+    --color-secondary-500: #141522;
     --color-secondary-300: #8E92BC;
     --color-secondart-400: #54577A;
 

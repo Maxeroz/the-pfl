@@ -63,6 +63,10 @@ const fadeIn = keyframes`
   }
 `;
 
+const StyledTableContainer = styled(TableContainer)`
+  border-radius: var(--border-radius-lg-pfl);
+`;
+
 const TableWrapperBlock = styled.div`
   background-color: #f5f5f7;
   border-radius: var(--border-radius-lg-pfl);
@@ -104,7 +108,7 @@ function TournamentTable() {
             {/* <Button onClick={handleOpenModal} variant="contained" color="primary">
             Создать матч
           </Button> */}
-            <TableContainer component={Paper} sx={{ borderRadius: 10 }}>
+            <StyledTableContainer component={Paper} sx={{ borderRadius: 10 }}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
@@ -187,7 +191,7 @@ function TournamentTable() {
                   ))}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </StyledTableContainer>
             <CreateMatchModal
               open={isModalOpen}
               handleClose={handleCloseModal}

@@ -70,6 +70,7 @@ function MatchSideBar({ match }) {
     ? "#fff" // Черный для ничьей
     : "#FF4423"; // Красный для поражения команды 2
 
+  if (isLoading === "remainder") return null;
   return (
     <MatchLi>
       {isLoading ? (

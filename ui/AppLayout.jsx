@@ -49,6 +49,9 @@
 
 // Создание собственной темы с переопределением цвета primary для LinearProgress
 const theme = createTheme({
+  typography: {
+    fontFamily: "'Plus Jakarta Sans', sans-serif",
+  },
   palette: {
     primary: { main: "#141522" },
     secondary: { main: "#8E92BC" },
