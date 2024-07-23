@@ -55,7 +55,10 @@ function Statistics() {
   const isLoading = isLoadingPlayers || isLoadingTable;
 
   useEffect(() => {
-    setUpdatedPlayersWithTeamNames(addTeamNamesToPlayers(players, tableData));
+    if (players.length > 0 && tableData.length > 0) {
+      const updatedPlayers = addTeamNamesToPlayers(players, tableData);
+      setUpdatedPlayersWithTeamNames(updatedPlayers);
+    }
   }, [players, tableData]);
 
   return (
@@ -77,34 +80,7 @@ function Statistics() {
                 initialTitle="Лучшие бомбардиры"
                 players={updatedPlayersWithTeamNames}
                 render={render}
-              >
-                <ReusableResultsTable.TableHead>
-                  <ReusableResultsTable.TableRow>
-                    <ReusableResultsTable.StyledTableCell>
-                      №
-                    </ReusableResultsTable.StyledTableCell>
-                    <ReusableResultsTable.StyledTableCell>
-                      Имя
-                    </ReusableResultsTable.StyledTableCell>
-                    <ReusableResultsTable.StyledTableCell>
-                      Команда
-                    </ReusableResultsTable.StyledTableCell>
-                    <ReusableResultsTable.StyledTableCell>
-                      Г
-                    </ReusableResultsTable.StyledTableCell>
-                    <ReusableResultsTable.StyledTableCell>
-                      П
-                    </ReusableResultsTable.StyledTableCell>
-                    <ReusableResultsTable.StyledTableCell>
-                      Г+П
-                    </ReusableResultsTable.StyledTableCell>
-                    <ReusableResultsTable.StyledTableCell>
-                      Игры
-                    </ReusableResultsTable.StyledTableCell>
-                  </ReusableResultsTable.TableRow>
-                </ReusableResultsTable.TableHead>
-              </ReusableResultsTable>
-              {/* <ReusableResultsTable title="Список Ассистентов" /> */}
+              ></ReusableResultsTable>
             </Row>
           </>
         )}

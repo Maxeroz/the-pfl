@@ -4,13 +4,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
   MenuItem,
-  // InputLabel,
   Select,
   FormControl,
   TableBody,
 } from "@mui/material";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 // Анимация плавного появления
@@ -59,7 +59,6 @@ const StyledTableCell = styled(TableCell)`
 function ReusableTableHeading({ title, setTitle, titleOptions }) {
   return (
     <StyledFormControl variant="outlined">
-      {/* <InputLabel id="select-label">Table Heading</InputLabel> */}
       <StyledSelect
         labelId="select-label"
         value={title}
@@ -76,34 +75,6 @@ function ReusableTableHeading({ title, setTitle, titleOptions }) {
   );
 }
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
 function ReusableResultsTable({
   children,
   players,
@@ -112,6 +83,27 @@ function ReusableResultsTable({
   render,
 }) {
   const [title, setTitle] = useState(initialTitle || titleOptions[0]);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("number");
+
+  const handleRequestSort = (property) => {
+    const isAscending = orderBy === property && order === "asc";
+    setOrder(isAscending ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const sortedPlayers = [...players].sort((a, b) => {
+    if (a[orderBy] < b[orderBy]) {
+      return order === "asc" ? -1 : 1;
+    }
+    if (a[orderBy] > b[orderBy]) {
+      return order === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
+
+  // Ограничение на 10 строк
+  const displayedPlayers = sortedPlayers.slice(0, 10);
 
   return (
     <TabelContext.Provider value={{}}>
@@ -123,9 +115,79 @@ function ReusableResultsTable({
         />
         <Table sx={{ minWidth: 200 }} aria-label="simple table">
           {children}
+          <TableHead>
+            <TableRow>
+              <TableCell sortDirection={orderBy === "number" ? order : false}>
+                <TableSortLabel
+                  active={orderBy === "number"}
+                  direction={orderBy === "number" ? order : "asc"}
+                  onClick={() => handleRequestSort("number")}
+                >
+                  №
+                </TableSortLabel>
+              </TableCell>
+              <TableCell
+                sortDirection={orderBy === "playerName" ? order : false}
+              >
+                <TableSortLabel
+                  active={orderBy === "playerName"}
+                  direction={orderBy === "playerName" ? order : "asc"}
+                  onClick={() => handleRequestSort("playerName")}
+                >
+                  Имя
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={orderBy === "teamName" ? order : false}>
+                <TableSortLabel
+                  active={orderBy === "teamName"}
+                  direction={orderBy === "teamName" ? order : "asc"}
+                  onClick={() => handleRequestSort("teamName")}
+                >
+                  Команда
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={orderBy === "scored" ? order : false}>
+                <TableSortLabel
+                  active={orderBy === "scored"}
+                  direction={orderBy === "scored" ? order : "asc"}
+                  onClick={() => handleRequestSort("scored")}
+                >
+                  Г
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={orderBy === "assists" ? order : false}>
+                <TableSortLabel
+                  active={orderBy === "assists"}
+                  direction={orderBy === "assists" ? order : "asc"}
+                  onClick={() => handleRequestSort("assists")}
+                >
+                  П
+                </TableSortLabel>
+              </TableCell>
+              <TableCell
+                sortDirection={orderBy === "scored_assists" ? order : false}
+              >
+                <TableSortLabel
+                  active={orderBy === "scored_assists"}
+                  direction={orderBy === "scored_assists" ? order : "asc"}
+                  onClick={() => handleRequestSort("scored_assists")}
+                >
+                  Г+П
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={orderBy === "games" ? order : false}>
+                <TableSortLabel
+                  active={orderBy === "games"}
+                  direction={orderBy === "games" ? order : "asc"}
+                  onClick={() => handleRequestSort("games")}
+                >
+                  Игры
+                </TableSortLabel>
+              </TableCell>
+            </TableRow>
+          </TableHead>
           <TableBody>
-            {/* Map through each player and render a TableRow for each */}
-            {players.map((player, index) => (
+            {displayedPlayers.map((player, index) => (
               <TableRow key={index}>{render(player)}</TableRow>
             ))}
           </TableBody>
