@@ -73,6 +73,7 @@ const TableWrapperBlock = styled.div`
 
   animation: ${fadeIn} 0.5s ease-in-out; // Применение анимации
 `;
+
 function TournamentTable() {
   const { isLoading = true, tableData } = useTable();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -101,7 +102,6 @@ function TournamentTable() {
         {isLoading ? (
           <CenterSpinnerDiv>
             <CircularProgress />
-            {/* <Loader isLoading={isLoading} size={50} display={false} /> */}
           </CenterSpinnerDiv>
         ) : (
           <>

@@ -1,34 +1,33 @@
 import supabase from "./supabase";
 
-export const getPlayersByTeamName = async (teamName) => {
-  if (!teamName) return;
-
-  // Получаем team_id по названию команды
-  const { data: teamData, error: teamError } = await supabase
-    .from("league1_table")
-    .select("id") // Предполагаем, что у вас есть колонка id
-    .eq("teamName", teamName)
-    .single(); // Получаем только одну запись
-
-  if (teamError || !teamData) {
-    console.error("Error fetching team data:", teamError);
-    throw new Error("Команда не найдена");
+/**
+ * Получение игроков по ID команды
+ * @param {string} teamId - ID команды
+ * @returns {Promise<object[]>} - Возвращает массив объектов игроков
+ * @throws {Error} - Ошибка при получении игроков
+ */
+export const getPlayersByTeamId = async (teamId) => {
+  if (!teamId) {
+    console.error("Ошибка: teamId не может быть пустым.");
+    throw new Error("teamId обязателен.");
   }
 
-  const teamId = teamData.id;
+  try {
+    const { data, error } = await supabase
+      .from("players")
+      .select("*")
+      .eq("team_id", teamId);
 
-  // Теперь получаем игроков по team_id
-  const { data, error: playerError } = await supabase
-    .from("players")
-    .select("*")
-    .eq("team_id", teamId);
+    if (error) {
+      console.error("Ошибка получения игроков:", error.message);
+      throw new Error("Не удалось получить игроков команды.");
+    }
 
-  if (playerError) {
-    console.error("Error fetching players:", playerError);
-    throw new Error("Не удалось получить игроков команды");
+    return data;
+  } catch (err) {
+    console.error("Ошибка выполнения запроса:", err.message);
+    throw new Error("Произошла ошибка при выполнении запроса.");
   }
-
-  return data; // Возвращаем массив игроков
 };
 
 export const getTeamRow = async (teamName) => {
