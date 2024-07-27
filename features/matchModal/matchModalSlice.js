@@ -76,6 +76,18 @@ const createMatchSlice = createSlice({
         }
       );
     },
+    handleAssistsChange(state, action) {
+      const { team, playerId, assists } = action.payload;
+      const currentPlayers =
+        team === "currentTeam"
+          ? state.currentTeam.playersScoredGoals
+          : state.opponentTeam.playersScoredGoals;
+
+      const playerIndex = currentPlayers.findIndex((p) => p.id === playerId);
+      if (playerIndex >= 0) {
+        currentPlayers[playerIndex].assists = assists;
+      }
+    },
   },
 });
 
@@ -90,6 +102,7 @@ export const {
 
   handlePlayerClick,
   handleGoalsChange,
+  handleAssistsChange,
 
   resetMatchState,
 

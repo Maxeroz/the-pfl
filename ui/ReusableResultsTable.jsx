@@ -5,10 +5,8 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  MenuItem,
-  Select,
-  FormControl,
   TableBody,
+  Paper,
 } from "@mui/material";
 import { createContext, useState } from "react";
 import styled, { keyframes } from "styled-components";
@@ -23,10 +21,10 @@ const fadeIn = keyframes`
   }
 `;
 
-// 1. Create a context
-const TabelContext = createContext();
+// Создание контекста
+const TableContext = createContext();
 
-// 2. Create parent component
+// Стилизованный контейнер для таблицы с анимацией плавного появления
 const StyledTableContainer = styled(TableContainer)`
   display: flex;
   flex-direction: column;
@@ -34,55 +32,41 @@ const StyledTableContainer = styled(TableContainer)`
   border: 1px solid #ccc;
   overflow: hidden;
   border-radius: var(--border-radius-lg-pfl);
-
   animation: ${fadeIn} 0.3s ease-in-out; // Применение анимации
+  table-layout: fixed; // Устанавливаем фиксированное расположение таблицы
 `;
 
-const StyledSelect = styled(Select)`
-  border-radius: var(--border-radius-lg-pfl);
-  font-size: 14px;
-  letter-spacing: 0.2rem;
-  color: var(--color-primary-100);
-  padding: 4px 10px;
-  background-color: var(--color-primary-900);
-  width: 100%;
-`;
-
-const StyledFormControl = styled(FormControl)`
-  width: 100%;
-`;
-
+// Стилизованная ячейка таблицы
 const StyledTableCell = styled(TableCell)`
-  font-size: 13px;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis; // Добавляем многоточие для длинного текста
+  white-space: nowrap; // Не переносить текст на новую строку
 `;
 
-function ReusableTableHeading({ title, setTitle, titleOptions }) {
-  return (
-    <StyledFormControl variant="outlined">
-      <StyledSelect
-        labelId="select-label"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        label="Table Heading"
-      >
-        {titleOptions.map((option, index) => (
-          <MenuItem key={index} value={option}>
-            {option}
-          </MenuItem>
-        ))}
-      </StyledSelect>
-    </StyledFormControl>
-  );
+// Стилизованная ячейка заголовка таблицы
+const HeadTableCell = styled(TableCell)`
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis; // Добавляем многоточие для длинного текста
+  white-space: nowrap; // Не переносить текст на новую строку
+`;
+
+// Стилизованный заголовок таблицы
+const StyledHeading = styled.h2`
+  font-size: 1.7rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 0;
+  margin: 0;
+  border-radius: var(--border-radius-lg-pfl);
+`;
+
+function ReusableTableHeading({ title }) {
+  return <StyledHeading>{title}</StyledHeading>;
 }
 
-function ReusableResultsTable({
-  children,
-  players,
-  initialTitle,
-  titleOptions,
-  render,
-}) {
-  const [title, setTitle] = useState(initialTitle || titleOptions[0]);
+function ReusableResultsTable({ children, players, tableTitle, render }) {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("number");
 
@@ -92,6 +76,7 @@ function ReusableResultsTable({
     setOrderBy(property);
   };
 
+  // Сортировка игроков по выбранному критерию
   const sortedPlayers = [...players].sort((a, b) => {
     if (a[orderBy] < b[orderBy]) {
       return order === "asc" ? -1 : 1;
@@ -106,18 +91,21 @@ function ReusableResultsTable({
   const displayedPlayers = sortedPlayers.slice(0, 10);
 
   return (
-    <TabelContext.Provider value={{}}>
+    <TableContext.Provider value={{}}>
       <StyledTableContainer>
-        <ReusableTableHeading
-          title={title}
-          setTitle={setTitle}
-          titleOptions={titleOptions}
-        />
-        <Table sx={{ minWidth: 200 }} aria-label="simple table">
+        <ReusableTableHeading title={tableTitle} />{" "}
+        {/* Используем новый компонент заголовка */}
+        <Table
+          sx={{ minWidth: 700 }}
+          aria-label="simple table"
+          component={Paper}
+        >
           {children}
           <TableHead>
             <TableRow>
-              <TableCell sortDirection={orderBy === "number" ? order : false}>
+              <HeadTableCell
+                sortDirection={orderBy === "number" ? order : false}
+              >
                 <TableSortLabel
                   active={orderBy === "number"}
                   direction={orderBy === "number" ? order : "asc"}
@@ -125,8 +113,8 @@ function ReusableResultsTable({
                 >
                   №
                 </TableSortLabel>
-              </TableCell>
-              <TableCell
+              </HeadTableCell>
+              <HeadTableCell
                 sortDirection={orderBy === "playerName" ? order : false}
               >
                 <TableSortLabel
@@ -136,8 +124,10 @@ function ReusableResultsTable({
                 >
                   Имя
                 </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === "teamName" ? order : false}>
+              </HeadTableCell>
+              <HeadTableCell
+                sortDirection={orderBy === "teamName" ? order : false}
+              >
                 <TableSortLabel
                   active={orderBy === "teamName"}
                   direction={orderBy === "teamName" ? order : "asc"}
@@ -145,8 +135,10 @@ function ReusableResultsTable({
                 >
                   Команда
                 </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === "scored" ? order : false}>
+              </HeadTableCell>
+              <HeadTableCell
+                sortDirection={orderBy === "scored" ? order : false}
+              >
                 <TableSortLabel
                   active={orderBy === "scored"}
                   direction={orderBy === "scored" ? order : "asc"}
@@ -154,8 +146,10 @@ function ReusableResultsTable({
                 >
                   Г
                 </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === "assists" ? order : false}>
+              </HeadTableCell>
+              <HeadTableCell
+                sortDirection={orderBy === "assists" ? order : false}
+              >
                 <TableSortLabel
                   active={orderBy === "assists"}
                   direction={orderBy === "assists" ? order : "asc"}
@@ -163,8 +157,8 @@ function ReusableResultsTable({
                 >
                   П
                 </TableSortLabel>
-              </TableCell>
-              <TableCell
+              </HeadTableCell>
+              <HeadTableCell
                 sortDirection={orderBy === "scored_assists" ? order : false}
               >
                 <TableSortLabel
@@ -174,8 +168,10 @@ function ReusableResultsTable({
                 >
                   Г+П
                 </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === "games" ? order : false}>
+              </HeadTableCell>
+              <HeadTableCell
+                sortDirection={orderBy === "games" ? order : false}
+              >
                 <TableSortLabel
                   active={orderBy === "games"}
                   direction={orderBy === "games" ? order : "asc"}
@@ -183,7 +179,7 @@ function ReusableResultsTable({
                 >
                   Игры
                 </TableSortLabel>
-              </TableCell>
+              </HeadTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -193,7 +189,7 @@ function ReusableResultsTable({
           </TableBody>
         </Table>
       </StyledTableContainer>
-    </TabelContext.Provider>
+    </TableContext.Provider>
   );
 }
 

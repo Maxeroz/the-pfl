@@ -1,32 +1,32 @@
-import { useSelector } from "react-redux";
-import ReusableResultsTable from "../ui/ReusableResultsTable";
-import Row from "../ui/Row";
-import TableTitle from "../ui/TableTitle";
-import { useEffect, useState } from "react";
-import useAllPlayers from "../features/reusableTable/useAllPlayers";
-import { useTable } from "../features/table/useTable";
-import { addTeamNamesToPlayers } from "../utils/helpers";
-import { CircularProgress } from "@mui/material";
-import styled from "styled-components";
+import { useSelector } from "react-redux"; // Импортируем хук для получения данных из Redux store
+import ReusableResultsTable from "../ui/ReusableResultsTable"; // Импортируем компонент таблицы результатов
+import Row from "../ui/Row"; // Импортируем компонент для управления расположением строк
+import TableTitle from "../ui/TableTitle"; // Импортируем компонент для заголовка таблицы
+import { useEffect, useState } from "react"; // Импортируем хуки React для управления состоянием и эффектами
+import useAllPlayers from "../features/reusableTable/useAllPlayers"; // Хук для получения данных о всех игроках
+import { useTable } from "../features/table/useTable"; // Хук для получения данных таблицы
+import { addTeamNamesToPlayers } from "../utils/helpers"; // Импортируем вспомогательную функцию для добавления имен команд к игрокам
+import { CircularProgress } from "@mui/material"; // Импортируем компонент индикатора загрузки из MUI
+import styled from "styled-components"; // Импортируем styled-components для стилизации
 
-const titpleOptions = ["Лучшие бомбардиры", "Лучшие ассистенты"];
-
+// Стилизованный контейнер для индикатора загрузки, выравнивающий его по центру
 const CenterSpinnerDiv = styled.div`
   display: flex;
   text-align: center;
   align-items: center;
   justify-content: center;
-
-  height: 90vh;
+  height: 90vh; // Высота контейнера
 `;
 
+// Стилизованный блок для обертки таблицы
 const TableWrapperBlock = styled.div`
-  background-color: #f5f5f7;
-  border-radius: var(--border-radius-lg-pfl);
+  background-color: #fafafa; // Фоновый цвет таблицы
+  border-radius: var(--border-radius-lg-pfl); // Радиус скругления углов
 `;
 
-// Функция render
+// Функция рендеринга ячеек таблицы для каждого игрока
 function render(player) {
+  // Определяем порядок колонок для таблицы
   const order = [
     "number",
     "playerName",
@@ -37,49 +37,59 @@ function render(player) {
     "games",
   ];
 
+  // Создаем ячейки таблицы в указанном порядке
   return order.map((key) => (
     <ReusableResultsTable.StyledTableCell key={key}>
-      {player[key]}
+      {player[key]} {/* Заполняем ячейку данными из объекта игрока */}
     </ReusableResultsTable.StyledTableCell>
   ));
 }
 
 function Statistics() {
+  // Состояние для обновленных данных игроков с добавленными именами команд
   const [updatedPlayersWithTeamNames, setUpdatedPlayersWithTeamNames] =
     useState([]);
+
+  // Извлекаем текущий уровень лиги из Redux store
   const { leagueTier = "" } = useSelector((state) => state?.league?.leagueTier);
 
+  // Используем хук для получения данных о всех игроках и индикаторе загрузки
   const { players = [], isLoadingPlayers } = useAllPlayers(leagueTier);
+
+  // Используем хук для получения данных таблицы и индикатора загрузки
   const { tableData = [], isLoading: isLoadingTable } = useTable();
 
+  // Определяем общее состояние загрузки
   const isLoading = isLoadingPlayers || isLoadingTable;
 
   useEffect(() => {
+    // Обновляем данные игроков, когда получены данные игроков и таблицы
     if (players.length > 0 && tableData.length > 0) {
+      // Добавляем имена команд к игрокам и обновляем состояние
       const updatedPlayers = addTeamNamesToPlayers(players, tableData);
       setUpdatedPlayersWithTeamNames(updatedPlayers);
     }
-  }, [players, tableData]);
+  }, [players, tableData]); // Зависимости эффекта: данные игроков и таблицы
 
   return (
-    <Row gap={3}>
+    <Row gap={2}>
       <Row>
-        <TableTitle>Статистика</TableTitle>
+        <TableTitle>Статистика</TableTitle> {/* Заголовок таблицы */}
       </Row>
 
       <TableWrapperBlock>
         {isLoading ? (
           <CenterSpinnerDiv>
-            <CircularProgress />
+            <CircularProgress /> {/* Индикатор загрузки */}
           </CenterSpinnerDiv>
         ) : (
           <>
             <Row type="horizontal" gap={3}>
               <ReusableResultsTable
-                titleOptions={titpleOptions}
-                initialTitle="Лучшие бомбардиры"
-                players={updatedPlayersWithTeamNames}
-                render={render}
+                initialTitle="Лучшие бомбардиры" // Начальный заголовок таблицы
+                tableTitle="Статистика игроков" // Заголовок таблицы
+                players={updatedPlayersWithTeamNames} // Передаем обновленные данные игроков
+                render={render} // Функция рендеринга ячеек таблицы
               ></ReusableResultsTable>
             </Row>
           </>

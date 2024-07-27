@@ -26,9 +26,11 @@ import {
   pickOpponentTeam,
   pickOpponentTeamResult,
   resetMatchState,
-  setIsPending,
+  // setIsPending,
+  handleAssistsChange,
 } from "./matchModalSlice";
-import toast from "react-hot-toast";
+
+import { useUpdatePlayer } from "./useUpdatePlayersTable";
 
 // Стили для модального окна
 const style = {
@@ -43,6 +45,7 @@ const style = {
   boxShadow: 24,
   p: 5,
   overflowY: "auto",
+  backdropFilter: "blur(8px)", // добавляем фильтр размытия
 };
 
 const CreateMatchModal = ({ open, handleClose, teams }) => {
@@ -78,6 +81,8 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
 
   const { addMatch } = useAddMatch();
 
+  const { updateAllPlayers } = useUpdatePlayer();
+
   // Обработчик подтверждения изменений (submit)
   const onSubmit = async () => {
     // Асинхронное обновление данных команд и добавление матча
@@ -86,6 +91,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
       updateTeamRowOpponent(),
       // dispatch(setIsPending(isPendingCurrent)),
       addMatch(),
+      updateAllPlayers(),
     ]);
     // Сбрасываем состояние матча и закрываем модальное окно
     dispatch(resetMatchState());
@@ -102,7 +108,11 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
   return (
     <>
       {/* Модальное окно */}
-      <Modal open={open} onClose={handleModalClose}>
+      <Modal
+        open={open}
+        onClose={handleModalClose}
+        style={{ backdropFilter: "blur(5px)" }}
+      >
         <Box sx={style}>
           <h2>Внести результат матча</h2>
 
@@ -176,6 +186,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                   Игроки команды {team1}, забившие гол
                 </Typography>
               </AccordionSummary>
+
               <AccordionDetails sx={{ maxHeight: 200, overflowY: "auto" }}>
                 {playersCurrentTeam.map((player) => {
                   const isSelected = playersScoredGoalsCurrentTeam?.some(
@@ -185,6 +196,10 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                     playersScoredGoalsCurrentTeam?.find(
                       (p) => p.id === player.id
                     )?.scored || 0;
+                  const playerAssists =
+                    playersScoredGoalsCurrentTeam?.find(
+                      (p) => p.id === player.id
+                    )?.assists || 0;
 
                   return (
                     <div
@@ -208,21 +223,40 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                       </MenuItem>
                       {/* Ввод количества голов */}
                       {isSelected && (
-                        <TextField
-                          type="number"
-                          label="Голы"
-                          value={playerGoals}
-                          onChange={(e) =>
-                            dispatch(
-                              handleGoalsChange({
-                                team: "currentTeam",
-                                playerId: player.id,
-                                scored: parseInt(e.target.value),
-                              })
-                            )
-                          }
-                          style={{ width: 60, marginLeft: 10 }}
-                        />
+                        <>
+                          <TextField
+                            type="number"
+                            label="Голы"
+                            value={playerGoals}
+                            onChange={(e) =>
+                              dispatch(
+                                handleGoalsChange({
+                                  team: "currentTeam",
+                                  playerId: player.id,
+                                  scored: parseInt(e.target.value),
+                                })
+                              )
+                            }
+                            style={{ width: 60, marginLeft: 10 }}
+                          />
+
+                          {/* Ввод количества ассистов */}
+                          <TextField
+                            type="number"
+                            label="Ассисты"
+                            value={playerAssists}
+                            onChange={(e) =>
+                              dispatch(
+                                handleAssistsChange({
+                                  team: "currentTeam",
+                                  playerId: player.id,
+                                  assists: parseInt(e.target.value),
+                                })
+                              )
+                            }
+                            style={{ width: 60, marginLeft: 10 }}
+                          />
+                        </>
                       )}
                     </div>
                   );
@@ -242,6 +276,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                     Игроки команды {team2}, забившие гол
                   </Typography>
                 </AccordionSummary>
+
                 <AccordionDetails sx={{ maxHeight: 200, overflowY: "auto" }}>
                   {playersOpponentTeam.map((player) => {
                     const isSelected = playersScoredGoalsOpponentTeam?.some(
@@ -251,6 +286,10 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                       playersScoredGoalsOpponentTeam?.find(
                         (p) => p.id === player.id
                       )?.scored || 0;
+                    const playerAssists =
+                      playersScoredGoalsOpponentTeam?.find(
+                        (p) => p.id === player.id
+                      )?.assists || 0;
 
                     return (
                       <div
@@ -279,21 +318,40 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                         </MenuItem>
                         {/* Ввод количества голов */}
                         {isSelected && (
-                          <TextField
-                            type="number"
-                            label="Голы"
-                            value={playerGoals}
-                            onChange={(e) =>
-                              dispatch(
-                                handleGoalsChange({
-                                  team: "opponentTeam",
-                                  playerId: player.id,
-                                  scored: parseInt(e.target.value),
-                                })
-                              )
-                            }
-                            style={{ width: 60, marginLeft: 10 }}
-                          />
+                          <>
+                            <TextField
+                              type="number"
+                              label="Голы"
+                              value={playerGoals}
+                              onChange={(e) =>
+                                dispatch(
+                                  handleGoalsChange({
+                                    team: "opponentTeam",
+                                    playerId: player.id,
+                                    scored: parseInt(e.target.value),
+                                  })
+                                )
+                              }
+                              style={{ width: 60, marginLeft: 10 }}
+                            />
+
+                            {/* Ввод количества ассистов */}
+                            <TextField
+                              type="number"
+                              label="Ассисты"
+                              value={playerAssists}
+                              onChange={(e) =>
+                                dispatch(
+                                  handleAssistsChange({
+                                    team: "opponentTeam",
+                                    playerId: player.id,
+                                    assists: parseInt(e.target.value),
+                                  })
+                                )
+                              }
+                              style={{ width: 60, marginLeft: 10 }}
+                            />
+                          </>
                         )}
                       </div>
                     );
@@ -304,7 +362,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
 
             {/* Кнопка для подтверждения изменений */}
             <Button onClick={onSubmit} variant="contained" fullWidth>
-              Применить
+              Добавить матч
             </Button>
           </Row>
         </Box>

@@ -5,7 +5,10 @@ const MainContent = styled.div`
   background-color: #fafafa;
   padding: 20px;
   overflow-y: auto;
-  min-width: 600px;
+  min-width: 750px;
+
+  border-left: 1px solid var(--color-secondinary-200);
+  border-right: 1px solid var(--color-secondinary-200);
 `;
 
 export default MainContent;

@@ -26,7 +26,7 @@ const Ul = styled.ul`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
 
   gap: 24px;
 

@@ -17,6 +17,10 @@ const GlobalStyles = createGlobalStyle`:root {
     --color-secondary-300: #8E92BC;
     --color-secondart-400: #54577A;
 
+    /* Secondinary */
+    --color-secondinary-100: ##DFE1F3;
+    --color-secondinary-200: ##C2C6E8;
+
     /* Success */
 
     --color-success-500 :#9CD323;
