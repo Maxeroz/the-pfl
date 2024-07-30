@@ -4,7 +4,7 @@ const IconWrapper = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: ${(props) => props.size || "24px"};
+  font-size: ${(props) => props.size || "30px"};
   color: ${(props) => props.color || "inherit"};
 `;
 

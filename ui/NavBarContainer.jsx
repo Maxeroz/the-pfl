@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const NavBarContainer = styled.div`
+const NavBarContainer = styled.aside`
   display: flex;
   flex-direction: column;
   gap: 60px;
@@ -8,7 +8,7 @@ const NavBarContainer = styled.div`
 
   width: 15%;
   background-color: #ffffff;
-  padding: 20px;
+  /* padding: 20px; */
 `;
 
 export default NavBarContainer;

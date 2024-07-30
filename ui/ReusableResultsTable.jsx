@@ -104,6 +104,7 @@ function ReusableResultsTable({ children, players, tableTitle, render }) {
           <TableHead>
             <TableRow>
               <HeadTableCell
+                sx={{ width: "90px" }}
                 sortDirection={orderBy === "number" ? order : false}
               >
                 <TableSortLabel
@@ -115,6 +116,7 @@ function ReusableResultsTable({ children, players, tableTitle, render }) {
                 </TableSortLabel>
               </HeadTableCell>
               <HeadTableCell
+                sx={{ width: "170px" }}
                 sortDirection={orderBy === "playerName" ? order : false}
               >
                 <TableSortLabel
