@@ -54,7 +54,7 @@ function InfoBlock({
   children,
   action,
   to,
-  scroll,
+  scrollX,
 }) {
   if (children)
     return (
@@ -63,7 +63,7 @@ function InfoBlock({
         width={width}
         height={height}
         action={action}
-        scroll={scroll}
+        scrollX={scrollX}
       >
         {isLoading ? (
           <Box sx={{ width: { width } }}>

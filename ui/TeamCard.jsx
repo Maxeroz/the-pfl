@@ -94,10 +94,6 @@ function TeamCard({ team }) {
                   sx={{
                     width: 50,
                     height: 50,
-                    transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "scale(1.1)",
-                    },
                   }}
                 />
                 <TeamTitleContainer>

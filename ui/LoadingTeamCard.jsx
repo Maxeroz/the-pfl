@@ -38,41 +38,46 @@ const TeamBlock = styled.div`
 
 // Стилизованный компонент для аватара заглушки с анимацией
 const PlaceholderAvatar = styled(Avatar)`
-  background: #e0e0e0;
-  background-image: linear-gradient(
-    90deg,
-    #e0e0e0 0px,
-    #f0f0f0 40px,
-    #e0e0e0 80px
-  );
-  background-size: 200% 100%;
-  animation: ${shimmer} 1.5s infinite linear;
+  background: #8e92bc;
+
   width: 50px;
   height: 50px;
   border-radius: 50%;
+
+  /* Стиль для переливающегося фона */
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary-300) 25%,
+    #8e92bc7f 50%,
+    #8e92bc 75%
+  );
+  background-size: 200% 100%;
+
+  /* Анимация */
+  animation: ${shimmer} 5s infinite linear;
 `;
 
 const PlaceholderText = styled.div`
-  background: #e0e0e0;
-  background-image: linear-gradient(
-    90deg,
-    #e0e0e0 0px,
-    #f0f0f0 40px,
-    #e0e0e0 80px
-  );
-  background-size: 200% 100%;
-  animation: ${shimmer} 1.5s infinite linear;
-  height: 12px;
-  width: 80%;
+  background: ${(props) => props.color};
+  opacity: ${(props) => props.opacity};
+
+  height: ${(props) => `${props.height}px`};
+  width: ${(props) => `${props.width}px`};
   margin: 4px 0;
-  border-radius: 4px;
+  border-radius: 20px;
 `;
 
 const PlaceholderDetailsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 4px;
 `;
+
+PlaceholderText.defaultProps = {
+  height: 12,
+  width: 100,
+};
 
 function LoadingTeamCard() {
   return (
@@ -89,16 +94,49 @@ function LoadingTeamCard() {
             <ImageTitleContainer>
               <PlaceholderAvatar />
               <TeamTitleContainer>
-                <PlaceholderText style={{ width: "50%" }} />
-                <PlaceholderText style={{ width: "30%" }} />
+                <PlaceholderText color="#546fff" opacity="0.32" />
+                <PlaceholderText color="#546fff" opacity="0.12" />
               </TeamTitleContainer>
             </ImageTitleContainer>
           </Row>
         </Row>
         <PlaceholderDetailsContainer>
-          <PlaceholderText style={{ width: "25%" }} />
-          <PlaceholderText style={{ width: "25%" }} />
-          <PlaceholderText style={{ width: "30%" }} />
+          <PlaceholderText
+            color="#546fff"
+            width="15"
+            opacity="0.32"
+            height="15"
+          />
+          <PlaceholderText
+            color="#546fff"
+            width="80"
+            opacity="0.32"
+            height="15"
+          />
+          <PlaceholderText
+            color="#546fff"
+            width="15"
+            opacity="0.32"
+            height="15"
+          />
+          <PlaceholderText
+            color="#546fff"
+            width="80"
+            opacity="0.32"
+            height="15"
+          />
+          <PlaceholderText
+            color="#546fff"
+            width="15"
+            opacity="0.32"
+            height="15"
+          />
+          <PlaceholderText
+            color="#546fff"
+            width="80"
+            opacity="0.32"
+            height="15"
+          />
         </PlaceholderDetailsContainer>
       </StyledInfoContainer>
     </TeamBlock>
