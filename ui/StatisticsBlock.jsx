@@ -183,13 +183,6 @@ function StatisticsBlock({ light, width, height }) {
     }
   };
 
-  // // Сброс текущей страницы, если количество матчей меньше
-  // useEffect(() => {
-  //   if (matches?.length < currentPage * matchesPerPage) {
-  //     setCurrentPage(1);
-  //   }
-  // }, [matches]);
-
   return (
     <StatisticsDiv
       light={light}

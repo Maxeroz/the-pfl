@@ -17,8 +17,10 @@ import GlobalStyles from "../Styles/GlobalStyles";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider } from "react-redux";
 import store from "./store";
-import Team from "../pages/Team";
+
 import Teams from "../pages/Teams";
+import AllTeams from "../ui/AllTeams";
+import Team from "../ui/Team";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,8 +49,12 @@ function App() {
               <Route path="statistics" element={<Statistics />} />
               <Route path="news" element={<News />} />
               <Route path="disqualifications" element={<Disqualifications />} />
-              <Route path="teams/league/:leagueId" element={<Teams />}>
-                <Route path="team/:id" element={<Team />} />
+              <Route path="teams" element={<Teams />}>
+                {/* Лига с идентификатором */}
+                <Route path="league/:leagueId" element={<AllTeams />}>
+                  {/* Команда с идентификатором в зависимости от лиги */}
+                  <Route path="team/:id" element={<Team />} />
+                </Route>
               </Route>
             </Route>
             <Route path="login" element={<Login />} />

@@ -32,7 +32,7 @@ function ImageTeams({ teams }) {
       {/* Используем spacing для увеличения пространства между элементами */}
       {teams.map((team) => (
         <EmptyLink
-          to={`/teams/league/${leagueId}/team/${team.id}`}
+          to={`/teams/league/${leagueId}/team/${team.id}`} // Ссылка на команду с привязкой к лиге
           key={team.id}
           aria-label={`Team ${team.name}`} /* Добавляем aria-label для доступности */
         >

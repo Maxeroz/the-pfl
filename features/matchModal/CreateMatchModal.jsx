@@ -31,6 +31,22 @@ import {
 } from "./matchModalSlice";
 
 import { useUpdatePlayer } from "./useUpdatePlayersTable";
+import styled from "styled-components";
+
+const StyledButton = styled(Button)`
+  background-color: var(--color-primary-500);
+
+  padding: 12px 0;
+  border-radius: var(--border-radius-lg-pfl);
+  font-size: 14px;
+`;
+
+const StyledTextField = styled(TextField)`
+  border-color: var(--input-border-color);
+  border-radius: var(--border-radius-lg-pfl);
+`;
+
+const StyledMenuItem = styled(MenuItem)``;
 
 // Стили для модального окна
 const style = {
@@ -40,7 +56,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 450,
-  height: 460,
+  height: 520,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 5,
@@ -117,7 +133,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
           <h2>Внести результат матча</h2>
 
           {/* Выбор команды 1 */}
-          <TextField
+          <StyledTextField
             select
             label="Команда 1"
             value={team1}
@@ -125,11 +141,11 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
             margin="normal"
             disabled
           >
-            <MenuItem value={team1}>{team1}</MenuItem>
-          </TextField>
+            <StyledMenuItem value={team1}>{team1}</StyledMenuItem>
+          </StyledTextField>
 
           {/* Выбор команды 2 */}
-          <TextField
+          <StyledTextField
             select
             label="Команда 2"
             value={team2Id || ""}
@@ -151,14 +167,14 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
             margin="normal"
           >
             {teamsToPickOpponent.map((team) => (
-              <MenuItem key={team.id} value={team.id}>
+              <StyledMenuItem key={team.id} value={team.id}>
                 {team.teamName}
-              </MenuItem>
+              </StyledMenuItem>
             ))}
-          </TextField>
+          </StyledTextField>
 
           {/* Ввод результатов команд */}
-          <TextField
+          <StyledTextField
             label="Результат команды 1"
             value={score1}
             onChange={(e) => dispatch(pickCurrentTeamResult(e.target.value))}
@@ -166,7 +182,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
             margin="normal"
           />
 
-          <TextField
+          <StyledTextField
             label="Результат команды 2"
             value={score2}
             onChange={(e) => dispatch(pickOpponentTeamResult(e.target.value))}
@@ -207,7 +223,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                       style={{ display: "flex", alignItems: "center" }}
                     >
                       {/* Выбор игрока */}
-                      <MenuItem
+                      <StyledMenuItem
                         value={player.playerName}
                         onClick={() =>
                           dispatch(
@@ -220,11 +236,11 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                         }}
                       >
                         {player.playerName}
-                      </MenuItem>
+                      </StyledMenuItem>
                       {/* Ввод количества голов */}
                       {isSelected && (
                         <>
-                          <TextField
+                          <StyledTextField
                             type="number"
                             label="Голы"
                             value={playerGoals}
@@ -241,7 +257,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                           />
 
                           {/* Ввод количества ассистов */}
-                          <TextField
+                          <StyledTextField
                             type="number"
                             label="Ассисты"
                             value={playerAssists}
@@ -297,7 +313,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                         style={{ display: "flex", alignItems: "center" }}
                       >
                         {/* Выбор игрока */}
-                        <MenuItem
+                        <StyledMenuItem
                           value={player.playerName}
                           onClick={() =>
                             dispatch(
@@ -315,11 +331,11 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                           }}
                         >
                           {player.playerName}
-                        </MenuItem>
+                        </StyledMenuItem>
                         {/* Ввод количества голов */}
                         {isSelected && (
                           <>
-                            <TextField
+                            <StyledTextField
                               type="number"
                               label="Голы"
                               value={playerGoals}
@@ -336,7 +352,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                             />
 
                             {/* Ввод количества ассистов */}
-                            <TextField
+                            <StyledTextField
                               type="number"
                               label="Ассисты"
                               value={playerAssists}
@@ -361,9 +377,9 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
             )}
 
             {/* Кнопка для подтверждения изменений */}
-            <Button onClick={onSubmit} variant="contained" fullWidth>
+            <StyledButton onClick={onSubmit} variant="contained" fullWidth>
               Добавить матч
-            </Button>
+            </StyledButton>
           </Row>
         </Box>
       </Modal>

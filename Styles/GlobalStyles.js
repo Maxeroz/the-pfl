@@ -14,8 +14,9 @@ const GlobalStyles = createGlobalStyle`:root {
     --border-radius-lg-pfl:10px;
     /* Secondary */
     --color-secondary-500: #141522;
+    --color-secondary-400: #54577A;
     --color-secondary-300: #8E92BC;
-    --color-secondart-400: #54577A;
+    
 
     /* Secondinary */
     --color-secondinary-100: ##DFE1F3;
@@ -25,6 +26,10 @@ const GlobalStyles = createGlobalStyle`:root {
 
     --color-success-500 :#9CD323;
     --color-error-500: #FF4423;
+
+
+    --input-border-color: #F5F5F7;
+
 
     /* brand */
 ;

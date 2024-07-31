@@ -7,7 +7,6 @@ import { HiMiniXCircle } from "react-icons/hi2";
 import Icon from "./Icon";
 import InfoContainer from "./InfoContainer";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const Title = styled.h3`
   font-size: 16px;
@@ -54,13 +53,16 @@ function InfoBlock({
   isLoading,
   children,
   action,
+  to,
 }) {
-  const league = useSelector((state) => state.league.leagueTier);
-  const leagueId = league.split(" ").slice(-1)[0]; // Исправление: получаем строку
-
   if (children)
     return (
-      <InfoContainer light={light} width={width} height={height}>
+      <InfoContainer
+        light={light}
+        width={width}
+        height={height}
+        action={action}
+      >
         {isLoading ? (
           <Box sx={{ width: { width } }}>
             <StyledPrimaryLinearProgress />
@@ -72,7 +74,7 @@ function InfoBlock({
     );
 
   return action ? (
-    <EmptyLink to={`/teams/league/${leagueId}`}>
+    <EmptyLink to={to}>
       <InfoContainer light={light} width={width} height={height}>
         {isLoading ? (
           <Box sx={{ width: { width } }}>

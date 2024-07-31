@@ -4,21 +4,21 @@ import { useProfile } from "../features/profile/useProfile";
 import Row from "../ui/Row";
 import TableTitle from "../ui/TableTitle";
 
-import styled from "styled-components";
-import ProfileInfoSpan from "../ui/ProfileInfoSpan";
-import Loader from "../ui/Loader";
+// import styled from "styled-components";
+// import ProfileInfoSpan from "../ui/ProfileInfoSpan";
+// import Loader from "../ui/Loader";
 
-import {
-  HiBuildingLibrary,
-  HiCalendarDays,
-  HiCheckCircle,
-  HiInformationCircle,
-} from "react-icons/hi2";
-import { HiArrowsUpDown } from "react-icons/hi2";
+// import {
+//   HiBuildingLibrary,
+//   HiCalendarDays,
+//   HiCheckCircle,
+//   HiInformationCircle,
+// } from "react-icons/hi2";
+// import { HiArrowsUpDown } from "react-icons/hi2";
 import { useSettings } from "../features/selectLeague/useSettings";
 import { useTable } from "../features/table/useTable";
 import InfoBlock from "../ui/InfoBlock";
-import ReusableResultsTable from "../ui/ReusableResultsTable";
+// import ReusableResultsTable from "../ui/ReusableResultsTable";
 import ImageTeams from "../ui/ImageTeams";
 
 const tableMapping = {
@@ -27,38 +27,39 @@ const tableMapping = {
   "ПФЛ ЛИГА 3": 2,
 };
 
-const CenterSpinnerDiv = styled.div`
-  display: flex;
-  margin: auto 0;
-  align-items: center;
-  justify-content: center;
-`;
+// const CenterSpinnerDiv = styled.div`
+//   display: flex;
+//   margin: auto 0;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
-const OpenWindowSpan = styled.span`
-  color: var(--color-green-700);
-`;
+// const OpenWindowSpan = styled.span`
+//   color: var(--color-green-700);
+// `;
 
-const ClosedWindowSpan = styled.span`
-  color: var(--color-red-700);
-`;
+// const ClosedWindowSpan = styled.span`
+//   color: var(--color-red-700);
+// `;
 
-const ProfileInfoIcon = styled.span`
-  display: flex;
-  align-items: center;
+// const ProfileInfoIcon = styled.span`
+//   display: flex;
+//   align-items: center;
 
-  color: var(--color-grey-500);
-`;
+//   color: var(--color-grey-500);
+// `;
 
-const BounderDiv = styled.div`
-  border-bottom: 1px solid;
-`;
+// const BounderDiv = styled.div`
+//   border-bottom: 1px solid;
+// `;
 
 function Profile() {
   const league = useSelector((state) => state.league.leagueTier);
+  const leagueId = league.split(" ").slice(-1)[0]; // Исправление: получаем строку
   const { tableData = [] } = useTable();
 
   const teamAmount = tableData.length;
-  const teamsToPlay = tableData.map((team) => team.teamName);
+  // const teamsToPlay = tableData.map((team) => team.teamName);
 
   const { settings: { season } = {} } = useSettings();
   const { profile = [], isLoading } = useProfile();
@@ -66,9 +67,7 @@ function Profile() {
   // Проверяем наличие профиля и правильного индекса
   const profileData = profile[tableMapping[league]];
 
-  const { leagueName, transferWindow, city } = profileData
-    ? profileData
-    : "Нет данных";
+  const { transferWindow } = profileData ? profileData : "Нет данных";
 
   return (
     <Row gap={3}>
@@ -84,7 +83,7 @@ function Profile() {
           isLoading={isLoading}
           light="light"
           height="64px"
-        ></InfoBlock>
+        />
 
         {/* Отображение информации о трансферном окне */}
         <InfoBlock
@@ -93,7 +92,7 @@ function Profile() {
           width="200px"
           isLoading={isLoading}
           height="64px"
-        ></InfoBlock>
+        />
       </Row>
 
       <Row type="horizontal" gap={2}>
@@ -103,7 +102,8 @@ function Profile() {
           isLoading={isLoading}
           height="64px"
           action={true}
-        ></InfoBlock>
+          to={`/teams/league/${leagueId}`}
+        />
 
         <InfoBlock
           isLoading={isLoading}

@@ -11,14 +11,18 @@ const fadeIn = keyframes`
 `;
 
 // Изменяемый стилизованный компонент с пропсами для ширины, высоты и фона
+// Изменяемый стилизованный компонент с пропсами для ширины, высоты и фона
 const InfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: ${(props) =>
+    props.alignItems || "center"}; // Значение по умолчанию center
+  flex-direction: ${(props) =>
+    props.direction || "row"}; // Значение по умолчанию row
 
   gap: 10px;
 
-  overflow-x: scroll;
+  overflow-x: ${(props) => (props.children ? "scroll" : "hidden")};
 
   background-color: ${(props) =>
     props.light === "light" ? "#F5F5F7" : "#141522"};
