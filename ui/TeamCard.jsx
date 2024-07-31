@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import InfoContainer from "./InfoContainer";
 import Row from "./Row";
-import { Avatar } from "@mui/material";
+import { Avatar, linkClasses } from "@mui/material";
 import { NavLink, useParams } from "react-router-dom";
 import DetailItem from "./DetailItem";
 
@@ -72,7 +72,7 @@ const StyledDetailItem = styled(DetailItem)`
   align-items: center;
 `;
 
-function TeamCard({ team, isLoading }) {
+function TeamCard({ team }) {
   const { leagueId } = useParams(); // Получаем параметр
 
   return (
@@ -90,15 +90,13 @@ function TeamCard({ team, isLoading }) {
               <ImageTitleContainer>
                 <Avatar
                   src={team.imageUrl}
-                  alt={`Avatar of ${team.name}`} /* alt-текст для изображения */
+                  alt={`Avatar of ${team.name}`}
                   sx={{
-                    width: 50 /* Задаем ширину для аватара */,
-                    height: 50 /* Задаем высоту для аватара */,
-                    transition:
-                      "transform 0.3s ease-in-out" /* Плавное изменение размеров */,
+                    width: 50,
+                    height: 50,
+                    transition: "transform 0.3s ease-in-out",
                     "&:hover": {
-                      transform:
-                        "scale(1.1)" /* Дополнительный эффект при наведении */,
+                      transform: "scale(1.1)",
                     },
                   }}
                 />
@@ -116,21 +114,21 @@ function TeamCard({ team, isLoading }) {
               icon={<GiSoccerBall />}
               color="#54577A"
             >
-              {team.scored}
+              Г: {team.scored}
             </StyledDetailItem>
             <StyledDetailItem
               icon={<TbPlayFootball />}
               size="24px"
               color="#54577A"
             >
-              {team.missed}
+              П: {team.missed}
             </StyledDetailItem>
             <StyledDetailItem
               icon={<TbLayersDifference />}
               size="24px"
               color="#54577A"
             >
-              ({team.wins}/{team.losses})
+              W/L: ({team.wins}/{team.losses})
             </StyledDetailItem>
           </DetailsContainer>
         </StyledInfoContainer>

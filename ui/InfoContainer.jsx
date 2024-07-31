@@ -22,7 +22,8 @@ const InfoContainer = styled.div`
 
   gap: 10px;
 
-  overflow-x: ${(props) => (props.children ? "scroll" : "hidden")};
+  overflow: ${(props) => props.scroll};
+  overflow-x: ${(props) => (props.scroll ? "scroll" : "hidden")};
 
   background-color: ${(props) =>
     props.light === "light" ? "#F5F5F7" : "#141522"};
@@ -36,5 +37,9 @@ const InfoContainer = styled.div`
 
   animation: ${fadeIn} 0.1s ease-in-out; // Применение анимации
 `;
+
+InfoContainer.defaultProps = {
+  scroll: "hidden",
+};
 
 export default InfoContainer;

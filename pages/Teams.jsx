@@ -6,7 +6,7 @@ function Teams() {
   return (
     <Row gap={3}>
       <Row>
-        <TableTitle>Данные о командах:</TableTitle>
+        <TableTitle>Информация о командах:</TableTitle>
       </Row>
       <Row>
         <Outlet />

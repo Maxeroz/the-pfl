@@ -51,10 +51,9 @@ function App() {
               <Route path="disqualifications" element={<Disqualifications />} />
               <Route path="teams" element={<Teams />}>
                 {/* Лига с идентификатором */}
-                <Route path="league/:leagueId" element={<AllTeams />}>
-                  {/* Команда с идентификатором в зависимости от лиги */}
-                  <Route path="team/:id" element={<Team />} />
-                </Route>
+                <Route path="league/:leagueId" element={<AllTeams />} />
+                {/* Команда с идентификатором в зависимости от лиги */}
+                <Route path="league/:leagueId/team/:id" element={<Team />} />
               </Route>
             </Route>
             <Route path="login" element={<Login />} />

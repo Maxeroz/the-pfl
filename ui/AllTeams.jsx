@@ -3,10 +3,13 @@ import Row from "./Row";
 
 import { useTable } from "../features/table/useTable";
 import TeamCard from "./TeamCard";
+import LoadingTeamCard from "./LoadingTeamCard";
 
 function AllTeams() {
   const { leagueId } = useParams(); // Получаем параметр
   const { isLoading, tableData: teams } = useTable();
+
+  let loadedTeams = [{ id: 1 }, { id: 2 }];
 
   return (
     <Row gap={2}>
@@ -17,9 +20,11 @@ function AllTeams() {
       </Row>
 
       <Row type="horizontal" wrap="wrap">
-        {teams.map((team) => (
-          <TeamCard key={team.id} team={team} isLoading={isLoading}></TeamCard>
-        ))}
+        {isLoading
+          ? loadedTeams.map((team) => <LoadingTeamCard key={team.id} />)
+          : teams.map((team) => (
+              <TeamCard key={team.id} team={team}></TeamCard>
+            ))}
       </Row>
     </Row>
   );

@@ -110,6 +110,7 @@ function Profile() {
           width="470px"
           light="light"
           height="70px"
+          scroll={true}
         >
           <ImageTeams teams={tableData} />
         </InfoBlock>
