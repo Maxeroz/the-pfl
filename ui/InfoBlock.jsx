@@ -55,6 +55,7 @@ function InfoBlock({
   action,
   to,
   scrollX,
+  onClick,
 }) {
   if (children)
     return (
@@ -103,7 +104,12 @@ function InfoBlock({
       </InfoContainer>
     </EmptyLink>
   ) : (
-    <InfoContainer light={light} width={width} height={height}>
+    <InfoContainer
+      light={light}
+      width={width}
+      height={height}
+      onClick={onClick}
+    >
       {isLoading ? (
         <Box sx={{ width: { width } }}>
           <StyledPrimaryLinearProgress />

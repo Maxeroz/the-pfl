@@ -18,6 +18,8 @@ const InfoContainer = styled.div`
   flex-direction: ${(props) => props.direction || "row"};
   gap: 10px;
 
+  cursor: ${(props) => props.onClick && "pointer"};
+
   overflow: ${(props) => (props.scroll ? "scroll" : "hidden")};
   overflow-x: ${(props) =>
     props.scrollX

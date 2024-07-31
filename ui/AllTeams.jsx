@@ -46,9 +46,16 @@ function AllTeams() {
       </Row>
 
       <Row type="horizontal" wrap="wrap">
-        {isLoading
-          ? loadedTeams.map((team) => <LoadingTeamCard key={team.id} />)
-          : filteredTeams.map((team) => <TeamCard key={team.id} team={team} />)}
+        <>
+          {isLoading
+            ? loadedTeams.map((team) => <LoadingTeamCard key={team.id} />)
+            : filteredTeams.map((team) => (
+                <TeamCard key={team.id} team={team} />
+              ))}
+
+          {/* Компонент для добавления новой команды в лигу */}
+          {/* <TeamCard team={{ adding: true }} /> */}
+        </>
       </Row>
     </Row>
   );

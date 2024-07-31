@@ -5,7 +5,7 @@ import { RiFindReplaceLine } from "react-icons/ri";
 // Контейнер для инпута и иконки
 const InputWrapper = styled.div`
   position: relative;
-  width: 480px;
+  width: 70%;
 `;
 
 // Инпут с увеличенным внутренним отступом слева

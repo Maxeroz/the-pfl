@@ -8,6 +8,7 @@ import DetailItem from "./DetailItem";
 import { GiSoccerBall } from "react-icons/gi";
 import { TbPlayFootball } from "react-icons/tb";
 import { TbLayersDifference } from "react-icons/tb";
+import Button from "./Button";
 
 const TeamBlock = styled.div`
   margin: 20px 0;
@@ -72,8 +73,35 @@ const StyledDetailItem = styled(DetailItem)`
   align-items: center;
 `;
 
+const AddTeamOption = styled.span`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 function TeamCard({ team }) {
   const { leagueId } = useParams(); // Получаем параметр
+
+  const isAddingSession = team?.adding;
+
+  if (isAddingSession)
+    return (
+      <TeamBlock>
+        <StyledInfoContainer
+          light="light"
+          width="350px"
+          height="140px"
+          direction="column"
+          alignItems="flex-start"
+        >
+          <AddTeamOption>
+            <Button>Добавить команду</Button>
+          </AddTeamOption>
+        </StyledInfoContainer>
+      </TeamBlock>
+    );
 
   return (
     <TeamBlock>

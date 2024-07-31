@@ -20,11 +20,12 @@ import { useTable } from "../features/table/useTable";
 import InfoBlock from "../ui/InfoBlock";
 // import ReusableResultsTable from "../ui/ReusableResultsTable";
 import ImageTeams from "../ui/ImageTeams";
+import { useUpdateTransferWindow } from "../features/selectLeague/useUpdateTransferWindow";
 
 const tableMapping = {
-  "ПФЛ ЛИГА 1": 0,
+  "ПФЛ ЛИГА 1": 2,
   "ПФЛ ЛИГА 2": 1,
-  "ПФЛ ЛИГА 3": 2,
+  "ПФЛ ЛИГА 3": 0,
 };
 
 // const CenterSpinnerDiv = styled.div`
@@ -55,6 +56,7 @@ const tableMapping = {
 
 function Profile() {
   const league = useSelector((state) => state.league.leagueTier);
+
   const leagueId = league.split(" ").slice(-1)[0]; // Исправление: получаем строку
   const { tableData = [] } = useTable();
 
@@ -69,6 +71,7 @@ function Profile() {
 
   const { transferWindow } = profileData ? profileData : "Нет данных";
 
+  const { updateTransferWindow } = useUpdateTransferWindow(!transferWindow);
   return (
     <Row gap={3}>
       <Row>
@@ -79,7 +82,7 @@ function Profile() {
         <InfoBlock
           text="Текущий сезон:"
           dataString={season}
-          width="450px"
+          width="65%"
           isLoading={isLoading}
           light="light"
           height="64px"
@@ -89,9 +92,10 @@ function Profile() {
         <InfoBlock
           text="Трансферное окно"
           dataString={transferWindow}
-          width="200px"
+          width="35%"
           isLoading={isLoading}
           height="64px"
+          onClick={updateTransferWindow}
         />
       </Row>
 
@@ -107,7 +111,7 @@ function Profile() {
 
         <InfoBlock
           isLoading={isLoading}
-          width="470px"
+          width="65%"
           light="light"
           height="70px"
           scrollX="scroll"
