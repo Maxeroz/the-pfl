@@ -18,6 +18,8 @@ const InfoContainer = styled.div`
 
   gap: 10px;
 
+  overflow-x: scroll;
+
   background-color: ${(props) =>
     props.light === "light" ? "#F5F5F7" : "#141522"};
   border-radius: var(--border-radius-lg-pfl);

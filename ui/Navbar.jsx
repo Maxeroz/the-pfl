@@ -1,15 +1,14 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import {
-  HiClipboardDocumentList,
-  HiHome,
-  HiMiniTableCells,
-  HiMiniUserCircle,
-  HiOutlineNewspaper,
-  HiOutlineSquare3Stack3D,
-  HiOutlineUserGroup,
-  HiQueueList,
-} from "react-icons/hi2";
+import // HiClipboardDocumentList,
+// HiHome,
+// HiMiniTableCells,
+// HiMiniUserCircle,
+// HiOutlineNewspaper,
+// HiOutlineSquare3Stack3D,
+// HiOutlineUserGroup,
+// HiQueueList,
+"react-icons/hi2";
 import Icon from "./Icon";
 
 // Стили для навигационного бара
@@ -96,11 +95,19 @@ const LinkTitle = styled.span`
 `;
 
 // Основной компонент Navbar
-const Navbar = () => {
+const Navbar = ({ options }) => {
   return (
     <Nav>
       <Ul>
-        <Li>
+        {options.map((option) => (
+          <Li key={option.title}>
+            <StyledNavLink to={option.to}>
+              <Icon>{option.icon}</Icon>
+              <LinkTitle>{option.title}</LinkTitle>
+            </StyledNavLink>
+          </Li>
+        ))}
+        {/* <Li>
           <StyledNavLink to="/profile">
             <Icon>
               <HiHome />
@@ -155,7 +162,7 @@ const Navbar = () => {
             </Icon>
             <LinkTitle>Войти</LinkTitle>
           </StyledNavLink>
-        </Li>
+        </Li> */}
       </Ul>
     </Nav>
   );

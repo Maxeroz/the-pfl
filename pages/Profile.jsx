@@ -19,6 +19,7 @@ import { useSettings } from "../features/selectLeague/useSettings";
 import { useTable } from "../features/table/useTable";
 import InfoBlock from "../ui/InfoBlock";
 import ReusableResultsTable from "../ui/ReusableResultsTable";
+import ImageTeams from "../ui/ImageTeams";
 
 const tableMapping = {
   "ПФЛ ЛИГА 1": 0,
@@ -93,6 +94,25 @@ function Profile() {
           isLoading={isLoading}
           height="64px"
         ></InfoBlock>
+      </Row>
+
+      <Row type="horizontal" gap={2}>
+        <InfoBlock
+          text={`Команды, участвующие в турнире - ${teamAmount}`}
+          width="250px"
+          isLoading={isLoading}
+          height="64px"
+          action={true}
+        ></InfoBlock>
+
+        <InfoBlock
+          isLoading={isLoading}
+          width="470px"
+          light="light"
+          height="70px"
+        >
+          <ImageTeams teams={tableData} />
+        </InfoBlock>
       </Row>
       <Row />
     </Row>

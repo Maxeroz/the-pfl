@@ -1,11 +1,13 @@
 import { Box, LinearProgress } from "@mui/material";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 
 import { HiCheckCircle } from "react-icons/hi2";
 import { HiMiniXCircle } from "react-icons/hi2";
 
 import Icon from "./Icon";
 import InfoContainer from "./InfoContainer";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Title = styled.h3`
   font-size: 16px;
@@ -17,6 +19,25 @@ const InfoSpan = styled.span`
   font-size: 12px;
 `;
 
+// Создаем стилизованную кнопку
+const EmptyLink = styled(Link)`
+  background-color: transparent; /* Прозрачный фон */
+  border: none; /* Убираем рамку */
+  padding: 0; /* Отсутствие внутренних отступов */
+  margin: 0; /* Отсутствие внешних отступов */
+  cursor: pointer; /* Меняем курсор на указатель */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Добавляем анимацию для трансформации и теней */
+
+  :hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень при наведении */
+  }
+
+  :focus {
+    outline: none; /* Убираем стандартный outline */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Пользовательский фокус */
+  }
+`;
+
 // Стилизованный LinearProgress с использованием цвета из темы
 const StyledPrimaryLinearProgress = styled(LinearProgress)`
   && {
@@ -24,8 +45,60 @@ const StyledPrimaryLinearProgress = styled(LinearProgress)`
   }
 `;
 
-function InfoBlock({ light, text, dataString, width, height, isLoading }) {
-  return (
+function InfoBlock({
+  light,
+  text,
+  dataString,
+  width,
+  height,
+  isLoading,
+  children,
+  action,
+}) {
+  const league = useSelector((state) => state.league.leagueTier);
+  const leagueId = league.split(" ").slice(-1)[0]; // Исправление: получаем строку
+
+  if (children)
+    return (
+      <InfoContainer light={light} width={width} height={height}>
+        {isLoading ? (
+          <Box sx={{ width: { width } }}>
+            <StyledPrimaryLinearProgress />
+          </Box>
+        ) : (
+          children
+        )}
+      </InfoContainer>
+    );
+
+  return action ? (
+    <EmptyLink to={`/teams/league/${leagueId}`}>
+      <InfoContainer light={light} width={width} height={height}>
+        {isLoading ? (
+          <Box sx={{ width: { width } }}>
+            <StyledPrimaryLinearProgress />
+          </Box>
+        ) : (
+          <>
+            <Title>{text}</Title>
+            <InfoSpan>{dataString}</InfoSpan>
+
+            {dataString === true && (
+              <Icon color="#9CD323" size="30px">
+                <HiCheckCircle />
+              </Icon>
+            )}
+
+            {dataString === false && (
+              <Icon color="#FF4423" size="30px">
+                <HiMiniXCircle />
+              </Icon>
+            )}
+          </>
+        )}
+      </InfoContainer>
+    </EmptyLink>
+  ) : (
     <InfoContainer light={light} width={width} height={height}>
       {isLoading ? (
         <Box sx={{ width: { width } }}>

@@ -70,6 +70,15 @@ import NavBarContainer from "./NavBarContainer";
 import MainContent from "./MainContent";
 
 import Sidebar from "./Sidebar";
+import {
+  HiClipboardDocumentList,
+  HiHome,
+  HiMiniTableCells,
+  HiMiniUserCircle,
+  HiOutlineNewspaper,
+  HiOutlineSquare3Stack3D,
+  HiQueueList,
+} from "react-icons/hi2";
 
 // Создание styled-components
 const Layout = styled.div`
@@ -89,7 +98,29 @@ const AppLayout = () => {
             width="50"
           ></MainNavBarTitle>
 
-          <Navbar />
+          <Navbar
+            options={[
+              { to: "/profile", icon: <HiHome />, title: "Профиль" },
+              {
+                to: "/applications",
+                icon: <HiClipboardDocumentList />,
+                title: "Заявки",
+              },
+              {
+                to: "/games",
+                icon: <HiOutlineSquare3Stack3D />,
+                title: "Игры",
+              },
+              { to: "/table", icon: <HiMiniTableCells />, title: "Таблица" },
+              {
+                to: "/statistics",
+                icon: <HiQueueList />,
+                title: "Статистика",
+              },
+              { to: "/news", icon: <HiOutlineNewspaper />, title: "Новости" },
+              { to: "/login", icon: <HiMiniUserCircle />, title: "Войти" },
+            ]}
+          />
         </NavBarContainer>
         <MainContent>
           {/* Основная часть приложения */}

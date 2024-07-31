@@ -21,6 +21,8 @@ import { pickCurrentTeam } from "../features/matchModal/matchModalSlice";
 
 const StyledTableCell = styled(TableCell)`
   font-size: 14px;
+
+  white-space: nowrap;
 `;
 
 const CenterSpinnerDiv = styled.div`
@@ -33,11 +35,18 @@ const CenterSpinnerDiv = styled.div`
 `;
 
 const LastGameSpan = styled.span`
-  margin: 0 2px;
+  text-align: center;
+
+  // Проверить эти стили
+  display: inline-block;
+  width: 22px;
+  text-align: center;
+
+  margin: 0 1px;
   padding: 4px;
   border-radius: 4px;
   background-color: ${({ result }) =>
-    result === "W" ? "#15803d" : result === "D" ? "#eadf46" : "#991b1b"};
+    result === "W" ? "#7FB519" : result === "D" ? "#FFD96B" : "#DB2719"};
   color: ${({ result }) => (result === "D" ? "#1f2937" : "#fff")};
 `;
 
@@ -132,7 +141,9 @@ function TournamentTable() {
                   {tableData.map((item) => (
                     <TableRow
                       key={item.id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
                     >
                       <StyledTableCell align="center">
                         {item.place}
@@ -179,7 +190,7 @@ function TournamentTable() {
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {item.points}
-                      </StyledTableCell>{" "}
+                      </StyledTableCell>
                       <StyledTableCell align="right">
                         {item.lastGames.map((result, index) => (
                           <LastGameSpan key={index} result={result}>
