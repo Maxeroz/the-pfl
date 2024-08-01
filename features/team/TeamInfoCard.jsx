@@ -1,9 +1,21 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import InfoContainer from "../../ui/InfoContainer";
 import { useTeamContext } from "./Team";
 
+// Анимация плавного появления
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
 const TeamBlock = styled.div`
   margin: 20px 0;
+
+  animation: ${fadeIn} 0.1s ease-out; /* Применение анимации плавного появления */
 `;
 
 const TitleContainer = styled.div`

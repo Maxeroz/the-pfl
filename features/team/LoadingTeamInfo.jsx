@@ -11,8 +11,20 @@ const shimmer = keyframes`
   }
 `;
 
+// Анимация плавного появления
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
 const TeamBlock = styled.div`
   margin: 20px 0;
+
+  animation: ${fadeIn} 0.3s ease-out; /* Применение анимации плавного появления */
 `;
 
 const TitleContainer = styled.div`

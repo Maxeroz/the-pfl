@@ -11,8 +11,6 @@ export function useCreateMatch(pickTeam) {
     pickTeam ? state.match[pickTeam]?.teamName : null
   );
 
-  // const dispatch = useDispatch();
-
   const { scored, missed } = useSelector((state) =>
     pickTeam ? state.match[pickTeam] || {} : {}
   );
@@ -25,6 +23,7 @@ export function useCreateMatch(pickTeam) {
 
   let updatedTeamRow = null;
   let lastGames = teamData ? [...teamData.lastGames] : [];
+  let pointsChart = teamData ? [...teamData.pointsChart] : [];
 
   if (teamData) {
     let result;
@@ -46,6 +45,16 @@ export function useCreateMatch(pickTeam) {
     }
     lastGames.unshift(result); // Добавляем новый элемент в начало массива
 
+    // Обновляем pointsChart
+    if (pointsChart.length > 0) {
+      // Если массив не пустой, добавляем новый элемент
+      const lastPoints = pointsChart[pointsChart.length - 1];
+      pointsChart.push(lastPoints + points);
+    } else {
+      // Если массив пустой, просто добавляем первый элемент
+      pointsChart.push(points);
+    }
+
     updatedTeamRow = {
       ...teamData,
       games: teamData.games + 1,
@@ -56,6 +65,7 @@ export function useCreateMatch(pickTeam) {
       scored: teamData.scored + Number(scored),
       lastGames: lastGames,
       points: teamData.points + points,
+      pointsChart: pointsChart, // Обновляем pointsChart
       difference:
         teamData.scored + Number(scored) - (teamData.missed + Number(missed)),
     };

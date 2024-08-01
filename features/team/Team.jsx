@@ -6,6 +6,8 @@ import { useTeam } from "./useTeam";
 import Row from "../../ui/Row";
 import TeamInfoCard from "./TeamInfoCard";
 import LoadingTeamInfo from "./LoadingTeamInfo";
+import TeamChart from "./TeamChart";
+import LoadingTeamChart from "./LoadingTeamChart";
 
 // 1. Create Context
 const TeamContext = createContext();
@@ -35,7 +37,19 @@ function Team() {
   return (
     <TeamContext.Provider value={{ ...teamData }}>
       <Row gap={2}>
-        <Row>{isLoading ? <LoadingTeamInfo /> : <TeamInfoCard />}</Row>
+        <Row type="horizontal">
+          {isLoading ? (
+            <>
+              <LoadingTeamInfo />
+              <LoadingTeamChart />
+            </>
+          ) : (
+            <>
+              <TeamInfoCard />
+              <TeamChart />
+            </>
+          )}
+        </Row>
       </Row>
     </TeamContext.Provider>
   );
