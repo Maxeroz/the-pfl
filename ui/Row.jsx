@@ -3,6 +3,8 @@ import styled, { css } from "styled-components";
 const Row = styled.div`
   display: flex;
 
+  height: ${(props) => `${props.height}px` || "100%"};
+
   ${(props) =>
     props.type === "horizontal" &&
     css`
@@ -12,14 +14,13 @@ const Row = styled.div`
 
       flex-wrap: ${props.wrap};
     `}
-
   ${(props) =>
     props.type === "vertical" &&
     css`
       flex: 1;
       flex-direction: column;
       gap: ${props.gap}rem;
-    `} /* @media (max-width: 685px) {
+    `}; /* @media (max-width: 685px) {
     flex-direction: column;
     align-items: flex-start;
   } */

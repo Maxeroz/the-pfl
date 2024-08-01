@@ -20,7 +20,7 @@ import store from "./store";
 
 import Teams from "../pages/Teams";
 import AllTeams from "../ui/AllTeams";
-import Team from "../ui/Team";
+import Team from "../features/team/Team";
 
 const queryClient = new QueryClient({
   defaultOptions: {

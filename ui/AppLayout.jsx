@@ -86,6 +86,10 @@ const Layout = styled.div`
   height: 100vh;
 `;
 
+const LimitationWidthDiv = styled.div`
+  width: 730px;
+`;
+
 // Определение компонента AppLayout
 const AppLayout = () => {
   return (
@@ -123,8 +127,10 @@ const AppLayout = () => {
           />
         </NavBarContainer>
         <MainContent>
-          {/* Основная часть приложения */}
-          <Outlet />
+          <LimitationWidthDiv>
+            {/* Основная часть приложения */}
+            <Outlet />
+          </LimitationWidthDiv>
         </MainContent>
         <Sidebar>{/* Дополнительная область */}</Sidebar>
       </Layout>

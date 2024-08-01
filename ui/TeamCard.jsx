@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import InfoContainer from "./InfoContainer";
 import Row from "./Row";
-import { Avatar, linkClasses } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { NavLink, useParams } from "react-router-dom";
 import DetailItem from "./DetailItem";
 

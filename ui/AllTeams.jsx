@@ -1,5 +1,5 @@
 import { Outlet, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Row from "./Row";
 
 import TeamCard from "./TeamCard";
@@ -31,7 +31,14 @@ function AllTeams() {
   const filteredTeams = filterTeams(teams, value);
 
   // Заглушки для загрузки
-  const loadedTeams = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+  const loadedTeams = [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+  ];
 
   return (
     <Row gap={2}>
@@ -40,9 +47,6 @@ function AllTeams() {
           Лига: ПФЛ-{leagueId}
         </TableTitle>
         <InputFilterTeam value={value} handleChange={handleChange} />
-      </Row>
-      <Row>
-        <Outlet />
       </Row>
 
       <Row type="horizontal" wrap="wrap">

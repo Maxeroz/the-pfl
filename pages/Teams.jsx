@@ -8,6 +8,7 @@ function Teams() {
       <Row>
         <TableTitle>Информация о командах:</TableTitle>
       </Row>
+
       <Row>
         <Outlet />
       </Row>
