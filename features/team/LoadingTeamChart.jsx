@@ -46,8 +46,8 @@ const PlaceholderTitleContainer = styled.div`
 `;
 
 const PlaceholderTitle = styled.div`
-  background-color: var(--color-grey-0);
-  opacity: 0.6;
+  background-color: var(--color-primary-500);
+  opacity: 0.32;
   height: 18px;
   width: 150px;
   border-radius: var(--border-radius-lg-pfl);
@@ -79,6 +79,7 @@ function LoadingTeamChart() {
       >
         <Row gap={1}>
           <PlaceholderTitleContainer>
+            <PlaceholderTitle />
             <PlaceholderTitle />
           </PlaceholderTitleContainer>
           <ChartPlaceholderContainer>

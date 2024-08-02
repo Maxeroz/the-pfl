@@ -109,7 +109,7 @@ function Profile() {
           to={`/teams/league/${leagueId}`}
         />
 
-        <InfoBlock
+        {/* <InfoBlock
           isLoading={isLoading}
           width="65%"
           light="light"
@@ -117,7 +117,7 @@ function Profile() {
           scrollX="scroll"
         >
           <ImageTeams teams={tableData} />
-        </InfoBlock>
+        </InfoBlock> */}
       </Row>
       <Row />
     </Row>

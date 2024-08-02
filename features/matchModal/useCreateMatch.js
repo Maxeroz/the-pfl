@@ -3,10 +3,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateLeagueTableByTeamName } from "../../services/apiMatch";
 import { useSelector } from "react-redux";
 
+// Функция для получения текущей даты в формате YYYY-MM-DD
+const getFormattedDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 export function useCreateMatch(pickTeam) {
   const queryClient = useQueryClient();
 
-  // Проверяем, что pickTeam определен
   const teamName = useSelector((state) =>
     pickTeam ? state.match[pickTeam]?.teamName : null
   );
@@ -18,7 +26,6 @@ export function useCreateMatch(pickTeam) {
   const draw = scored === missed;
   const win = scored > missed;
 
-  // Вызываем хук useGetTeam с teamName
   const { data: teamData } = useGetTeam(teamName);
 
   let updatedTeamRow = null;
@@ -46,14 +53,29 @@ export function useCreateMatch(pickTeam) {
     lastGames.unshift(result); // Добавляем новый элемент в начало массива
 
     // Обновляем pointsChart
-    if (pointsChart.length > 0) {
-      // Если массив не пустой, добавляем новый элемент
-      const lastPoints = pointsChart[pointsChart.length - 1];
-      pointsChart.push(lastPoints + points);
-    } else {
-      // Если массив пустой, просто добавляем первый элемент
-      pointsChart.push(points);
+    const todayDate = getFormattedDate();
+    let dateExists = false;
+
+    pointsChart = pointsChart.map((entry) => {
+      if (entry.date === todayDate) {
+        dateExists = true;
+        return {
+          ...entry,
+          points: entry.points + points,
+        };
+      }
+      return entry;
+    });
+
+    if (!dateExists) {
+      pointsChart.push({
+        date: todayDate,
+        points,
+      });
     }
+
+    // Сортируем по дате
+    pointsChart.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     updatedTeamRow = {
       ...teamData,

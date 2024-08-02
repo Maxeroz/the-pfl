@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import MatchSideBarLoadingIndicator from "./MatchSideBarLoadingIndicator";
+import { convertToEuropeanDate } from "../utils/helpers";
 
 // Определение стилей для элемента li
 const MatchLi = styled.li`
@@ -37,11 +38,36 @@ const TeamImg = styled.img`
   object-fit: cover; // Изображение покрывает весь контейнер, сохраняя пропорции
 `;
 
+const StyledTeamInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const TeamName = styled.span`
+  font-size: 12px;
+  font-weight: 600;
+`;
+
+const Date = styled.span`
+  font-size: 10px;
+`;
+
+const ResultsAndDate = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+`;
+
 const TeamsScoredContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-width: 100px;
+
+  /* height: 40px; */
 `;
 
 const TeamScore = styled.span`
@@ -50,6 +76,9 @@ const TeamScore = styled.span`
 `;
 
 function MatchSideBar({ match }) {
+  const date = convertToEuropeanDate(match.created_at);
+  const { team1: team1Name, team2: team2Name } = match;
+
   // Определяем, какая команда выиграла или ничья
   const isTeam1Won = match.team1Scored > match.team2Scored;
   const isTeam2Won = match.team2Scored > match.team1Scored;
@@ -77,16 +106,25 @@ function MatchSideBar({ match }) {
         <MatchSideBarLoadingIndicator />
       ) : (
         <>
-          <TeamImgContainer borderColor={team1BorderColor}>
-            <TeamImg src={match.team1ImgUrl} alt={`Logo of ${match.team1}`} />
-          </TeamImgContainer>
-          <TeamsScoredContainer>
-            <TeamScore>{match.team1Scored}</TeamScore>-
-            <TeamScore>{match.team2Scored}</TeamScore>
-          </TeamsScoredContainer>
-          <TeamImgContainer borderColor={team2BorderColor}>
-            <TeamImg src={match.team2ImgUrl} alt={`Logo of ${match.team2}`} />
-          </TeamImgContainer>
+          <StyledTeamInfo>
+            <TeamImgContainer borderColor={team1BorderColor}>
+              <TeamImg src={match.team1ImgUrl} alt={`Logo of ${match.team1}`} />
+            </TeamImgContainer>
+            <TeamName>{team1Name}</TeamName>
+          </StyledTeamInfo>
+          <ResultsAndDate>
+            <TeamsScoredContainer>
+              <TeamScore>{match.team1Scored}</TeamScore>-
+              <TeamScore>{match.team2Scored}</TeamScore>
+            </TeamsScoredContainer>
+            <Date>{date}</Date>
+          </ResultsAndDate>
+          <StyledTeamInfo>
+            <TeamImgContainer borderColor={team2BorderColor}>
+              <TeamImg src={match.team2ImgUrl} alt={`Logo of ${match.team2}`} />
+            </TeamImgContainer>
+            <TeamName>{team2Name}</TeamName>
+          </StyledTeamInfo>
         </>
       )}
     </MatchLi>

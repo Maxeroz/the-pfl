@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 import { useMatches } from "../features/matchStatistics/useMatches";
 import { Box, LinearProgress, Button } from "@mui/material";
-import MatchSideBar from "./MatchSideBar";
 import { useSelector } from "react-redux";
 import { getRandomNumberFromDate } from "../utils/helpers";
+
+import MatchSideBar from "./MatchSideBar";
 
 // Анимация для плавного появления элементов
 const fadeIn = keyframes`
@@ -28,12 +29,16 @@ const StatisticsDiv = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+
   width: ${(props) => props.width || "100px"};
-  height: ${(props) => (props.isFixedHeight ? "390px" : "auto")};
+  height: ${(props) => (props.isFixedHeight ? "400px" : "auto")};
+
   padding: 24px;
-  gap: 10px;
+  gap: 15px;
+
   background-color: ${(props) =>
     props.light === "light" ? "#F5F5F7" : "#141522"};
+
   border-radius: var(--border-radius-lg-pfl);
   position: relative;
   transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
@@ -49,10 +54,13 @@ const MatchesContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   background-color: #fff;
   padding: 14px;
+
   border-radius: var(--border-radius-lg-pfl);
   height: ${(props) => (props.isFixedHeight ? "324px" : "auto")};
+
   overflow-y: auto;
   transition: height 0.3s ease-in-out;
   position: relative;
@@ -62,6 +70,7 @@ const MatchesContainer = styled.div`
 const MatchesUl = styled.ul`
   display: flex;
   flex-direction: column;
+
   gap: 15px;
   opacity: ${(props) => (props.fadeIn ? 1 : 0)};
 `;
@@ -98,20 +107,32 @@ const PaginationButtons = styled.div`
   align-items: center;
   margin-top: 10px;
   width: 100%;
+`;
 
-  button {
-    /* Обычные стили для обеих кнопок */
-    /* padding: 10px 20px; */
-    border: 1px solid #eee; /* Или используйте нужный вам стиль */
-    border-radius: 4px;
-    /* font-size: 14px; */
-    cursor: pointer;
-  }
+const CommonButton = styled.button`
+  /* Обычные стили для обеих кнопок */
+  padding: 4px 14px;
+  border-radius: var(--border-radius-lg-pfl);
 
-  button:last-child {
-    /* Всегда перемещает последнюю кнопку (Следующая) вправо */
-    margin-left: auto;
+  border-style: none;
+  font-size: 14px;
+  cursor: pointer;
+
+  color: #fff;
+  background-color: var(--color-primary-500);
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-secondary-500);
   }
+`;
+
+const ButtonPrev = styled(CommonButton)`
+  margin-right: auto; /* Перемещает кнопку влево */
+`;
+
+const ButtonNext = styled(CommonButton)`
+  margin-left: auto; /* Перемещает кнопку вправо */
 `;
 
 function StatisticsBlock({ light, width, height }) {
@@ -217,10 +238,10 @@ function StatisticsBlock({ light, width, height }) {
             {matches?.length > matchesPerPage && (
               <PaginationButtons>
                 {currentPage > 1 && (
-                  <Button onClick={handlePrevPage}>Предыдущая</Button>
+                  <ButtonPrev onClick={handlePrevPage}>Предыдущая</ButtonPrev>
                 )}
                 {currentPage < Math.ceil(matches.length / matchesPerPage) && (
-                  <Button onClick={handleNextPage}>Следующая</Button>
+                  <ButtonNext onClick={handleNextPage}>Следующая</ButtonNext>
                 )}
               </PaginationButtons>
             )}

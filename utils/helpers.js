@@ -42,3 +42,19 @@ export function addTeamNamesToPlayers(players, tableData) {
 
   return updatedPlayers;
 }
+
+export function convertToEuropeanDate(isoDate) {
+  // Создаём объект Date из строки формата ISO 8601
+  const date = new Date(isoDate);
+
+  // Извлекаем день и месяц
+  const day = date.getDate(); // день месяца
+  const month = date.getMonth() + 1; // месяцы в JavaScript начинаются с 0
+
+  // Форматируем строку в европейский формат DD/MM
+  const europeanDate = `${day.toString().padStart(2, "0")}/${month
+    .toString()
+    .padStart(2, "0")}`;
+
+  return europeanDate;
+}

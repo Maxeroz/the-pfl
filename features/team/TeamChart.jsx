@@ -10,6 +10,7 @@ import {
 import { useTeamContext } from "./Team";
 import InfoContainer from "../../ui/InfoContainer";
 import Row from "../../ui/Row";
+import CustomTooltip from "../../ui/CustomTooltip";
 
 // Анимация плавного появления
 const fadeIn = keyframes`
@@ -21,8 +22,8 @@ const fadeIn = keyframes`
   }
 `;
 
-// Определяем дни недели
-const daysOfWeek = ["M", "T", "W", "Th", "F", "S", "Su"];
+// Определяем дни недели на русском языке
+const daysOfWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
 // Функция для преобразования даты в день недели
 const getDayOfWeek = (date) => {
@@ -34,19 +35,19 @@ const getDayOfWeek = (date) => {
 const formatChartData = (pointsChart) => {
   const chartData = daysOfWeek.map((day) => ({ day, points: 0 }));
 
-  // Создаем объект для хранения данных по дням недели
-  let lastPoints = 0;
+  // Переменная для хранения накопленных очков
+  let accumulatedPoints = 0;
 
   pointsChart.forEach(({ date, points }) => {
     const day = getDayOfWeek(date);
     const index = daysOfWeek.indexOf(day);
     if (index !== -1) {
-      lastPoints = points;
-      chartData[index].points = points;
+      accumulatedPoints += points; // Накопление очков
+      chartData[index].points = accumulatedPoints;
     }
   });
 
-  // Присваиваем последние значения для промежуточных дней
+  // Присваиваем накопленные значения для промежуточных дней
   for (let i = 0; i < chartData.length; i++) {
     if (chartData[i].points === 0 && i > 0) {
       chartData[i].points = chartData[i - 1].points;
@@ -92,7 +93,7 @@ const CustomTick = ({ x, y, payload }) => (
 );
 
 function TeamChart() {
-  const { pointsChart, isLoading } = useTeamContext();
+  const { pointsChart } = useTeamContext();
 
   if (!pointsChart || pointsChart.length === 0) {
     return null;
@@ -128,15 +129,15 @@ function TeamChart() {
               <XAxis
                 dataKey="day"
                 axisLine={{ stroke: "none" }}
-                tick={{ fill: "#141522", fontSize: 12 }}
+                tick={<CustomTick />}
                 tickLine={false}
               />
               <YAxis
-                axisLine={{ stroke: "🔞 " }}
+                axisLine={{ stroke: "none" }}
                 tick={{ fill: "#141522", fontSize: 12 }}
                 tickLine={false}
               />
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
               <Line
                 type="monotone"
                 dataKey="points"
