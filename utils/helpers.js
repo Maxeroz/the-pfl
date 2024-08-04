@@ -58,3 +58,75 @@ export function convertToEuropeanDate(isoDate) {
 
   return europeanDate;
 }
+
+export function generateMonthlyData(gamesData) {
+  const pointsByDate = {};
+  let totalPoints = 0;
+
+  gamesData.forEach((game) => {
+    const { date, points } = game;
+    totalPoints += points;
+    pointsByDate[date] = totalPoints;
+  });
+
+  // Определяем диапазон для трех месяцев
+  const startDate = new Date();
+  startDate.setDate(1); // Начало текущего месяца
+  startDate.setMonth(startDate.getMonth() - 1); // Перемещаемся на один месяц назад
+
+  // Находим первое воскресенье, начиная с одного месяца назад
+  const firstDate = new Date(startDate);
+  firstDate.setDate(1); // Первый день месяца
+  const firstSunday = new Date(firstDate);
+  const dayOfWeek = firstSunday.getDay();
+  firstSunday.setDate(
+    firstSunday.getDate() - (dayOfWeek === 0 ? 0 : dayOfWeek)
+  ); // Переводим к Воскресенью
+
+  // Определяем последний день через три месяца
+  const lastDate = new Date(startDate);
+  lastDate.setMonth(lastDate.getMonth() + 3); // Три месяца вперед
+  lastDate.setDate(0); // Последний день месяца
+
+  const threeMonthsData = [];
+  let currentPoints = 0;
+
+  // Генерация данных для трех месяцев
+  for (
+    let date = firstSunday;
+    date <= lastDate;
+    date.setDate(date.getDate() + 1)
+  ) {
+    const dateString = date.toISOString().split("T")[0];
+    currentPoints =
+      pointsByDate[dateString] !== undefined
+        ? pointsByDate[dateString]
+        : currentPoints;
+
+    threeMonthsData.push({
+      date: dateString,
+      day: getDayOfWeek(dateString),
+      points: currentPoints,
+    });
+  }
+
+  return threeMonthsData;
+}
+
+export function getDayOfWeek(dateString) {
+  const daysOfWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+  const date = new Date(dateString);
+  return daysOfWeek[date.getDay()];
+}
+
+export function filterWeekData(monthlyData, weekStartDate) {
+  const startDate = new Date(weekStartDate);
+  startDate.setDate(startDate.getDate() - startDate.getDay()); // Переводим к понедельнику
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6); // Неделя длится 7 дней
+
+  return monthlyData.filter((data) => {
+    const date = new Date(data.date);
+    return date >= startDate && date <= endDate;
+  });
+}

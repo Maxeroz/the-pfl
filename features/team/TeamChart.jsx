@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import {
   LineChart,
@@ -11,8 +12,9 @@ import { useTeamContext } from "./Team";
 import InfoContainer from "../../ui/InfoContainer";
 import Row from "../../ui/Row";
 import CustomTooltip from "../../ui/CustomTooltip";
+import { generateMonthlyData, filterWeekData } from "../../utils/helpers";
+import Menus from "../../ui/Menus";
 
-// Анимация плавного появления
 const fadeIn = keyframes`
   0% {
     opacity: 0;
@@ -21,41 +23,6 @@ const fadeIn = keyframes`
     opacity: 1;
   }
 `;
-
-// Определяем дни недели на русском языке
-const daysOfWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
-
-// Функция для преобразования даты в день недели
-const getDayOfWeek = (date) => {
-  const day = new Date(date).getDay();
-  return daysOfWeek[day];
-};
-
-// Функция для преобразования данных в формат для графика
-const formatChartData = (pointsChart) => {
-  const chartData = daysOfWeek.map((day) => ({ day, points: 0 }));
-
-  // Переменная для хранения накопленных очков
-  let accumulatedPoints = 0;
-
-  pointsChart.forEach(({ date, points }) => {
-    const day = getDayOfWeek(date);
-    const index = daysOfWeek.indexOf(day);
-    if (index !== -1) {
-      accumulatedPoints += points; // Накопление очков
-      chartData[index].points = accumulatedPoints;
-    }
-  });
-
-  // Присваиваем накопленные значения для промежуточных дней
-  for (let i = 0; i < chartData.length; i++) {
-    if (chartData[i].points === 0 && i > 0) {
-      chartData[i].points = chartData[i - 1].points;
-    }
-  }
-
-  return chartData;
-};
 
 const TeamBlock = styled.div`
   margin: 20px 0;
@@ -70,8 +37,7 @@ const ChartContainer = styled.div`
   border-radius: var(--border-radius-lg-pfl);
   background-color: #fff;
   padding: 10px;
-
-  animation: ${fadeIn} 1s ease-out; /* Применение анимации плавного появления */
+  animation: ${fadeIn} 1s ease-out;
 `;
 
 const StatisticsTitleContainer = styled.div`
@@ -85,72 +51,114 @@ const StatisticsTitle = styled.div`
   font-weight: 600;
 `;
 
-// Кастомная функция для отображения меток осей без засечек
+const StyledMenu = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-size: 1.4rem;
+  font-weight: 500;
+`;
+
 const CustomTick = ({ x, y, payload }) => (
   <text x={x} y={y} dy={16} textAnchor="middle" fill="#141522" fontSize={12}>
     {payload.value}
   </text>
 );
 
-function TeamChart() {
+const TeamChart = () => {
   const { pointsChart } = useTeamContext();
+  const [currentWeekStart, setCurrentWeekStart] = useState(() => {
+    const today = new Date();
+    const day = today.getDay();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - day + (day === 0 ? -6 : 1)); // Пн
+    return startOfWeek.toISOString().split("T")[0];
+  });
 
   if (!pointsChart || pointsChart.length === 0) {
     return null;
   }
 
-  const chartData = formatChartData(pointsChart);
+  const monthlyData = generateMonthlyData(pointsChart);
+  const chartData = filterWeekData(monthlyData, currentWeekStart);
+
+  const handlePrevWeek = () => {
+    const date = new Date(currentWeekStart);
+    date.setDate(date.getDate() - 7);
+    setCurrentWeekStart(date.toISOString().split("T")[0]);
+  };
+
+  const handleNextWeek = () => {
+    const date = new Date(currentWeekStart);
+    date.setDate(date.getDate() + 7);
+    setCurrentWeekStart(date.toISOString().split("T")[0]);
+  };
 
   return (
-    <TeamBlock>
-      <InfoContainer
-        light="light"
-        width="460px"
-        height="200px"
-        direction="column"
-      >
-        <Row gap={1}>
-          <StatisticsTitleContainer>
-            <StatisticsTitle>График результатов</StatisticsTitle>
-            <span>На этой неделе</span>
-          </StatisticsTitleContainer>
-          <ChartContainer>
-            <LineChart
-              width={400}
-              height={120}
-              data={chartData}
-              margin={{ top: 30, right: 20, bottom: 0, left: -20 }}
-            >
-              <CartesianGrid
-                // strokeDasharray="3 3"
-                stroke="#f5f5f5"
-                horizontal={false}
-              />
-              <XAxis
-                dataKey="day"
-                axisLine={{ stroke: "none" }}
-                tick={<CustomTick />}
-                tickLine={false}
-              />
-              <YAxis
-                axisLine={{ stroke: "none" }}
-                tick={{ fill: "#141522", fontSize: 12 }}
-                tickLine={false}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Line
-                type="monotone"
-                dataKey="points"
-                stroke="#141522"
-                strokeWidth={3}
-                dot={{ stroke: "#546FFF", strokeWidth: 4, fill: "#fff", r: 5 }}
-              />
-            </LineChart>
-          </ChartContainer>
-        </Row>
-      </InfoContainer>
-    </TeamBlock>
+    <Menus>
+      <TeamBlock>
+        <InfoContainer
+          light="light"
+          width="460px"
+          height="200px"
+          direction="column"
+        >
+          <Row gap={1}>
+            <StatisticsTitleContainer>
+              <StatisticsTitle>График результатов</StatisticsTitle>
+              <StyledMenu>
+                Эта неделя
+                <Menus.Toggle id="teamChart" />
+              </StyledMenu>
+              <Menus.List id="teamChart">
+                <Menus.Button onClick={handlePrevWeek}>
+                  Пред. неделя
+                </Menus.Button>
+                <Menus.Button onClick={handleNextWeek}>
+                  След. неделя
+                </Menus.Button>
+              </Menus.List>
+            </StatisticsTitleContainer>
+            <ChartContainer>
+              <LineChart
+                width={400}
+                height={120}
+                data={chartData}
+                margin={{ top: 30, right: 20, bottom: 0, left: -20 }}
+              >
+                <CartesianGrid stroke="#f5f5f5" horizontal={false} />
+                <XAxis
+                  dataKey="day"
+                  axisLine={{ stroke: "none" }}
+                  tick={<CustomTick />}
+                  tickLine={false}
+                />
+                <YAxis
+                  axisLine={{ stroke: "none" }}
+                  tick={{ fill: "#141522", fontSize: 12 }}
+                  tickLine={false}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Line
+                  type="monotone"
+                  dataKey="points"
+                  stroke="#141522"
+                  strokeWidth={3}
+                  dot={{
+                    stroke: "#546FFF",
+                    strokeWidth: 4,
+                    fill: "#fff",
+                    r: 5,
+                  }}
+                />
+              </LineChart>
+            </ChartContainer>
+          </Row>
+        </InfoContainer>
+      </TeamBlock>
+    </Menus>
   );
-}
+};
 
 export default TeamChart;
