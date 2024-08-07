@@ -14,6 +14,7 @@ import Row from "../../ui/Row";
 import CustomTooltip from "../../ui/CustomTooltip";
 import { generateMonthlyData, filterWeekData } from "../../utils/helpers";
 import Menus from "../../ui/Menus";
+import { useTeamPaginationContext } from "./TeamChartPagination";
 
 const fadeIn = keyframes`
   0% {
@@ -66,15 +67,33 @@ const CustomTick = ({ x, y, payload }) => (
   </text>
 );
 
-const TeamChart = () => {
+// Функция для получения строки недели
+const getWeekTitle = (currentPage, currentWeekStart) => {
+  if (currentPage === 0) {
+    return "Текущая неделя";
+  } else if (currentPage === 1) {
+    return "Следующая неделя";
+  } else if (currentPage === -1) {
+    return "Предыдущая неделя";
+  } else {
+    // Вычисляем даты начала и конца недели
+    const startDate = new Date(currentWeekStart);
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 6);
+
+    // Форматирование даты в 'dd MMM'
+    const options = { month: "short", day: "numeric" };
+    const startFormatted = startDate.toLocaleDateString("ru-RU", options);
+    const endFormatted = endDate.toLocaleDateString("ru-RU", options);
+
+    return `${startFormatted} - ${endFormatted}`;
+  }
+};
+
+const TeamChart = ({ isDisplayed }) => {
   const { pointsChart } = useTeamContext();
-  const [currentWeekStart, setCurrentWeekStart] = useState(() => {
-    const today = new Date();
-    const day = today.getDay();
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - day + (day === 0 ? -6 : 1)); // Пн
-    return startOfWeek.toISOString().split("T")[0];
-  });
+  const { currentPage, currentWeekStart, handlePrevWeek, handleNextWeek } =
+    useTeamPaginationContext();
 
   if (!pointsChart || pointsChart.length === 0) {
     return null;
@@ -83,17 +102,7 @@ const TeamChart = () => {
   const monthlyData = generateMonthlyData(pointsChart);
   const chartData = filterWeekData(monthlyData, currentWeekStart);
 
-  const handlePrevWeek = () => {
-    const date = new Date(currentWeekStart);
-    date.setDate(date.getDate() - 7);
-    setCurrentWeekStart(date.toISOString().split("T")[0]);
-  };
-
-  const handleNextWeek = () => {
-    const date = new Date(currentWeekStart);
-    date.setDate(date.getDate() + 7);
-    setCurrentWeekStart(date.toISOString().split("T")[0]);
-  };
+  if (isDisplayed) return <span>Hello World!</span>;
 
   return (
     <Menus>
@@ -108,7 +117,7 @@ const TeamChart = () => {
             <StatisticsTitleContainer>
               <StatisticsTitle>График результатов</StatisticsTitle>
               <StyledMenu>
-                Эта неделя
+                {getWeekTitle(currentPage, currentWeekStart)}
                 <Menus.Toggle id="teamChart" />
               </StyledMenu>
               <Menus.List id="teamChart">

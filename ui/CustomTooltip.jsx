@@ -10,11 +10,41 @@ const StyledTooltipContainer = styled.div`
   color: var(--color-grey-0);
 `;
 
-function CustomTooltip({ active, payload, label }) {
+function formatDate(dateString) {
+  // Создаем объект Date из строки
+  const date = new Date(dateString);
+
+  // Определяем массив сокращенных названий месяцев на русском
+  const monthNames = [
+    "янв.",
+    "фев.",
+    "март",
+    "апр.",
+    "май",
+    "июнь",
+    "июль",
+    "авг.",
+    "сент.",
+    "окт.",
+    "ноя.",
+    "дек.",
+  ];
+
+  // Извлекаем день и месяц из объекта Date
+  const day = date.getDate();
+  const month = date.getMonth(); // Месяцы в JavaScript начинаются с 0
+
+  // Форматируем дату
+  return `${day} ${monthNames[month]}`;
+}
+
+function CustomTooltip({ active, payload }) {
+  const date = payload[0]?.payload.date;
+
   if (active && payload && payload.length) {
     return (
       <StyledTooltipContainer>
-        <strong>День: {label}</strong>
+        <strong>День: {formatDate(date)}</strong>
         <br />
         {payload.map((element, i) => (
           <span key={i}>Очки : {element.value}</span>

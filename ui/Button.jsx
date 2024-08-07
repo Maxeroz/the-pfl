@@ -13,8 +13,8 @@ const StyledButton = styled.button`
   border-style: none;
 `;
 
-function Button({ children }) {
-  return <StyledButton>{children}</StyledButton>;
+function Button({ children, onClick }) {
+  return <StyledButton onClick={onClick}>{children}</StyledButton>;
 }
 
 export default Button;
