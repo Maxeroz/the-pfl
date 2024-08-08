@@ -22,9 +22,6 @@ import { useAddMatch } from "./useAddMatch";
 import {
   handleGoalsChange,
   handlePlayerClick,
-  pickCurrentTeamResult,
-  pickOpponentTeam,
-  pickOpponentTeamResult,
   resetMatchState,
   handleAssistsChange,
 } from "./matchModalSlice";
@@ -33,6 +30,9 @@ import { useUpdatePlayer } from "./useUpdatePlayersTable";
 import styled from "styled-components";
 
 import { useForm } from "react-hook-form";
+import { useOnChangeOpponentTeam } from "./dispatchHooks/useOnChangeOpponentTeam";
+import { useOnChangeCurrentTeamResults } from "./dispatchHooks/useOnChangeCurrentTeamResults";
+import { useOnChangeOpponentTeamResults } from "./dispatchHooks/useOnChangeOpponentTeamResul";
 
 const StyledButton = styled(Button)`
   background-color: var(--color-primary-500);
@@ -45,6 +45,11 @@ const StyledButton = styled(Button)`
 const StyledTextField = styled(TextField)`
   border-color: var(--input-border-color);
   border-radius: var(--border-radius-lg-pfl);
+
+  /* Стили только для последнего TextField */
+  &:last-child {
+    margin-bottom: 20px;
+  }
 `;
 
 const StyledMenuItem = styled(MenuItem)``;
@@ -57,10 +62,9 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 450,
-  height: 520,
   bgcolor: "background.paper",
   boxShadow: 24,
-  p: 5,
+  p: 6,
   overflowY: "auto",
   backdropFilter: "blur(8px)", // добавляем фильтр размытия
 };
@@ -104,6 +108,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -113,17 +118,19 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
   });
 
   // Обработчик подтверждения изменений (submit)
-  const onSubmit = async (data) => {
-    // Асинхронное обновление данных команд и добавление матча
-    await Promise.all([
-      updateTeamRowCurrent(),
-      updateTeamRowOpponent(),
-      addMatch(),
-      updateAllPlayers(),
-    ]);
-    // Сбрасываем состояние матча и закрываем модальное окно
-    dispatch(resetMatchState());
-    handleClose();
+  const onSubmit = (data) => {
+    const { team2Id } = data;
+
+    // // Асинхронное обновление данных команд и добавление матча
+    // await Promise.all([
+    //   updateTeamRowCurrent(),
+    //   updateTeamRowOpponent(),
+    //   addMatch(),
+    //   updateAllPlayers(),
+    // ]);
+    // // Сбрасываем состояние матча и закрываем модальное окно
+    // dispatch(resetMatchState());
+    // handleClose();
   };
 
   // Обработчик закрытия модального окна
@@ -131,7 +138,16 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
     // Сбрасываем состояние матча и закрываем модальное окно
     dispatch(resetMatchState());
     handleClose();
+    reset();
   };
+
+  // Расширение функционала onChange useForm Hook для выбора противоположной команды в Redux
+  const onChangeTeamOpponentHandler =
+    useOnChangeOpponentTeam(teamsToPickOpponent);
+
+  const onChangeCurrentTeamResults = useOnChangeCurrentTeamResults();
+
+  const onChangeOpponentTeamResults = useOnChangeOpponentTeamResults();
 
   return (
     <>
@@ -157,26 +173,20 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
             >
               <StyledMenuItem value={team1}>{team1}</StyledMenuItem>
             </StyledTextField>
-            Выбор команды 2
+
+            {/* Выбор команды 2 с валидацией*/}
+
             <StyledTextField
               select
               label="Команда 2"
-              value={team2Id || ""}
-              onChange={(e) => {
-                const selectedTeamId = e.target.value;
-                const selectedTeam = teamsToPickOpponent.find(
-                  (team) => team.id === selectedTeamId
-                );
-                dispatch(
-                  pickOpponentTeam({
-                    id: selectedTeam.id,
-                    teamName: selectedTeam.teamName,
-                    imgUrl: selectedTeam.imageUrl,
-                  })
-                );
-              }}
               fullWidth
               margin="normal"
+              {...register("team2Id", {
+                required: "Выбор команды оппонента обязателен",
+                onChange: onChangeTeamOpponentHandler,
+              })}
+              error={!!errors.team2Id}
+              helperText={errors.team2Id ? errors.team2Id.message : ""}
             >
               {teamsToPickOpponent.map((team) => (
                 <StyledMenuItem key={team.id} value={team.id}>
@@ -184,21 +194,43 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                 </StyledMenuItem>
               ))}
             </StyledTextField>
-            {/* Ввод результатов команд */}
+
+            {/* Ввод результатов команд с валидацией*/}
+
             <StyledTextField
-              label="Результат команды 1"
-              value={score1}
-              onChange={(e) => dispatch(pickCurrentTeamResult(e.target.value))}
+              label={`Результат команды ${team1}`}
+              {...register("score1", {
+                onChange: onChangeCurrentTeamResults,
+                required: `Результаты команды ${team1} обязательны`, // Сообщение об ошибке для required
+                min: {
+                  value: 0, // Минимальное значение
+                  message: "Результат команды не может быть отрицательным", // Кастомное сообщение об ошибке
+                },
+              })}
               fullWidth
               margin="normal"
+              error={!!errors.score1}
+              helperText={errors.score1 ? errors.score1.message : ""}
             />
-            <StyledTextField
-              label="Результат команды 2"
-              value={score2}
-              onChange={(e) => dispatch(pickOpponentTeamResult(e.target.value))}
-              fullWidth
-              margin="normal"
-            />
+
+            {team2 && (
+              <StyledTextField
+                label={`Результат команды ${team2}`}
+                {...register("score2", {
+                  onChange: onChangeOpponentTeamResults,
+                  required: `Результаты команды ${team2} обязательны`, // Сообщение об ошибке для required
+                  min: {
+                    value: 0, // Минимальное значение
+                    message: "Результат команды не может быть отрицательным", // Кастомное сообщение об ошибке
+                  },
+                })}
+                fullWidth
+                margin="normal"
+                error={!!errors.score2}
+                helperText={errors.score2 ? errors.score2.message : ""}
+              />
+            )}
+
             <Row gap={2}>
               {/* Аккордеон для игроков текущей команды */}
               <Accordion>
@@ -388,7 +420,12 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
               )}
 
               {/* Кнопка для подтверждения изменений */}
-              <StyledButton onClick={onSubmit} variant="contained" fullWidth>
+              <StyledButton
+                type="submit"
+                onClick={onSubmit}
+                variant="contained"
+                fullWidth
+              >
                 Добавить матч
               </StyledButton>
             </Row>
