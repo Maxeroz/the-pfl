@@ -38,3 +38,22 @@ export async function updatePlayerById(id, playerData) {
     throw error;
   }
 }
+
+export async function getPlayersByTeamId(teamId) {
+  try {
+    // Запрос к таблице players с фильтрацией по team_id
+    const { data, error } = await supabase
+      .from("players")
+      .select("*") // Выберите необходимые поля, например 'id', 'name', 'position'
+      .eq("team_id", teamId);
+
+    if (error) {
+      throw new Error(`Ошибка получения данных: ${error.message}`);
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Ошибка выполнения запроса:", err);
+    return [];
+  }
+}

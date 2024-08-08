@@ -23,9 +23,9 @@ import ImageTeams from "../ui/ImageTeams";
 import { useUpdateTransferWindow } from "../features/selectLeague/useUpdateTransferWindow";
 
 const tableMapping = {
-  "ПФЛ ЛИГА 1": 2,
+  "ПФЛ ЛИГА 1": 0,
   "ПФЛ ЛИГА 2": 1,
-  "ПФЛ ЛИГА 3": 0,
+  "ПФЛ ЛИГА 3": 2,
 };
 
 // const CenterSpinnerDiv = styled.div`
@@ -67,7 +67,9 @@ function Profile() {
   const { profile = [], isLoading } = useProfile();
 
   // Проверяем наличие профиля и правильного индекса
-  const profileData = profile[tableMapping[league]];
+  const profileData = profile.find(
+    (profile) => profile.id === Number(leagueId)
+  );
 
   const { transferWindow } = profileData ? profileData : "Нет данных";
 

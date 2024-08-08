@@ -17,7 +17,7 @@ export function useUpdateTransferWindow(transferWindowValue) {
     mutationFn: () => updateTransferWindowApi(leagueId, transferWindowValue),
     onSuccess: () => {
       // Используем toast для успешного уведомления
-      toast.success("Transfer Window successfully updated");
+      toast.success("Трансферное окно обновлено");
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
     onError: (err) => toast.error(err.message),

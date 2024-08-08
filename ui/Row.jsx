@@ -20,10 +20,7 @@ const Row = styled.div`
       flex: 1;
       flex-direction: column;
       gap: ${props.gap}rem;
-    `}; /* @media (max-width: 685px) {
-    flex-direction: column;
-    align-items: flex-start;
-  } */
+    `};
 `;
 
 Row.defaultProps = {

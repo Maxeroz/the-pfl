@@ -11,12 +11,23 @@ import LoadingTeamChart from "./LoadingTeamChart";
 import TeamChartPagination from "./TeamChartPagination";
 import styled from "styled-components";
 import Button from "../../ui/Button";
+import TabelTitle from "../../ui/TableTitle";
+import LoadingOperationsRow from "./LoadingOperationsRow";
+import PlayersInTeam from "./PlayersInTeam";
+import { usePlayers } from "./usePlayers";
 
 const OperationsRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  background-color: var(--color-grey-0);
+
+  padding: 10px 20px;
+  border-radius: var(--border-radius-lg-pfl);
 `;
+
+const PlayersRow = styled(OperationsRow)``;
 
 // 1. Create Context
 const TeamContext = createContext();
@@ -51,6 +62,12 @@ function Team() {
   }, [currentLeagueId, queryLeagueId, searchParams, setSearchParams]);
 
   const { isLoading, data: teamData } = useTeam(queryLeagueId, teamId);
+  const { isLoading: isLoadingPlayers, data: playersData = [] } =
+    usePlayers(teamId);
+
+  console.log(playersData);
+
+  const teamName = teamData.teamName;
 
   // Проверка, если ли массив с сыгранными матчами, для того чтобы определить, нужно ли отображать график изменения очков команды
 
@@ -61,11 +78,19 @@ function Team() {
 
   return (
     <TeamChartPagination>
-      <TeamContext.Provider value={{ ...teamData }}>
+      <TeamContext.Provider value={{ ...teamData, playersData }}>
         <Row gap={2}>
-          <OperationsRow>
-            <Button onClick={handleBackClick}>Назад</Button>
-          </OperationsRow>
+          {isLoading ? (
+            <LoadingOperationsRow />
+          ) : (
+            <OperationsRow>
+              <TabelTitle height="small">
+                Футбольный клуб: {teamName}
+              </TabelTitle>
+              <Button onClick={handleBackClick}>Назад</Button>
+            </OperationsRow>
+          )}
+
           <Row type="horizontal">
             <>
               {isLoading ? <LoadingTeamInfo /> : <TeamInfoCard />}
@@ -76,6 +101,14 @@ function Team() {
               )}
             </>
           </Row>
+
+          <Row gap={2}>
+            <PlayersRow direction="column">
+              <TabelTitle height="small">Состав </TabelTitle>
+            </PlayersRow>
+            <PlayersInTeam />
+          </Row>
+          <Row></Row>
         </Row>
       </TeamContext.Provider>
     </TeamChartPagination>

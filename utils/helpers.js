@@ -1,3 +1,15 @@
+import { keyframes } from "styled-components";
+
+// Анимация для переливающегося эффекта
+export const shimmer = keyframes`
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+`;
+
 export function getLastElement(str, delimiter = " ") {
   const arr = str.split(delimiter);
   return arr.pop();

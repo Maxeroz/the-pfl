@@ -13,11 +13,14 @@ const GlobalStyles = createGlobalStyle`:root {
 
     --border-radius-lg-pfl:10px;
     /* Secondary */
-    --color-secondary-500: #141522;
-    --color-secondary-400: #54577A;
+    --color-secondary-100: #DFE1F3;
+    --color-secondary-200: #C2C6E8;
     --color-secondary-300: #8E92BC;
-    
+    --color-secondary-400: #54577A;
+    --color-secondary-500: #141522;
 
+    
+    
     /* Secondinary */
     --color-secondinary-100: ##DFE1F3;
     --color-secondinary-200: ##C2C6E8;

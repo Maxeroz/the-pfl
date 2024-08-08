@@ -2,16 +2,7 @@ import styled, { keyframes } from "styled-components";
 import InfoContainer from "./InfoContainer";
 import { Avatar } from "@mui/material";
 import Row from "./Row";
-
-// Анимация для переливающегося эффекта
-const shimmer = keyframes`
-  0% {
-    background-position: -200px 0;
-  }
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
-`;
+import { shimmer } from "../utils/helpers";
 
 const ImageTitleContainer = styled.div`
   display: flex;
@@ -38,7 +29,7 @@ const TeamBlock = styled.div`
 
 // Стилизованный компонент для аватара заглушки с анимацией
 const PlaceholderAvatar = styled(Avatar)`
-  background: #8e92bc;
+  background: var(--color-secondary-300);
 
   width: 50px;
   height: 50px;
@@ -47,9 +38,9 @@ const PlaceholderAvatar = styled(Avatar)`
   /* Стиль для переливающегося фона */
   background: linear-gradient(
     90deg,
-    var(--color-secondary-300) 25%,
-    #8e92bc7f 50%,
-    #8e92bc 75%
+    var(--color-secondary-200) 25%,
+    var(--color-secondary-300) 50%,
+    var(--color-secondary-400) 75%
   );
   background-size: 200% 100%;
 
@@ -58,7 +49,7 @@ const PlaceholderAvatar = styled(Avatar)`
 `;
 
 const PlaceholderText = styled.div`
-  background: ${(props) => props.color};
+  background: ${(props) => props.color || `var(--color-primary-500)`};
   opacity: ${(props) => props.opacity};
 
   height: ${(props) => `${props.height}px`};
@@ -94,49 +85,19 @@ function LoadingTeamCard() {
             <ImageTitleContainer>
               <PlaceholderAvatar />
               <TeamTitleContainer>
-                <PlaceholderText color="#546fff" opacity="0.32" />
-                <PlaceholderText color="#546fff" opacity="0.12" />
+                <PlaceholderText opacity="0.32" />
+                <PlaceholderText opacity="0.12" />
               </TeamTitleContainer>
             </ImageTitleContainer>
           </Row>
         </Row>
         <PlaceholderDetailsContainer>
-          <PlaceholderText
-            color="#546fff"
-            width="15"
-            opacity="0.32"
-            height="15"
-          />
-          <PlaceholderText
-            color="#546fff"
-            width="80"
-            opacity="0.32"
-            height="15"
-          />
-          <PlaceholderText
-            color="#546fff"
-            width="15"
-            opacity="0.32"
-            height="15"
-          />
-          <PlaceholderText
-            color="#546fff"
-            width="80"
-            opacity="0.32"
-            height="15"
-          />
-          <PlaceholderText
-            color="#546fff"
-            width="15"
-            opacity="0.32"
-            height="15"
-          />
-          <PlaceholderText
-            color="#546fff"
-            width="80"
-            opacity="0.32"
-            height="15"
-          />
+          <PlaceholderText width="15" opacity="0.32" height="15" />
+          <PlaceholderText width="80" opacity="0.32" height="15" />
+          <PlaceholderText width="15" opacity="0.32" height="15" />
+          <PlaceholderText width="80" opacity="0.32" height="15" />
+          <PlaceholderText width="15" opacity="0.32" height="15" />
+          <PlaceholderText width="80" opacity="0.32" height="15" />
         </PlaceholderDetailsContainer>
       </StyledInfoContainer>
     </TeamBlock>
