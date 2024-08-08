@@ -26,12 +26,13 @@ import {
   pickOpponentTeam,
   pickOpponentTeamResult,
   resetMatchState,
-  // setIsPending,
   handleAssistsChange,
 } from "./matchModalSlice";
 
 import { useUpdatePlayer } from "./useUpdatePlayersTable";
 import styled from "styled-components";
+
+import { useForm } from "react-hook-form";
 
 const StyledButton = styled(Button)`
   background-color: var(--color-primary-500);
@@ -65,6 +66,7 @@ const style = {
 };
 
 const CreateMatchModal = ({ open, handleClose, teams }) => {
+  // Функция для диспетча действия RTK
   const dispatch = useDispatch();
 
   // Получение списка игроков текущей и противоположной команды
@@ -96,16 +98,26 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
   const teamsToPickOpponent = removeObjectById(teams, team1Id);
 
   const { addMatch } = useAddMatch();
-
   const { updateAllPlayers } = useUpdatePlayer();
 
+  // Настройка useForm для обработки данных формы
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      score1,
+      score2,
+    },
+  });
+
   // Обработчик подтверждения изменений (submit)
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     // Асинхронное обновление данных команд и добавление матча
     await Promise.all([
       updateTeamRowCurrent(),
       updateTeamRowOpponent(),
-      // dispatch(setIsPending(isPendingCurrent)),
       addMatch(),
       updateAllPlayers(),
     ]);
@@ -132,178 +144,85 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
         <Box sx={style}>
           <h2>Внести результат матча</h2>
 
-          {/* Выбор команды 1 */}
-          <StyledTextField
-            select
-            label="Команда 1"
-            value={team1}
-            fullWidth
-            margin="normal"
-            disabled
-          >
-            <StyledMenuItem value={team1}>{team1}</StyledMenuItem>
-          </StyledTextField>
-
-          {/* Выбор команды 2 */}
-          <StyledTextField
-            select
-            label="Команда 2"
-            value={team2Id || ""}
-            onChange={(e) => {
-              const selectedTeamId = e.target.value;
-              const selectedTeam = teamsToPickOpponent.find(
-                (team) => team.id === selectedTeamId
-              );
-              console.log(selectedTeam);
-              dispatch(
-                pickOpponentTeam({
-                  id: selectedTeam.id,
-                  teamName: selectedTeam.teamName,
-                  imgUrl: selectedTeam.imageUrl,
-                })
-              );
-            }}
-            fullWidth
-            margin="normal"
-          >
-            {teamsToPickOpponent.map((team) => (
-              <StyledMenuItem key={team.id} value={team.id}>
-                {team.teamName}
-              </StyledMenuItem>
-            ))}
-          </StyledTextField>
-
-          {/* Ввод результатов команд */}
-          <StyledTextField
-            label="Результат команды 1"
-            value={score1}
-            onChange={(e) => dispatch(pickCurrentTeamResult(e.target.value))}
-            fullWidth
-            margin="normal"
-          />
-
-          <StyledTextField
-            label="Результат команды 2"
-            value={score2}
-            onChange={(e) => dispatch(pickOpponentTeamResult(e.target.value))}
-            fullWidth
-            margin="normal"
-          />
-
-          <Row gap={2}>
-            {/* Аккордеон для игроков текущей команды */}
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<HiFolderOpen />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography sx={{ fontSize: 13 }}>
-                  Игроки команды {team1}, забившие гол
-                </Typography>
-              </AccordionSummary>
-
-              <AccordionDetails sx={{ maxHeight: 200, overflowY: "auto" }}>
-                {playersCurrentTeam.map((player) => {
-                  const isSelected = playersScoredGoalsCurrentTeam?.some(
-                    (p) => p.id === player.id
-                  );
-                  const playerGoals =
-                    playersScoredGoalsCurrentTeam?.find(
-                      (p) => p.id === player.id
-                    )?.scored || 0;
-                  const playerAssists =
-                    playersScoredGoalsCurrentTeam?.find(
-                      (p) => p.id === player.id
-                    )?.assists || 0;
-
-                  return (
-                    <div
-                      key={player.id}
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      {/* Выбор игрока */}
-                      <StyledMenuItem
-                        value={player.playerName}
-                        onClick={() =>
-                          dispatch(
-                            handlePlayerClick({ team: "currentTeam", player })
-                          )
-                        }
-                        style={{
-                          backgroundColor: isSelected ? "lightblue" : "inherit",
-                          flexGrow: 1,
-                        }}
-                      >
-                        {player.playerName}
-                      </StyledMenuItem>
-                      {/* Ввод количества голов */}
-                      {isSelected && (
-                        <>
-                          <StyledTextField
-                            type="number"
-                            label="Голы"
-                            value={playerGoals}
-                            onChange={(e) =>
-                              dispatch(
-                                handleGoalsChange({
-                                  team: "currentTeam",
-                                  playerId: player.id,
-                                  scored: parseInt(e.target.value),
-                                })
-                              )
-                            }
-                            style={{ width: 60, marginLeft: 10 }}
-                          />
-
-                          {/* Ввод количества ассистов */}
-                          <StyledTextField
-                            type="number"
-                            label="Ассисты"
-                            value={playerAssists}
-                            onChange={(e) =>
-                              dispatch(
-                                handleAssistsChange({
-                                  team: "currentTeam",
-                                  playerId: player.id,
-                                  assists: parseInt(e.target.value),
-                                })
-                              )
-                            }
-                            style={{ width: 60, marginLeft: 10 }}
-                          />
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
-              </AccordionDetails>
-            </Accordion>
-
-            {/* Аккордеон для игроков противоположной команды */}
-            {team2 && (
+          {/* Оборачиваем весь компонент в form */}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* Выбор команды 1 */}
+            <StyledTextField
+              select
+              label="Команда 1"
+              value={team1}
+              fullWidth
+              margin="normal"
+              disabled
+            >
+              <StyledMenuItem value={team1}>{team1}</StyledMenuItem>
+            </StyledTextField>
+            Выбор команды 2
+            <StyledTextField
+              select
+              label="Команда 2"
+              value={team2Id || ""}
+              onChange={(e) => {
+                const selectedTeamId = e.target.value;
+                const selectedTeam = teamsToPickOpponent.find(
+                  (team) => team.id === selectedTeamId
+                );
+                dispatch(
+                  pickOpponentTeam({
+                    id: selectedTeam.id,
+                    teamName: selectedTeam.teamName,
+                    imgUrl: selectedTeam.imageUrl,
+                  })
+                );
+              }}
+              fullWidth
+              margin="normal"
+            >
+              {teamsToPickOpponent.map((team) => (
+                <StyledMenuItem key={team.id} value={team.id}>
+                  {team.teamName}
+                </StyledMenuItem>
+              ))}
+            </StyledTextField>
+            {/* Ввод результатов команд */}
+            <StyledTextField
+              label="Результат команды 1"
+              value={score1}
+              onChange={(e) => dispatch(pickCurrentTeamResult(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <StyledTextField
+              label="Результат команды 2"
+              value={score2}
+              onChange={(e) => dispatch(pickOpponentTeamResult(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <Row gap={2}>
+              {/* Аккордеон для игроков текущей команды */}
               <Accordion>
                 <AccordionSummary
                   expandIcon={<HiFolderOpen />}
-                  aria-controls="panel2a-content"
-                  id="panel2a-header"
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
                 >
                   <Typography sx={{ fontSize: 13 }}>
-                    Игроки команды {team2}, забившие гол
+                    Игроки команды {team1}, забившие гол
                   </Typography>
                 </AccordionSummary>
 
                 <AccordionDetails sx={{ maxHeight: 200, overflowY: "auto" }}>
-                  {playersOpponentTeam.map((player) => {
-                    const isSelected = playersScoredGoalsOpponentTeam?.some(
+                  {playersCurrentTeam.map((player) => {
+                    const isSelected = playersScoredGoalsCurrentTeam?.some(
                       (p) => p.id === player.id
                     );
                     const playerGoals =
-                      playersScoredGoalsOpponentTeam?.find(
+                      playersScoredGoalsCurrentTeam?.find(
                         (p) => p.id === player.id
                       )?.scored || 0;
                     const playerAssists =
-                      playersScoredGoalsOpponentTeam?.find(
+                      playersScoredGoalsCurrentTeam?.find(
                         (p) => p.id === player.id
                       )?.assists || 0;
 
@@ -317,10 +236,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                           value={player.playerName}
                           onClick={() =>
                             dispatch(
-                              handlePlayerClick({
-                                team: "opponentTeam",
-                                player,
-                              })
+                              handlePlayerClick({ team: "currentTeam", player })
                             )
                           }
                           style={{
@@ -342,7 +258,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                               onChange={(e) =>
                                 dispatch(
                                   handleGoalsChange({
-                                    team: "opponentTeam",
+                                    team: "currentTeam",
                                     playerId: player.id,
                                     scored: parseInt(e.target.value),
                                   })
@@ -359,7 +275,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                               onChange={(e) =>
                                 dispatch(
                                   handleAssistsChange({
-                                    team: "opponentTeam",
+                                    team: "currentTeam",
                                     playerId: player.id,
                                     assists: parseInt(e.target.value),
                                   })
@@ -374,13 +290,109 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                   })}
                 </AccordionDetails>
               </Accordion>
-            )}
 
-            {/* Кнопка для подтверждения изменений */}
-            <StyledButton onClick={onSubmit} variant="contained" fullWidth>
-              Добавить матч
-            </StyledButton>
-          </Row>
+              {/* Аккордеон для игроков противоположной команды */}
+              {team2 && (
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<HiFolderOpen />}
+                    aria-controls="panel2a-content"
+                    id="panel2a-header"
+                  >
+                    <Typography sx={{ fontSize: 13 }}>
+                      Игроки команды {team2}, забившие гол
+                    </Typography>
+                  </AccordionSummary>
+
+                  <AccordionDetails sx={{ maxHeight: 200, overflowY: "auto" }}>
+                    {playersOpponentTeam.map((player) => {
+                      const isSelected = playersScoredGoalsOpponentTeam?.some(
+                        (p) => p.id === player.id
+                      );
+                      const playerGoals =
+                        playersScoredGoalsOpponentTeam?.find(
+                          (p) => p.id === player.id
+                        )?.scored || 0;
+                      const playerAssists =
+                        playersScoredGoalsOpponentTeam?.find(
+                          (p) => p.id === player.id
+                        )?.assists || 0;
+
+                      return (
+                        <div
+                          key={player.id}
+                          style={{ display: "flex", alignItems: "center" }}
+                        >
+                          {/* Выбор игрока */}
+                          <StyledMenuItem
+                            value={player.playerName}
+                            onClick={() =>
+                              dispatch(
+                                handlePlayerClick({
+                                  team: "opponentTeam",
+                                  player,
+                                })
+                              )
+                            }
+                            style={{
+                              backgroundColor: isSelected
+                                ? "lightblue"
+                                : "inherit",
+                              flexGrow: 1,
+                            }}
+                          >
+                            {player.playerName}
+                          </StyledMenuItem>
+                          {/* Ввод количества голов */}
+                          {isSelected && (
+                            <>
+                              <StyledTextField
+                                type="number"
+                                label="Голы"
+                                value={playerGoals}
+                                onChange={(e) =>
+                                  dispatch(
+                                    handleGoalsChange({
+                                      team: "opponentTeam",
+                                      playerId: player.id,
+                                      scored: parseInt(e.target.value),
+                                    })
+                                  )
+                                }
+                                style={{ width: 60, marginLeft: 10 }}
+                              />
+
+                              {/* Ввод количества ассистов */}
+                              <StyledTextField
+                                type="number"
+                                label="Ассисты"
+                                value={playerAssists}
+                                onChange={(e) =>
+                                  dispatch(
+                                    handleAssistsChange({
+                                      team: "opponentTeam",
+                                      playerId: player.id,
+                                      assists: parseInt(e.target.value),
+                                    })
+                                  )
+                                }
+                                style={{ width: 60, marginLeft: 10 }}
+                              />
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </AccordionDetails>
+                </Accordion>
+              )}
+
+              {/* Кнопка для подтверждения изменений */}
+              <StyledButton onClick={onSubmit} variant="contained" fullWidth>
+                Добавить матч
+              </StyledButton>
+            </Row>
+          </form>
         </Box>
       </Modal>
 

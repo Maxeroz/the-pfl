@@ -43,6 +43,8 @@ const StyledTeamInfo = styled.div`
   justify-content: space-between;
   flex-direction: column;
   align-items: center;
+
+  min-width: 70px;
 `;
 
 const TeamName = styled.span`

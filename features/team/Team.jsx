@@ -16,6 +16,27 @@ import LoadingOperationsRow from "./LoadingOperationsRow";
 import PlayersInTeam from "./PlayersInTeam";
 import { usePlayers } from "./usePlayers";
 
+import { HiChevronDown } from "react-icons/hi2";
+
+const StyledButton = styled.button`
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  border-radius: var(--border-radius-sm);
+  transform: translateX(0.8rem);
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: var(--color-grey-100);
+  }
+
+  & svg {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: var(--color-grey-700);
+  }
+`;
+
 const OperationsRow = styled.div`
   display: flex;
   align-items: center;
@@ -36,6 +57,13 @@ const TeamContext = createContext();
 function Team() {
   // Извлечение параметров из URL
   const { id: teamId } = useParams();
+
+  const [isPlayersOpen, setIsPlayersOpen] = useState(false);
+
+  // Функция для открытия таблицы по кнопке
+  function togglePlayersOpen() {
+    setIsPlayersOpen((prevStae) => !prevStae);
+  }
 
   // Получение leagueId из строки запроса
   const navigate = useNavigate(); // Получаем функцию navigate
@@ -65,8 +93,6 @@ function Team() {
   const { isLoading: isLoadingPlayers, data: playersData = [] } =
     usePlayers(teamId);
 
-  console.log(playersData);
-
   const teamName = teamData.teamName;
 
   // Проверка, если ли массив с сыгранными матчами, для того чтобы определить, нужно ли отображать график изменения очков команды
@@ -78,7 +104,7 @@ function Team() {
 
   return (
     <TeamChartPagination>
-      <TeamContext.Provider value={{ ...teamData, playersData }}>
+      <TeamContext.Provider value={{ ...teamData, playersData, isPlayersOpen }}>
         <Row gap={2}>
           {isLoading ? (
             <LoadingOperationsRow />
@@ -105,6 +131,10 @@ function Team() {
           <Row gap={2}>
             <PlayersRow direction="column">
               <TabelTitle height="small">Состав </TabelTitle>
+
+              <StyledButton onClick={togglePlayersOpen}>
+                <HiChevronDown />
+              </StyledButton>
             </PlayersRow>
             <PlayersInTeam />
           </Row>
