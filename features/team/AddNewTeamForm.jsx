@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import TableTitle from "../../ui/TableTitle";
+import { useState } from "react";
 import { useSelector } from "react-redux";
+import TableTitle from "../../ui/TableTitle";
 import Row from "../../ui/Row";
-import { useForm } from "react-hook-form"; // Импортируем useForm
 import Button from "../../ui/Button";
-import { useState } from "react"; // Импортируем useState для управления состоянием
+import { useForm } from "react-hook-form";
+import { useDropzone } from "react-dropzone";
 
 const StyledTeamName = styled.span`
   border-bottom: 2px solid var(--color-primary-500);
@@ -12,11 +13,10 @@ const StyledTeamName = styled.span`
 
 const StyledFormContainer = styled.div`
   display: flex;
-  flex-direction: column; /* Столбчатая компоновка для лучшей структуры */
+  flex-direction: column;
   justify-content: space-between;
   background-color: var(--color-grey-0);
   width: 680px;
-  /* height: 400px; */
   border: 1px solid var(--color-primary-100);
   border-radius: var(--border-radius-lg-pfl);
   padding: 32px;
@@ -33,30 +33,35 @@ const FormInputContainer = styled.div`
 `;
 
 const FormInput = styled.input`
-  border: 1px solid var(--color-primary-100);
+  border: 1px solid
+    ${(props) =>
+      props.hasError ? "var(--color-error-500)" : "var(--color-primary-100)"};
   border-radius: var(--border-radius-lg-pfl);
   height: 50px;
   width: 400px;
   padding: 5px 20px;
   font-size: 12px;
   font-weight: 500;
-
-  /* Изменяем цвет границы при ошибке */
-  ${({ hasError }) =>
-    hasError &&
-    `
-      border-color: var(--color-error);
-    `}
 `;
 
-const FileInput = styled.input`
-  border: 1px solid var(--color-primary-100);
+const DropzoneWrapper = styled.div`
+  border: 1px solid
+    ${(props) =>
+      props.hasError ? "var(--color-error-500)" : "var(--color-primary-100)"};
   border-radius: var(--border-radius-lg-pfl);
   height: 50px;
   width: 400px;
-  padding: 5px 20px;
-  font-size: 12px;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-grey-0);
+  cursor: pointer;
+  position: relative;
+`;
+
+const DropzoneText = styled.span`
+  font-size: 14px;
+  color: var(--color-primary-500);
 `;
 
 const InputLabel = styled.label`
@@ -67,64 +72,68 @@ const InputLabel = styled.label`
   font-weight: 600;
 `;
 
-const ImagePreview = styled.img`
-  width: 100px; /* Ширина предварительного просмотра */
-  height: 100px; /* Высота предварительного просмотра */
-  object-fit: cover;
-  border-radius: var(--border-radius-lg-pfl);
-  margin-top: 10px; /* Отступ сверху */
-  border: 1px solid var(--color-primary-100);
+const ErrorMessage = styled.span`
+  color: var(--color-error-500);
+  font-size: 12px;
 `;
 
-// Стиль для отображения сообщений об ошибках
-const ErrorMessage = styled.span`
-  color: var(--color-error-500); // Определите ваш цвет ошибки в CSS-переменных
+const SuccessMessage = styled.span`
+  color: var(--color-success-500);
   font-size: 12px;
-  /* margin-top: 4px; */
 `;
 
 function AddNewTeamForm() {
   const leagueTier = useSelector((state) => state.league.leagueTier);
 
-  // Инициализация useForm с значениями по умолчанию
   const {
     register,
     handleSubmit,
-    formState: { errors }, // Получаем объект ошибок
-    setValue, // Используем для установки значения
+    formState: { errors },
+    setValue,
+    setError,
+    clearErrors,
   } = useForm({
     defaultValues: {
-      teamName: "", // Значение по умолчанию для имени команды
-      teamLogo: null, // Значение по умолчанию для логотипа команды
+      teamName: "",
+      teamLogo: null,
     },
+    mode: "onBlur",
   });
 
-  const [imagePreview, setImagePreview] = useState(null); // Состояние для предварительного просмотра изображения
+  const [logoUploaded, setLogoUploaded] = useState(false);
 
   const onSubmit = (data) => {
-    console.log(data); // Логирование отправленных данных формы
+    // Проверяем наличие ошибки перед отправкой
+    if (!data.teamLogo) {
+      setError("teamLogo", {
+        type: "manual",
+        message: "Логотип команды обязателен",
+      });
+      setLogoUploaded(false);
+      return; // Прекращаем обработку формы, если логотип не загружен
+    }
+    console.log(data);
     // Обработка отправки формы
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0]; // Получаем первый выбранный файл
+  const onDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0];
     if (file) {
-      // Если файл выбран
-      setValue("teamLogo", file); // Устанавливаем значение для формы
-      const reader = new FileReader(); // Создаем объект FileReader
-      reader.onloadend = () => {
-        // Когда чтение файла завершено
-        setImagePreview(reader.result); // Устанавливаем изображение для предварительного просмотра
-      };
-      reader.readAsDataURL(file); // Читаем файл как Data URL
+      setValue("teamLogo", file); // Устанавливаем загруженный файл
+      setLogoUploaded(true); // Устанавливаем положительную индикацию
+      clearErrors("teamLogo"); // Очистить ошибку, если есть
     }
   };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: "image/*", // Разрешить только изображения
+    multiple: false, // Разрешить загрузку только одного файла
+  });
 
   return (
     <StyledFormContainer>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {" "}
-        {/* Обертка элементов в form */}
         <Row gap={2}>
           <TableTitle>
             Добавить команду в турнир:{" "}
@@ -139,9 +148,8 @@ function AddNewTeamForm() {
                 {...register("teamName", {
                   required: "Название команды обязательно",
                 })}
-                hasError={!!errors.teamName} // Передаем пропс для отображения ошибки
+                hasError={!!errors.teamName}
               />
-              {/* Отображаем сообщение об ошибке, если оно есть */}
               {errors.teamName && (
                 <ErrorMessage>{errors.teamName.message}</ErrorMessage>
               )}
@@ -151,23 +159,25 @@ function AddNewTeamForm() {
           <Row gap={1}>
             <InputLabel htmlFor="teamLogo">Логотип команды</InputLabel>
             <FormInputContainer>
-              <FileInput
-                type="file"
-                id="teamLogo"
-                accept="image/*" // Ограничиваем только изображениями
-                {...register("teamLogo")}
-                onChange={handleFileChange} // Обработчик изменения файла
-              />
-              {/* Отображаем предварительный просмотр изображения, если он есть */}
-              {imagePreview && (
-                <ImagePreview src={imagePreview} alt="Team Logo Preview" />
+              <DropzoneWrapper
+                {...getRootProps()}
+                hasError={!!errors.teamLogo} // Показываем ошибку, если она есть
+              >
+                <input {...getInputProps()} />
+                <DropzoneText>
+                  Перетащите изображение сюда или нажмите для выбора
+                </DropzoneText>
+              </DropzoneWrapper>
+              {errors.teamLogo && (
+                <ErrorMessage>{errors.teamLogo.message}</ErrorMessage>
+              )}
+              {logoUploaded && !errors.teamLogo && (
+                <SuccessMessage>Логотип загружен успешно!</SuccessMessage>
               )}
             </FormInputContainer>
           </Row>
 
           <Button width={200} type="submit">
-            {" "}
-            {/* Кнопка отправки, onClick не требуется */}
             Применить
           </Button>
         </Row>

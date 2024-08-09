@@ -8,7 +8,13 @@ const GlobalStyles = createGlobalStyle`:root {
 
     /* Primary */
     --color-primary-100: #DCE4FF;
+    --color-primary-200: #BAC8FF;
+    --color-primary-300: #98ABFF;
+    --color-primary-400: #9F84FD;
     --color-primary-500: #546FFF;
+    --color-primary-600: #3D53DB;
+    --color-primary-700: #2A3BB7;
+    --color-primary-800: #1A2793;
     --color-primary-900:#10197A;
 
     --border-radius-lg-pfl:10px;

@@ -1,18 +1,21 @@
 import { cloneElement, createContext, useContext, useState } from "react";
+import useEscapeKey from "../../hooks/useEscapeKey";
 
 // Modal Context
 const ModalContext = createContext();
 
 // Parent Component
 function ModalNewTeam({ children }) {
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
 
+  const ref = useEscapeKey(handleClose);
+
   return (
     <ModalContext.Provider value={{ openModal, handleClose, handleOpen }}>
-      {children}
+      <div ref={ref}>{children}</div>
     </ModalContext.Provider>
   );
 }

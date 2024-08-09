@@ -57,7 +57,7 @@ const EmptyLink = styled(NavLink)`
 
 const StyledInfoContainer = styled(InfoContainer)`
   &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень при наведении */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень при наведении */
     transition: box-shadow 0.1s ease-in-out; /* Плавная анимация тени */
   }
 `;
@@ -91,26 +91,26 @@ function TeamCard({ team }) {
   if (isAddingSession)
     return (
       <TeamBlock>
-        <StyledInfoContainer
-          light="light"
-          width="350px"
-          height="140px"
-          direction="column"
-          alignItems="flex-start"
-        >
-          <AddTeamOption>
-            {/* <Button>Добавить команду</Button> */}
-            <ModalNewTeam.ModalOpenButton>
+        <ModalNewTeam.ModalOpenButton>
+          <StyledInfoContainer
+            light="light"
+            width="350px"
+            height="140px"
+            direction="column"
+            alignItems="flex-start"
+          >
+            <AddTeamOption>
+              {/* <Button>Добавить команду</Button> */}
               <Button>Добавить команду</Button>
-            </ModalNewTeam.ModalOpenButton>
+            </AddTeamOption>
+          </StyledInfoContainer>
+        </ModalNewTeam.ModalOpenButton>
 
-            <ModalNewTeam.ModalWindow>
-              <Modal style={{ backdropFilter: "blur(5px)" }}>
-                <AddNewTeamForm />
-              </Modal>
-            </ModalNewTeam.ModalWindow>
-          </AddTeamOption>
-        </StyledInfoContainer>
+        <ModalNewTeam.ModalWindow>
+          <Modal style={{ backdropFilter: "blur(5px)" }}>
+            <AddNewTeamForm />
+          </Modal>
+        </ModalNewTeam.ModalWindow>
       </TeamBlock>
     );
 
