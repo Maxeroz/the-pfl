@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import InfoContainer from "./InfoContainer";
 import Row from "./Row";
-import { Avatar } from "@mui/material";
+import { Avatar, Box, Modal } from "@mui/material";
 import { NavLink, useParams } from "react-router-dom";
 import DetailItem from "./DetailItem";
 
@@ -9,6 +9,8 @@ import { GiSoccerBall } from "react-icons/gi";
 import { TbPlayFootball } from "react-icons/tb";
 import { TbLayersDifference } from "react-icons/tb";
 import Button from "./Button";
+import ModalNewTeam from "../features/team/ModalNewTeam";
+import AddNewTeamForm from "../features/team/AddNewTeamForm";
 
 const TeamBlock = styled.div`
   margin: 20px 0;
@@ -97,7 +99,16 @@ function TeamCard({ team }) {
           alignItems="flex-start"
         >
           <AddTeamOption>
-            <Button>Добавить команду</Button>
+            {/* <Button>Добавить команду</Button> */}
+            <ModalNewTeam.ModalOpenButton>
+              <Button>Добавить команду</Button>
+            </ModalNewTeam.ModalOpenButton>
+
+            <ModalNewTeam.ModalWindow>
+              <Modal style={{ backdropFilter: "blur(5px)" }}>
+                <AddNewTeamForm />
+              </Modal>
+            </ModalNewTeam.ModalWindow>
           </AddTeamOption>
         </StyledInfoContainer>
       </TeamBlock>

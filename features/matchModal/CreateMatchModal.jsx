@@ -118,19 +118,21 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
   });
 
   // Обработчик подтверждения изменений (submit)
-  const onSubmit = (data) => {
-    const { team2Id } = data;
-
-    // // Асинхронное обновление данных команд и добавление матча
-    // await Promise.all([
-    //   updateTeamRowCurrent(),
-    //   updateTeamRowOpponent(),
-    //   addMatch(),
-    //   updateAllPlayers(),
-    // ]);
-    // // Сбрасываем состояние матча и закрываем модальное окно
-    // dispatch(resetMatchState());
-    // handleClose();
+  const onSubmit = async (data) => {
+    try {
+      // Выполнение всех асинхронных операций после успешной валидации
+      await Promise.all([
+        updateTeamRowCurrent(),
+        updateTeamRowOpponent(),
+        addMatch(),
+        updateAllPlayers(),
+      ]);
+      // Сбрасываем состояние матча и закрываем модальное окно
+      dispatch(resetMatchState());
+      handleClose();
+    } catch (error) {
+      console.error("Ошибка при добавлении матча:", error);
+    }
   };
 
   // Обработчик закрытия модального окна
@@ -422,7 +424,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
               {/* Кнопка для подтверждения изменений */}
               <StyledButton
                 type="submit"
-                onClick={onSubmit}
+                onClick={handleSubmit(onSubmit)}
                 variant="contained"
                 fullWidth
               >

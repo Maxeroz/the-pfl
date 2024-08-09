@@ -8,6 +8,7 @@ import InputFilterTeam from "./InputFilter";
 import TableTitle from "../ui/TableTitle";
 
 import { useTable } from "../features/table/useTable";
+import ModalNewTeam from "../features/team/ModalNewTeam";
 
 function AllTeams() {
   const { leagueId } = useParams(); // Получаем параметр
@@ -41,27 +42,29 @@ function AllTeams() {
   ];
 
   return (
-    <Row gap={2}>
-      <Row type="horizontal">
-        <TableTitle as={"h3"} height="small">
-          Лига: ПФЛ-{leagueId}
-        </TableTitle>
-        <InputFilterTeam value={value} handleChange={handleChange} />
-      </Row>
+    <ModalNewTeam>
+      <Row gap={2}>
+        <Row type="horizontal">
+          <TableTitle as={"h3"} height="small">
+            Лига: ПФЛ-{leagueId}
+          </TableTitle>
+          <InputFilterTeam value={value} handleChange={handleChange} />
+        </Row>
 
-      <Row type="horizontal" wrap="wrap">
-        <>
-          {isLoading
-            ? loadedTeams.map((team) => <LoadingTeamCard key={team.id} />)
-            : filteredTeams.map((team) => (
-                <TeamCard key={team.id} team={team} />
-              ))}
+        <Row type="horizontal" wrap="wrap">
+          <>
+            {isLoading
+              ? loadedTeams.map((team) => <LoadingTeamCard key={team.id} />)
+              : filteredTeams.map((team) => (
+                  <TeamCard key={team.id} team={team} />
+                ))}
 
-          {/* Компонент для добавления новой команды в лигу */}
-          {/* <TeamCard team={{ adding: true }} /> */}
-        </>
+            {/* Компонент для добавления новой команды в лигу */}
+            <TeamCard team={{ adding: true }} />
+          </>
+        </Row>
       </Row>
-    </Row>
+    </ModalNewTeam>
   );
 }
 
