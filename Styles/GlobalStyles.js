@@ -34,7 +34,13 @@ const GlobalStyles = createGlobalStyle`:root {
     /* Success */
 
     --color-success-500 :#9CD323;
+
+    /* Error */
     --color-error-500: #FF4423;
+    --color-error-600: #DB2719;
+    --color-error-700: #B71112;
+    --color-error-800: #930B16;
+    --color-error-900: #7A0619;
 
 
     --input-border-color: #F5F5F7;

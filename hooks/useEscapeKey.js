@@ -5,12 +5,11 @@ function useEscapeKey(handler) {
   const ref = useRef(null);
 
   useEffect(() => {
+    // Обработчик события нажатия клавиши
     const handleKeyDown = (event) => {
+      // Проверяем, является ли нажатая клавиша Escape
       if (event.key === "Escape") {
-        // Проверяем, находится ли фокус внутри элемента с ref
-        if (ref.current && ref.current.contains(document.activeElement)) {
-          handler();
-        }
+        handler(); // Вызываем переданный обработчик
       }
     };
 

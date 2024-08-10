@@ -38,4 +38,14 @@ function ModalWindow({ children }) {
 ModalNewTeam.ModalOpenButton = ModalOpenButton;
 ModalNewTeam.ModalWindow = ModalWindow;
 
+export function useModalNewTeamContext() {
+  const context = useContext(ModalContext);
+
+  if (context === undefined)
+    throw new Error(
+      "ModalNewTeamContext was used outside ModalContextProvider"
+    );
+  return context;
+}
+
 export default ModalNewTeam;

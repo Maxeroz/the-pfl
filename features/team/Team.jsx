@@ -17,6 +17,7 @@ import PlayersInTeam from "./PlayersInTeam";
 import { usePlayers } from "./usePlayers";
 
 import { HiChevronDown } from "react-icons/hi2";
+import { useDeleteTeam } from "./useDeleteTeam";
 
 const StyledButton = styled.button`
   background: none;
@@ -48,6 +49,13 @@ const OperationsRow = styled.div`
   border-radius: var(--border-radius-lg-pfl);
 `;
 
+const ButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+`;
+
 const PlayersRow = styled(OperationsRow)``;
 
 // 1. Create Context
@@ -74,7 +82,24 @@ function Team() {
   const league = useSelector((state) => state.league.leagueTier);
   const currentLeagueId = league.split(" ").slice(-1)[0]; // Исправление: получаем строку
 
-  const [isPointsChart, setIsPointsChart] = useState();
+  // Функция для удаления команды из хука
+  const { deleteTeam, isPending: isDeletingTeam } = useDeleteTeam();
+
+  const tableName = `league${currentLeagueId}_table`;
+
+  // Получаем данные о команде
+  const { isLoading, data: teamData } = useTeam(queryLeagueId, teamId);
+  const { isLoading: isLoadingPlayers, data: playersData = [] } =
+    usePlayers(teamId);
+
+  const { imageUrl = "" } = teamData;
+  // const fileName = imageUrl.split("/").pop().split("?")[0];
+
+  const teamName = teamData.teamName;
+
+  const handleDeleteTeam = () => {
+    deleteTeam({ tableName, id: teamId, imageUrl });
+  };
 
   // Функция обработчик для перехода назад
   const handleBackClick = () => {
@@ -89,18 +114,12 @@ function Team() {
     }
   }, [currentLeagueId, queryLeagueId, searchParams, setSearchParams]);
 
-  const { isLoading, data: teamData } = useTeam(queryLeagueId, teamId);
-  const { isLoading: isLoadingPlayers, data: playersData = [] } =
-    usePlayers(teamId);
-
-  const teamName = teamData.teamName;
-
   // Проверка, если ли массив с сыгранными матчами, для того чтобы определить, нужно ли отображать график изменения очков команды
 
-  useEffect(() => {
-    const pointsChart = teamData?.pointsChart?.length > 0; // true если есть данные
-    setIsPointsChart(pointsChart);
-  }, [teamData]);
+  // useEffect(() => {
+  //   const pointsChart = teamData?.pointsChart?.length > 0; // true если есть данные
+  //   setIsPointsChart(pointsChart);
+  // }, [teamData]);
 
   return (
     <TeamChartPagination>
@@ -113,18 +132,19 @@ function Team() {
               <TabelTitle height="small">
                 Футбольный клуб: {teamName}
               </TabelTitle>
-              <Button onClick={handleBackClick}>Назад</Button>
+              <ButtonsContainer>
+                <Button variant="error" onClick={handleDeleteTeam}>
+                  Удалить
+                </Button>
+                <Button onClick={handleBackClick}>Назад</Button>
+              </ButtonsContainer>
             </OperationsRow>
           )}
 
           <Row type="horizontal">
             <>
               {isLoading ? <LoadingTeamInfo /> : <TeamInfoCard />}
-              {!isLoading && isPointsChart ? (
-                <TeamChart />
-              ) : (
-                <LoadingTeamChart />
-              )}
+              {!isLoading ? <TeamChart /> : <LoadingTeamChart />}
             </>
           </Row>
 

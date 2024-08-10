@@ -126,6 +126,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
         updateTeamRowOpponent(),
         addMatch(),
         updateAllPlayers(),
+        reset(),
       ]);
       // Сбрасываем состояние матча и закрываем модальное окно
       dispatch(resetMatchState());
@@ -140,7 +141,6 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
     // Сбрасываем состояние матча и закрываем модальное окно
     dispatch(resetMatchState());
     handleClose();
-    reset();
   };
 
   // Расширение функционала onChange useForm Hook для выбора противоположной команды в Redux

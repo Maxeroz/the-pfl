@@ -6,6 +6,8 @@ import Row from "../../ui/Row";
 import Button from "../../ui/Button";
 import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
+import { useAddTeam } from "./useAddTeam";
+import CenterSpinnerDiv from "../../ui/CenterSpinnerDiv";
 
 const StyledTeamName = styled.span`
   border-bottom: 2px solid var(--color-primary-500);
@@ -17,6 +19,7 @@ const StyledFormContainer = styled.div`
   justify-content: space-between;
   background-color: var(--color-grey-0);
   width: 680px;
+  height: 380px;
   border: 1px solid var(--color-primary-100);
   border-radius: var(--border-radius-lg-pfl);
   padding: 32px;
@@ -42,12 +45,24 @@ const FormInput = styled.input`
   padding: 5px 20px;
   font-size: 12px;
   font-weight: 500;
+
+  /* Стили для фокуса */
+  &:focus {
+    outline: none; /* Убираем стандартное выделение */
+    border-color: ${(props) =>
+      props.hasError ? "var(--color-error-500)" : "var(--color-primary-500)"};
+  }
 `;
 
 const DropzoneWrapper = styled.div`
-  border: 1px solid
+  border: 2px dashed
     ${(props) =>
-      props.hasError ? "var(--color-error-500)" : "var(--color-primary-100)"};
+      props.hasError
+        ? "var(--color-error-500)"
+        : props.isUploaded
+        ? "var(--color-success-500)"
+        : "var(--color-primary-100)"};
+
   border-radius: var(--border-radius-lg-pfl);
   height: 50px;
   width: 400px;
@@ -61,7 +76,8 @@ const DropzoneWrapper = styled.div`
 
 const DropzoneText = styled.span`
   font-size: 14px;
-  color: var(--color-primary-500);
+  color: ${(props) =>
+    props.hasError ? "var(--color-error-500)" : "var(--color-success-500)"};
 `;
 
 const InputLabel = styled.label`
@@ -83,7 +99,11 @@ const SuccessMessage = styled.span`
 `;
 
 function AddNewTeamForm() {
+  // Получаем доступ к ID лиги из Redux
   const leagueTier = useSelector((state) => state.league.leagueTier);
+  const leagueId = leagueTier.split(" ").slice(-1)[0];
+
+  const { addNewTeam, isPending: isAddingTeam } = useAddTeam();
 
   const {
     register,
@@ -100,11 +120,12 @@ function AddNewTeamForm() {
     mode: "onBlur",
   });
 
+  // Состояние загрузки изображения
   const [logoUploaded, setLogoUploaded] = useState(false);
 
   const onSubmit = (data) => {
     // Проверяем наличие ошибки перед отправкой
-    if (!data.teamLogo) {
+    if (!data.teamLogo || data.teamLogo.length === 0) {
       setError("teamLogo", {
         type: "manual",
         message: "Логотип команды обязателен",
@@ -112,8 +133,13 @@ function AddNewTeamForm() {
       setLogoUploaded(false);
       return; // Прекращаем обработку формы, если логотип не загружен
     }
-    console.log(data);
+
     // Обработка отправки формы
+    const teamName = data.teamName;
+    const teamLogoFile = data.teamLogo; // Берем первый файл из массива файлов
+    const tableName = `league${leagueId}_table`;
+
+    addNewTeam({ tableName, teamName, teamLogoFile }); // Передаем правильные параметры
   };
 
   const onDrop = (acceptedFiles) => {
@@ -133,55 +159,62 @@ function AddNewTeamForm() {
 
   return (
     <StyledFormContainer>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Row gap={2}>
-          <TableTitle>
-            Добавить команду в турнир:{" "}
-            <StyledTeamName>{leagueTier}</StyledTeamName>
-          </TableTitle>
-          <Row gap={1}>
-            <InputLabel htmlFor="teamName">Название команды</InputLabel>
-            <FormInputContainer>
-              <FormInput
-                placeholder="Название команды..."
-                id="teamName"
-                {...register("teamName", {
-                  required: "Название команды обязательно",
-                })}
-                hasError={!!errors.teamName}
-              />
-              {errors.teamName && (
-                <ErrorMessage>{errors.teamName.message}</ErrorMessage>
-              )}
-            </FormInputContainer>
-          </Row>
+      {isAddingTeam ? (
+        <CenterSpinnerDiv />
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Row gap={2}>
+            <TableTitle>
+              Добавить команду в турнир:{" "}
+              <StyledTeamName>{leagueTier}</StyledTeamName>
+            </TableTitle>
+            <Row gap={1}>
+              <InputLabel htmlFor="teamName">Название команды</InputLabel>
+              <FormInputContainer>
+                <FormInput
+                  placeholder="Введите название команды..."
+                  id="teamName"
+                  {...register("teamName", {
+                    required: "Название команды обязательно",
+                  })}
+                  hasError={!!errors.teamName}
+                />
+                {errors.teamName && (
+                  <ErrorMessage>{errors.teamName.message}</ErrorMessage>
+                )}
+              </FormInputContainer>
+            </Row>
 
-          <Row gap={1}>
-            <InputLabel htmlFor="teamLogo">Логотип команды</InputLabel>
-            <FormInputContainer>
-              <DropzoneWrapper
-                {...getRootProps()}
-                hasError={!!errors.teamLogo} // Показываем ошибку, если она есть
-              >
-                <input {...getInputProps()} />
-                <DropzoneText>
-                  Перетащите изображение сюда или нажмите для выбора
-                </DropzoneText>
-              </DropzoneWrapper>
-              {errors.teamLogo && (
-                <ErrorMessage>{errors.teamLogo.message}</ErrorMessage>
-              )}
-              {logoUploaded && !errors.teamLogo && (
-                <SuccessMessage>Логотип загружен успешно!</SuccessMessage>
-              )}
-            </FormInputContainer>
-          </Row>
+            <Row gap={1}>
+              <InputLabel htmlFor="teamLogo">Логотип команды</InputLabel>
+              <FormInputContainer>
+                <DropzoneWrapper
+                  {...getRootProps()}
+                  hasError={!!errors.teamLogo} // Показываем ошибку, если она есть
+                  isUploaded={logoUploaded}
+                >
+                  <input {...getInputProps()} />
+                  <DropzoneText hasError={!!errors.teamLogo}>
+                    {logoUploaded
+                      ? "Изображение загружено"
+                      : "Перетащите изображение сюда или нажмите для выбора"}
+                  </DropzoneText>
+                </DropzoneWrapper>
+                {errors.teamLogo && (
+                  <ErrorMessage>{errors.teamLogo.message}</ErrorMessage>
+                )}
+                {logoUploaded && !errors.teamLogo && (
+                  <SuccessMessage>Логотип загружен успешно!</SuccessMessage>
+                )}
+              </FormInputContainer>
+            </Row>
 
-          <Button width={200} type="submit">
-            Применить
-          </Button>
-        </Row>
-      </form>
+            <Button width={200} type="submit" disabled={isAddingTeam}>
+              Применить
+            </Button>
+          </Row>
+        </form>
+      )}
     </StyledFormContainer>
   );
 }

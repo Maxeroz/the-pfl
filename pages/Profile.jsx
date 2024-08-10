@@ -57,7 +57,7 @@ const tableMapping = {
 function Profile() {
   const league = useSelector((state) => state.league.leagueTier);
 
-  const leagueId = league.split(" ").slice(-1)[0]; // Исправление: получаем строку
+  const leagueId = league.split(" ").slice(-1)[0];
   const { tableData = [] } = useTable();
 
   const teamAmount = tableData.length;

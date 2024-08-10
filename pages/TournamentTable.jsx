@@ -18,20 +18,12 @@ import CreateMatchModal from "../features/matchModal/CreateMatchModal";
 import { useDispatch } from "react-redux";
 
 import { pickCurrentTeam } from "../features/matchModal/matchModalSlice";
+import CenterSpinnerDiv from "../ui/CenterSpinnerDiv";
 
 const StyledTableCell = styled(TableCell)`
   font-size: 14px;
 
   white-space: nowrap;
-`;
-
-const CenterSpinnerDiv = styled.div`
-  display: flex;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-
-  height: 90vh;
 `;
 
 const LastGameSpan = styled.span`
@@ -109,9 +101,7 @@ function TournamentTable() {
 
       <TableWrapperBlock>
         {isLoading ? (
-          <CenterSpinnerDiv>
-            <CircularProgress />
-          </CenterSpinnerDiv>
+          <CenterSpinnerDiv />
         ) : (
           <>
             {/* <Button onClick={handleOpenModal} variant="contained" color="primary">

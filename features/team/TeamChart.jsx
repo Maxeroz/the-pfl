@@ -61,6 +61,21 @@ const StyledMenu = styled.span`
   font-weight: 500;
 `;
 
+const NoMatchesContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  font-weight: 600;
+
+  background-color: #fff;
+  width: 400px;
+  height: 160px;
+
+  border-radius: var(--border-radius-lg-pfl);
+`;
+
 const CustomTick = ({ x, y, payload }) => (
   <text x={x} y={y} dy={16} textAnchor="middle" fill="#141522" fontSize={12}>
     {payload.value}
@@ -90,19 +105,32 @@ const getWeekTitle = (currentPage, currentWeekStart) => {
   }
 };
 
-const TeamChart = ({ isDisplayed }) => {
+const TeamChart = () => {
   const { pointsChart } = useTeamContext();
   const { currentPage, currentWeekStart, handlePrevWeek, handleNextWeek } =
     useTeamPaginationContext();
 
   if (!pointsChart || pointsChart.length === 0) {
-    return null;
+    return (
+      <TeamBlock>
+        <InfoContainer
+          light="light"
+          width="460px"
+          height="200px"
+          direction="column"
+        >
+          <Row gap={1}>
+            <StatisticsTitleContainer>
+              <NoMatchesContainer>Нет сыгранных матчей</NoMatchesContainer>
+            </StatisticsTitleContainer>
+          </Row>
+        </InfoContainer>
+      </TeamBlock>
+    );
   }
 
   const monthlyData = generateMonthlyData(pointsChart);
   const chartData = filterWeekData(monthlyData, currentWeekStart);
-
-  if (isDisplayed) return <span>Hello World!</span>;
 
   return (
     <Menus>

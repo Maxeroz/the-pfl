@@ -3,7 +3,6 @@ import { getPlayersByTeamId } from "../../services/apiPlayers";
 
 // Хук для получения всех игроков команды по ID из URL
 export function usePlayers(teamId) {
-  console.log(teamId);
   const { isLoading, data, error } = useQuery({
     queryKey: ["allTeamPlayers", teamId],
     queryFn: () => getPlayersByTeamId(teamId),
