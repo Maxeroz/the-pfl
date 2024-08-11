@@ -10,7 +10,8 @@ function PlayersInTeam() {
   const infoContainerRef = useRef(null); // Создаем реф для InfoContainer
 
   // Ограничиваем количество игроков до 10
-  const limitedPlayersData = playersData.slice(0, 10);
+  // const limitedPlayersData = playersData.slice(0, 10);
+  const limitedPlayersData = playersData;
 
   useEffect(() => {
     if (infoContainerRef.current) {
@@ -35,9 +36,9 @@ function PlayersInTeam() {
             <Table.Header>
               <div>Номер</div>
               <div>Игрок</div>
-              <div>Возраст</div>
-              <div>Рост</div>
-              <div>Вес</div>
+              <div>Игры</div>
+              <div>Ж/К</div>
+              <div>К/К</div>
               <div>Амплуа</div>
             </Table.Header>
 

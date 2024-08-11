@@ -18,6 +18,9 @@ import { usePlayers } from "./usePlayers";
 
 import { HiChevronDown } from "react-icons/hi2";
 import { useDeleteTeam } from "./useDeleteTeam";
+import ReusableModalWindow from "../../ui/ReusableModalWindow";
+import DeleteTeamForm from "../../ui/DeleteTeamForm";
+import ConfirmAction from "../../ui/ConfirmAction";
 
 const StyledButton = styled.button`
   background: none;
@@ -133,9 +136,23 @@ function Team() {
                 Футбольный клуб: {teamName}
               </TabelTitle>
               <ButtonsContainer>
-                <Button variant="error" onClick={handleDeleteTeam}>
-                  Удалить
-                </Button>
+                <ReusableModalWindow>
+                  <ReusableModalWindow.ToggleButton id="deleteTeam">
+                    <Button variant="error">Удалить</Button>
+                  </ReusableModalWindow.ToggleButton>
+
+                  <ReusableModalWindow.Window id="deleteTeam">
+                    <DeleteTeamForm>
+                      <ConfirmAction
+                        action={{ value: "удалить", target: "команду" }}
+                        variant="error"
+                        handler={handleDeleteTeam}
+                      >
+                        Вы действительно желаете
+                      </ConfirmAction>
+                    </DeleteTeamForm>
+                  </ReusableModalWindow.Window>
+                </ReusableModalWindow>
                 <Button onClick={handleBackClick}>Назад</Button>
               </ButtonsContainer>
             </OperationsRow>

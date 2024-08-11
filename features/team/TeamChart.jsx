@@ -165,18 +165,22 @@ const TeamChart = () => {
                 margin={{ top: 30, right: 20, bottom: 0, left: -20 }}
               >
                 <CartesianGrid stroke="#f5f5f5" horizontal={false} />
+
                 <XAxis
                   dataKey="day"
                   axisLine={{ stroke: "none" }}
                   tick={<CustomTick />}
                   tickLine={false}
                 />
+
                 <YAxis
                   axisLine={{ stroke: "none" }}
                   tick={{ fill: "#141522", fontSize: 12 }}
                   tickLine={false}
                 />
+
                 <Tooltip content={<CustomTooltip />} />
+
                 <Line
                   type="monotone"
                   dataKey="points"

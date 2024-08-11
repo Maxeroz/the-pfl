@@ -20,7 +20,7 @@ const Stacked = styled.div`
 `;
 
 function TeamTableRow({
-  player: { number, playerName, position, age, height, weight },
+  player: { number, playerName, position, games, redCards, yellowCards },
 }) {
   return (
     <Table.Row>
@@ -31,15 +31,15 @@ function TeamTableRow({
       </Stacked>
 
       <Stacked>
-        <span>{age}</span>
+        <span>{games}</span>
       </Stacked>
 
       <Stacked>
-        <span>{height}</span>
+        <span>{redCards}</span>
       </Stacked>
 
       <Stacked>
-        <span>{weight}</span>
+        <span>{yellowCards}</span>
       </Stacked>
 
       <Stacked>

@@ -31,6 +31,8 @@ const StyledButton = styled.button`
   border-style: none;
   cursor: pointer; /* Указываем, что это кликабельный элемент */
 
+  text-transform: capitalize;
+
   transition: background-color 0.3s, transform 0.2s, opacity 0.2s; /* Плавный переход для всех состояний */
 
   &:hover {

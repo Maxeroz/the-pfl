@@ -56,10 +56,9 @@ const EmptyLink = styled(NavLink)`
 `;
 
 const StyledInfoContainer = styled(InfoContainer)`
-  &:hover {
+  /* &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень при наведении */
-    transition: box-shadow 0.1s ease-in-out; /* Плавная анимация тени */
-  }
+  /* transition: box-shadow 0.1s ease-in-out;  */
 `;
 
 const DetailsContainer = styled.div`
