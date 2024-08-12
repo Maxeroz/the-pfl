@@ -3,6 +3,7 @@ import { useProfile } from "../features/profile/useProfile";
 
 import Row from "../ui/Row";
 import TableTitle from "../ui/TableTitle";
+import HeaderUserBox from "../ui/HeaderUserBox";
 
 // import styled from "styled-components";
 // import ProfileInfoSpan from "../ui/ProfileInfoSpan";
@@ -21,6 +22,8 @@ import InfoBlock from "../ui/InfoBlock";
 // import ReusableResultsTable from "../ui/ReusableResultsTable";
 import ImageTeams from "../ui/ImageTeams";
 import { useUpdateTransferWindow } from "../features/selectLeague/useUpdateTransferWindow";
+import styled from "styled-components";
+import User from "../ui/User";
 
 const tableMapping = {
   "ПФЛ ЛИГА 1": 0,
@@ -76,9 +79,10 @@ function Profile() {
   const { updateTransferWindow } = useUpdateTransferWindow(!transferWindow);
   return (
     <Row gap={3}>
-      <Row>
+      <HeaderUserBox>
         <TableTitle>Общая информация</TableTitle>
-      </Row>
+        <User />
+      </HeaderUserBox>
       <Row type="horizontal" gap={2}>
         {/* Отображение информации о сезоне */}
         <InfoBlock

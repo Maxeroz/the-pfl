@@ -19,6 +19,8 @@ import { useDispatch } from "react-redux";
 
 import { pickCurrentTeam } from "../features/matchModal/matchModalSlice";
 import CenterSpinnerDiv from "../ui/CenterSpinnerDiv";
+import HeaderUserBox from "../ui/HeaderUserBox";
+import User from "../ui/User";
 
 const StyledTableCell = styled(TableCell)`
   font-size: 14px;
@@ -97,7 +99,10 @@ function TournamentTable() {
 
   return (
     <Row gap={2}>
-      <TableTitle>Таблица турнира</TableTitle>
+      <HeaderUserBox>
+        <TableTitle>Таблица турнира</TableTitle>
+        <User />
+      </HeaderUserBox>
 
       <TableWrapperBlock>
         {isLoading ? (

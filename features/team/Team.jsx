@@ -21,6 +21,7 @@ import { useDeleteTeam } from "./useDeleteTeam";
 import ReusableModalWindow from "../../ui/ReusableModalWindow";
 import DeleteTeamForm from "../../ui/DeleteTeamForm";
 import ConfirmAction from "../../ui/ConfirmAction";
+import CenterSpinnerDiv from "../../ui/CenterSpinnerDiv";
 
 const StyledButton = styled.button`
   background: none;
@@ -46,7 +47,7 @@ const OperationsRow = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  background-color: var(--color-grey-0);
+  border: 1px solid #fff;
 
   padding: 10px 20px;
   border-radius: var(--border-radius-lg-pfl);
@@ -138,18 +139,22 @@ function Team() {
               <ButtonsContainer>
                 <ReusableModalWindow>
                   <ReusableModalWindow.ToggleButton id="deleteTeam">
-                    <Button variant="error">Удалить</Button>
+                    <Button variant="secondary">Удалить</Button>
                   </ReusableModalWindow.ToggleButton>
 
                   <ReusableModalWindow.Window id="deleteTeam">
                     <DeleteTeamForm>
-                      <ConfirmAction
-                        action={{ value: "удалить", target: "команду" }}
-                        variant="error"
-                        handler={handleDeleteTeam}
-                      >
-                        Вы действительно желаете
-                      </ConfirmAction>
+                      {isDeletingTeam ? (
+                        <CenterSpinnerDiv />
+                      ) : (
+                        <ConfirmAction
+                          action={{ value: "удалить", target: "команду" }}
+                          variant="error"
+                          handler={handleDeleteTeam}
+                        >
+                          Вы действительно желаете
+                        </ConfirmAction>
+                      )}
                     </DeleteTeamForm>
                   </ReusableModalWindow.Window>
                 </ReusableModalWindow>
@@ -165,17 +170,19 @@ function Team() {
             </>
           </Row>
 
-          <Row gap={2}>
-            <PlayersRow direction="column">
-              <TabelTitle height="small">Состав </TabelTitle>
-
-              <StyledButton onClick={togglePlayersOpen}>
-                <HiChevronDown />
-              </StyledButton>
-            </PlayersRow>
-            <PlayersInTeam />
-          </Row>
-          <Row></Row>
+          {playersData.length > 0 ? (
+            <Row gap={2}>
+              <PlayersRow direction="column">
+                <TabelTitle height="small">Состав </TabelTitle>
+                <StyledButton onClick={togglePlayersOpen}>
+                  <HiChevronDown />
+                </StyledButton>
+              </PlayersRow>
+              {/* Таблица с игроками */}
+              <PlayersInTeam />
+            </Row>
+          ) : null}
+          <Row>{""}</Row>
         </Row>
       </TeamContext.Provider>
     </TeamChartPagination>

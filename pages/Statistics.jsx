@@ -8,6 +8,8 @@ import { useTable } from "../features/table/useTable"; // Хук для полу
 import { addTeamNamesToPlayers } from "../utils/helpers"; // Импортируем вспомогательную функцию для добавления имен команд к игрокам
 import { CircularProgress } from "@mui/material"; // Импортируем компонент индикатора загрузки из MUI
 import styled from "styled-components"; // Импортируем styled-components для стилизации
+import HeaderUserBox from "../ui/HeaderUserBox";
+import User from "../ui/User";
 
 // Стилизованный контейнер для индикатора загрузки, выравнивающий его по центру
 const CenterSpinnerDiv = styled.div`
@@ -73,9 +75,10 @@ function Statistics() {
 
   return (
     <Row gap={2}>
-      <Row>
+      <HeaderUserBox>
         <TableTitle>Статистика</TableTitle> {/* Заголовок таблицы */}
-      </Row>
+        <User />
+      </HeaderUserBox>
 
       <TableWrapperBlock>
         {isLoading ? (

@@ -5,6 +5,7 @@ import React, {
   useContext,
 } from "react";
 import { createPortal } from "react-dom";
+import useEscapeKey from "../hooks/useEscapeKey";
 
 // Создаем контекст для модального окна
 const ReusableModalContext = createContext();
@@ -16,9 +17,11 @@ function ReusableModalWindow({ children }) {
   const handleOpen = (id) => setOpen(id); // Функция для открытия модального окна
   const handleClose = () => setOpen(""); // Функция для закрытия модального окна
 
+  const refEscapeKey = useEscapeKey(handleClose);
+
   return (
     <ReusableModalContext.Provider value={{ open, handleOpen, handleClose }}>
-      {children}
+      <div ref={refEscapeKey}>{children}</div>
     </ReusableModalContext.Provider>
   );
 }
@@ -44,9 +47,8 @@ function CloseModal({ children }) {
   });
 }
 
-// Компонент окна, который отображается только когда id совпадает с open
 function Window({ children, id }) {
-  const { open } = useContext(ReusableModalContext); // Достаем handleClose и open из контекста
+  const { open, handleClose } = useContext(ReusableModalContext); // Достаем handleClose и open из контекста
 
   // Если текущее окно не открыто, возвращаем null
   if (open !== id) return null;
@@ -55,7 +57,10 @@ function Window({ children, id }) {
   if (!React.isValidElement(children)) return null;
 
   // Используем ReactDOM.createPortal для рендеринга children в body
-  return createPortal(children, document.body);
+  return createPortal(
+    React.cloneElement(children, { handleClose: handleClose }), // Добавляем обработчик клика
+    document.body
+  );
 }
 
 // Добавляем компоненты как свойства к ReusableModalWindow

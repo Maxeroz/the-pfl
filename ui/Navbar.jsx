@@ -107,62 +107,6 @@ const Navbar = ({ options }) => {
             </StyledNavLink>
           </Li>
         ))}
-        {/* <Li>
-          <StyledNavLink to="/profile">
-            <Icon>
-              <HiHome />
-            </Icon>
-            <LinkTitle>Профиль</LinkTitle>
-          </StyledNavLink>
-        </Li>
-        <Li>
-          <StyledNavLink to="/applications">
-            <Icon>
-              <HiClipboardDocumentList />
-            </Icon>
-            <LinkTitle>Заявки</LinkTitle>
-          </StyledNavLink>
-        </Li>
-        <Li>
-          <StyledNavLink to="/games">
-            <Icon>
-              <HiOutlineSquare3Stack3D />
-            </Icon>
-            <LinkTitle>Игры</LinkTitle>
-          </StyledNavLink>
-        </Li>
-        <Li>
-          <StyledNavLink to="/table">
-            <Icon>
-              <HiMiniTableCells />
-            </Icon>
-            <LinkTitle>Таблица</LinkTitle>
-          </StyledNavLink>
-        </Li>
-        <Li>
-          <StyledNavLink to="/statistics">
-            <Icon>
-              <HiQueueList />
-            </Icon>
-            <LinkTitle>Статистика</LinkTitle>
-          </StyledNavLink>
-        </Li>
-        <Li>
-          <StyledNavLink to="/news">
-            <Icon>
-              <HiOutlineNewspaper />
-            </Icon>
-            <LinkTitle>Новости</LinkTitle>
-          </StyledNavLink>
-        </Li>
-        <Li>
-          <StyledNavLink to="/login">
-            <Icon>
-              <HiMiniUserCircle />
-            </Icon>
-            <LinkTitle>Войти</LinkTitle>
-          </StyledNavLink>
-        </Li> */}
       </Ul>
     </Nav>
   );

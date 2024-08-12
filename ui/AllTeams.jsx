@@ -9,6 +9,18 @@ import TableTitle from "../ui/TableTitle";
 
 import { useTable } from "../features/table/useTable";
 import ModalNewTeam from "../features/team/ModalNewTeam";
+import styled from "styled-components";
+
+const OperationsRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 1px solid #fff;
+
+  padding: 10px 20px;
+  border-radius: var(--border-radius-lg-pfl);
+`;
 
 function AllTeams() {
   const { leagueId } = useParams(); // Получаем параметр
@@ -44,12 +56,12 @@ function AllTeams() {
   return (
     <ModalNewTeam>
       <Row gap={2}>
-        <Row type="horizontal">
+        <OperationsRow>
           <TableTitle as={"h3"} height="small">
             Лига: ПФЛ-{leagueId}
           </TableTitle>
           <InputFilterTeam value={value} handleChange={handleChange} />
-        </Row>
+        </OperationsRow>
 
         <Row type="horizontal" wrap="wrap">
           <>

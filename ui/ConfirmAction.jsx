@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Button from "./Button";
 import ReusableModalWindow from "./ReusableModalWindow";
-import { HiX } from "react-icons/hi"; // Иконка крестика
+import { HiMiniXMark } from "react-icons/hi2";
 
 // Контейнер для модального окна
 const ConfirmActionContainer = styled.div`
@@ -23,20 +23,20 @@ const CloseButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 30px;
 
   &:hover {
     color: var(--color-grey-700); /* Добавляем эффект при наведении */
   }
 `;
 
-function ConfirmAction({ children, action, variant, handler, onClose }) {
+function ConfirmAction({ children, action, variant, handler }) {
   return (
     <ConfirmActionContainer>
       {/* Крестик для закрытия окна */}
       <ReusableModalWindow.CloseModal>
-        <CloseButton onClick={onClose}>
-          <HiX />
+        <CloseButton>
+          <HiMiniXMark />
         </CloseButton>
       </ReusableModalWindow.CloseModal>
 

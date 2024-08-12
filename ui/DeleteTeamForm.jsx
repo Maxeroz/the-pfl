@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const Overlay = styled.div`
   position: fixed;
@@ -22,16 +23,20 @@ const DeleteTeamContainer = styled.div`
 
   background-color: var(--color-grey-0);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: var(--border-radius-lg-pfl);
   padding: 20px;
   z-index: 1010; /* Размещение над Overlay */
 `;
 
-function DeleteTeamForm({ children }) {
+function DeleteTeamForm({ children, handleClose }) {
+  const refOutsideClick = useOutsideClick(handleClose);
+
   return (
     <>
       <Overlay />
-      <DeleteTeamContainer>{children}</DeleteTeamContainer>
+      <DeleteTeamContainer ref={refOutsideClick}>
+        {children}
+      </DeleteTeamContainer>
     </>
   );
 }

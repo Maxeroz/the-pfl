@@ -142,3 +142,17 @@ export function filterWeekData(monthlyData, weekStartDate) {
     return date >= startDate && date <= endDate;
   });
 }
+
+export function mergeRefs(...refs) {
+  return (node) => {
+    refs.forEach((ref) => {
+      if (ref) {
+        if (typeof ref === "function") {
+          ref(node);
+        } else {
+          ref.current = node;
+        }
+      }
+    });
+  };
+}

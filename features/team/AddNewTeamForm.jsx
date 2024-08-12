@@ -1,13 +1,15 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+
+import CenterSpinnerDiv from "../../ui/CenterSpinnerDiv";
 import TableTitle from "../../ui/TableTitle";
 import Row from "../../ui/Row";
 import Button from "../../ui/Button";
+
 import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { useAddTeam } from "./useAddTeam";
-import CenterSpinnerDiv from "../../ui/CenterSpinnerDiv";
 
 const StyledTeamName = styled.span`
   border-bottom: 2px solid var(--color-primary-500);
@@ -46,9 +48,8 @@ const FormInput = styled.input`
   font-size: 12px;
   font-weight: 500;
 
-  /* Стили для фокуса */
   &:focus {
-    outline: none; /* Убираем стандартное выделение */
+    outline: none;
     border-color: ${(props) =>
       props.hasError ? "var(--color-error-500)" : "var(--color-primary-500)"};
   }
@@ -99,11 +100,14 @@ const SuccessMessage = styled.span`
 `;
 
 function AddNewTeamForm() {
-  // Получаем доступ к ID лиги из Redux
   const leagueTier = useSelector((state) => state.league.leagueTier);
   const leagueId = leagueTier.split(" ").slice(-1)[0];
 
-  const { addNewTeam, isPending: isAddingTeam } = useAddTeam();
+  const {
+    addNewTeam,
+    isPending: isAddingTeam,
+    error: addTeamError,
+  } = useAddTeam();
 
   const {
     register,
@@ -120,41 +124,56 @@ function AddNewTeamForm() {
     mode: "onBlur",
   });
 
-  // Состояние загрузки изображения
   const [logoUploaded, setLogoUploaded] = useState(false);
 
   const onSubmit = (data) => {
-    // Проверяем наличие ошибки перед отправкой
     if (!data.teamLogo || data.teamLogo.length === 0) {
       setError("teamLogo", {
         type: "manual",
         message: "Логотип команды обязателен",
       });
       setLogoUploaded(false);
-      return; // Прекращаем обработку формы, если логотип не загружен
+      return;
     }
 
-    // Обработка отправки формы
     const teamName = data.teamName;
-    const teamLogoFile = data.teamLogo; // Берем первый файл из массива файлов
+    const teamLogoFile = data.teamLogo;
     const tableName = `league${leagueId}_table`;
 
-    addNewTeam({ tableName, teamName, teamLogoFile }); // Передаем правильные параметры
+    addNewTeam({ tableName, teamName, teamLogoFile }).catch((error) => {
+      // Обработка ошибки при добавлении команды
+      console.error("Ошибка при добавлении команды:", error);
+      setError("teamLogo", {
+        type: "manual",
+        message: "Не удалось добавить команду. Попробуйте снова.",
+      });
+    });
   };
 
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file) {
-      setValue("teamLogo", file); // Устанавливаем загруженный файл
-      setLogoUploaded(true); // Устанавливаем положительную индикацию
-      clearErrors("teamLogo"); // Очистить ошибку, если есть
+      // Проверка размера файла (например, 5MB)
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      if (file.size > MAX_FILE_SIZE) {
+        setError("teamLogo", {
+          type: "manual",
+          message: "Максимальный размер — 5MB.",
+        });
+        setLogoUploaded(false);
+        return;
+      }
+
+      setValue("teamLogo", file);
+      setLogoUploaded(true);
+      clearErrors("teamLogo");
     }
   };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: "image/*", // Разрешить только изображения
-    multiple: false, // Разрешить загрузку только одного файла
+    accept: "image/*",
+    multiple: false,
   });
 
   return (
@@ -190,7 +209,7 @@ function AddNewTeamForm() {
               <FormInputContainer>
                 <DropzoneWrapper
                   {...getRootProps()}
-                  hasError={!!errors.teamLogo} // Показываем ошибку, если она есть
+                  hasError={!!errors.teamLogo}
                   isUploaded={logoUploaded}
                 >
                   <input {...getInputProps()} />

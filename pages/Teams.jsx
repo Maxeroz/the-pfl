@@ -1,13 +1,16 @@
 import { Outlet } from "react-router-dom";
 import Row from "../ui/Row";
 import TableTitle from "../ui/TableTitle";
+import HeaderUserBox from "../ui/HeaderUserBox";
+import User from "../ui/User";
 
 function Teams() {
   return (
     <Row gap={3}>
-      <Row>
+      <HeaderUserBox>
         <TableTitle>Информация о командах:</TableTitle>
-      </Row>
+        <User />
+      </HeaderUserBox>
 
       <Row>
         <Outlet />
