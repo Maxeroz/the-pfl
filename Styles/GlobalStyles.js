@@ -25,7 +25,7 @@ const GlobalStyles = createGlobalStyle`:root {
     --color-secondary-400: #54577A;
     --color-secondary-500: #141522;
 
-    
+    --color-background: #FAFAFA;
     
     /* Secondinary */
     --color-secondinary-100: ##DFE1F3;

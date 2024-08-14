@@ -1,31 +1,32 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-import AppLayout from "../ui/AppLayout";
-import Profile from "../pages/Profile";
-import Applications from "../pages/Applications";
-import Games from "../pages/Games";
-import TournamentTable from "../pages/TournamentTable";
-import Statistics from "../pages/Statistics";
-import News from "../pages/News";
-import Disqualifications from "../pages/Disqualifications";
-import Login from "../pages/Login";
-import PageNotFound from "../pages/PageNotFound";
-import GlobalStyles from "../Styles/GlobalStyles";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider } from "react-redux";
+import React, { Suspense, lazy } from "react";
+
+import GlobalStyles from "../Styles/GlobalStyles";
+import AppLayout from "../ui/AppLayout";
+import ProtectedRoute from "../ui/ProtectedRoute";
 import store from "./store";
 
-import Teams from "../pages/Teams";
-import AllTeams from "../ui/AllTeams";
-import Team from "../features/team/Team";
+// Ленивые компоненты
+const Profile = lazy(() => import("../pages/Profile"));
+const Applications = lazy(() => import("../pages/Applications"));
+const Games = lazy(() => import("../pages/Games"));
+const TournamentTable = lazy(() => import("../pages/TournamentTable"));
+const Statistics = lazy(() => import("../pages/Statistics"));
+const News = lazy(() => import("../pages/News"));
+const Disqualifications = lazy(() => import("../pages/Disqualifications"));
+const Login = lazy(() => import("../pages/Login"));
+const PageNotFound = lazy(() => import("../pages/PageNotFound"));
+const Teams = lazy(() => import("../pages/Teams"));
+const AllTeams = lazy(() => import("../ui/AllTeams"));
+const Team = lazy(() => import("../features/team/Team"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // staleTime: 60 * 1000,
       staleTime: 0,
     },
   },
@@ -36,31 +37,38 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <ReactQueryDevtools />
-
         <GlobalStyles />
         <BrowserRouter>
-          <Routes>
-            <Route element={<AppLayout />}>
-              <Route index element={<Navigate to="profile" replace />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="applications" element={<Applications />} />
-              <Route path="games" element={<Games />} />
-              <Route path="table" element={<TournamentTable />} />
-              <Route path="statistics" element={<Statistics />} />
-              <Route path="news" element={<News />} />
-              <Route path="disqualifications" element={<Disqualifications />} />
-              <Route path="teams" element={<Teams />}>
-                {/* Лига с идентификатором */}
-                <Route path="league/:leagueId" element={<AllTeams />} />
-                {/* Команда с идентификатором в зависимости от лиги */}
-                <Route path="league/:leagueId/team/:id" element={<Team />} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route
+                element={
+                  <ProtectedRoute>
+                    <AppLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Navigate to="profile" replace />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="applications" element={<Applications />} />
+                <Route path="games" element={<Games />} />
+                <Route path="table" element={<TournamentTable />} />
+                <Route path="statistics" element={<Statistics />} />
+                <Route path="news" element={<News />} />
+                <Route
+                  path="disqualifications"
+                  element={<Disqualifications />}
+                />
+                <Route path="teams" element={<Teams />}>
+                  <Route path="league/:leagueId" element={<AllTeams />} />
+                  <Route path="league/:leagueId/team/:id" element={<Team />} />
+                </Route>
               </Route>
-            </Route>
-            <Route path="login" element={<Login />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
+              <Route path="login" element={<Login />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
-
         <Toaster
           position="top-center"
           gutter={12}

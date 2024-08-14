@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 // Используем пропс `as` для выбора HTML тега и `height` для изменения высоты
-const TabelTitle = styled.h2`
+const TableTitle = styled.h2`
   font-size: 24px;
   font-weight: 500;
   margin: 0;
@@ -15,4 +15,4 @@ const TabelTitle = styled.h2`
   `}
 `;
 
-export default TabelTitle;
+export default TableTitle;

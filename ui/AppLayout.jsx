@@ -122,7 +122,7 @@ const AppLayout = () => {
                 title: "Статистика",
               },
               { to: "/news", icon: <HiOutlineNewspaper />, title: "Новости" },
-              { to: "/login", icon: <HiMiniUserCircle />, title: "Войти" },
+              // { to: "/login", icon: <HiMiniUserCircle />, title: "Войти" },
             ]}
           />
         </NavBarContainer>
