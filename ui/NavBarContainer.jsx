@@ -7,6 +7,7 @@ const NavBarContainer = styled.aside`
   align-items: center;
 
   width: 15%;
+
   background-color: #ffffff;
 `;
 

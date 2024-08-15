@@ -31,10 +31,15 @@ const InfoContainer = styled.div`
       : "hidden"}; /* Separate control for vertical scrolling */
 
   background-color: ${(props) =>
-    props.light === "light" ? "#F5F5F7" : "#141522"};
+    props.light === "light"
+      ? "var(--input-border-color)"
+      : "var(--color-secondary-500)"};
   border-radius: var(--border-radius-lg-pfl);
   padding: 20px;
-  color: ${(props) => (props.light === "light" ? "#141522" : "#fff")};
+  color: ${(props) =>
+    props.light === "light"
+      ? "var(--color-secondary-500)"
+      : "var(--color-grey-0)"};
   width: ${(props) => props.width || "100px"};
   height: ${(props) => props.height || "auto"};
 

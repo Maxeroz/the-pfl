@@ -3,12 +3,13 @@ import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider } from "react-redux";
-import React, { Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 
 import GlobalStyles from "../Styles/GlobalStyles";
 import AppLayout from "../ui/AppLayout";
 import ProtectedRoute from "../ui/ProtectedRoute";
 import store from "./store";
+import CenterSpinnerDiv from "../ui/CenterSpinnerDiv";
 
 // Ленивые компоненты
 const Profile = lazy(() => import("../pages/Profile"));
@@ -39,7 +40,7 @@ function App() {
         <ReactQueryDevtools />
         <GlobalStyles />
         <BrowserRouter>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<CenterSpinnerDiv />}>
             <Routes>
               <Route
                 element={

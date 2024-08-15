@@ -10,6 +10,8 @@ import // HiClipboardDocumentList,
 // HiQueueList,
 "react-icons/hi2";
 import Icon from "./Icon";
+import Button from "./Button";
+import { useLogout } from "../features/authentication/useLogout";
 
 // Стили для навигационного бара
 const Nav = styled.nav`
@@ -21,7 +23,8 @@ const Nav = styled.nav`
   background-color: #fff; /* Цвет фона навигационного бара */
 
   padding: 0 2.5rem;
-  height: 100vh; /* Полная высота экрана */
+
+  gap: 25px;
 
   @media (max-width: 1280px) {
     width: 180px;
@@ -96,6 +99,8 @@ const LinkTitle = styled.span`
 
 // Основной компонент Navbar
 const Navbar = ({ options }) => {
+  const { logout, error, isPending } = useLogout();
+
   return (
     <Nav>
       <Ul>
@@ -108,6 +113,7 @@ const Navbar = ({ options }) => {
           </Li>
         ))}
       </Ul>
+      <Button onClick={logout}>Выйти</Button>
     </Nav>
   );
 };

@@ -12,7 +12,6 @@ import {
   TableHead,
   TableRow,
   Button,
-  CircularProgress,
 } from "@mui/material";
 import CreateMatchModal from "../features/matchModal/CreateMatchModal";
 import { useDispatch } from "react-redux";

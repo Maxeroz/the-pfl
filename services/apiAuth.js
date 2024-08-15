@@ -8,7 +8,7 @@ export async function loginWithEmail({ email, password }) {
     });
 
     if (error) {
-      throw error; // Если возникла ошибка, бросаем её для обработки
+      throw new Error(error.message); // Генерируем ошибку с сообщением
     }
 
     return {
@@ -16,10 +16,7 @@ export async function loginWithEmail({ email, password }) {
       data, // Данные пользователя
     };
   } catch (error) {
-    return {
-      success: false,
-      error: error.message, // Сообщение об ошибке
-    };
+    throw new Error(error.message); // Генерируем ошибку с сообщением
   }
 }
 
@@ -57,5 +54,22 @@ export async function getSessionAndUser() {
   } catch (error) {
     console.error("Ошибка при получении сессии и пользователя:", error);
     return null;
+  }
+}
+
+export async function logout() {
+  try {
+    // Вызов метода signOut для выхода из системы
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      throw new Error(error.message); // Генерируем ошибку, если она есть
+    }
+
+    // Успешный выход
+    console.log("Вы успешно вышли из системы.");
+  } catch (error) {
+    console.error("Ошибка при выходе из системы:", error.message);
+    throw error; // Перебрасываем ошибку для дальнейшей обработки
   }
 }

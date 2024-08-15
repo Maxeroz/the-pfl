@@ -12,7 +12,9 @@ export function useLogin() {
       toast.success("Вход выполнен!");
       navigate("/profile");
     },
-    onError: (err) => toast.error(err.message),
+    onError: (error) => {
+      toast.error("Неверные email или пароль");
+    },
   });
 
   return { login, isPending };

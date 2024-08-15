@@ -59,7 +59,7 @@ const theme = createTheme({
 });
 
 // Импорт необходимых библиотек и компонентов
-import React from "react";
+
 import styled, { ThemeProvider } from "styled-components";
 import { Outlet } from "react-router-dom";
 
@@ -74,11 +74,11 @@ import {
   HiClipboardDocumentList,
   HiHome,
   HiMiniTableCells,
-  HiMiniUserCircle,
   HiOutlineNewspaper,
   HiOutlineSquare3Stack3D,
   HiQueueList,
 } from "react-icons/hi2";
+import Button from "./Button";
 
 // Создание styled-components
 const Layout = styled.div`
@@ -100,7 +100,7 @@ const AppLayout = () => {
             titleHeading="The PFL"
             imgUrl="/logo-pfl1.png"
             width="50"
-          ></MainNavBarTitle>
+          />
 
           <Navbar
             options={[

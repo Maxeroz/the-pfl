@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 import { useMatches } from "../features/matchStatistics/useMatches";
-import { Box, LinearProgress, Button } from "@mui/material";
+import { Box, LinearProgress } from "@mui/material";
 import { useSelector } from "react-redux";
 import { getRandomNumberFromDate } from "../utils/helpers";
 

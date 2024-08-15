@@ -149,7 +149,7 @@ function Team() {
                       ) : (
                         <ConfirmAction
                           action={{ value: "удалить", target: "команду" }}
-                          variant="error"
+                          variant="secondary"
                           handler={handleDeleteTeam}
                         >
                           Вы действительно желаете

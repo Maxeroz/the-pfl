@@ -1,5 +1,5 @@
 // Импорт необходимых компонентов из MUI и React
-import React from "react";
+import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -61,7 +61,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 450,
+  width: 470,
   bgcolor: "background.paper",
   maxHeight: "90%",
   boxShadow: 24,
@@ -121,6 +121,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
   // Обработчик подтверждения изменений (submit)
   const onSubmit = async (data) => {
     try {
+      handleClose();
       // Выполнение всех асинхронных операций после успешной валидации
       await Promise.all([
         updateTeamRowCurrent(),
@@ -129,9 +130,9 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
         updateAllPlayers(),
         reset(),
       ]);
+
       // Сбрасываем состояние матча и закрываем модальное окно
       dispatch(resetMatchState());
-      handleClose();
     } catch (error) {
       console.error("Ошибка при добавлении матча:", error);
     }
@@ -142,14 +143,13 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
     // Сбрасываем состояние матча и закрываем модальное окно
     dispatch(resetMatchState());
     handleClose();
+    reset();
   };
 
   // Расширение функционала onChange useForm Hook для выбора противоположной команды в Redux
   const onChangeTeamOpponentHandler =
     useOnChangeOpponentTeam(teamsToPickOpponent);
-
   const onChangeCurrentTeamResults = useOnChangeCurrentTeamResults();
-
   const onChangeOpponentTeamResults = useOnChangeOpponentTeamResults();
 
   return (
@@ -252,14 +252,15 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                     const isSelected = playersScoredGoalsCurrentTeam?.some(
                       (p) => p.id === player.id
                     );
-                    const playerGoals =
-                      playersScoredGoalsCurrentTeam?.find(
-                        (p) => p.id === player.id
-                      )?.scored || 0;
-                    const playerAssists =
-                      playersScoredGoalsCurrentTeam?.find(
-                        (p) => p.id === player.id
-                      )?.assists || 0;
+
+                    // const playerGoals =
+                    //   playersScoredGoalsCurrentTeam?.find(
+                    //     (p) => p.id === player.id
+                    //   )?.scored || 0;
+                    // const playerAssists =
+                    //   playersScoredGoalsCurrentTeam?.find(
+                    //     (p) => p.id === player.id
+                    //   )?.assists || 0;
 
                     return (
                       <div
@@ -285,11 +286,11 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                         </StyledMenuItem>
                         {/* Ввод количества голов */}
                         {isSelected && (
-                          <>
+                          <div>
                             <StyledTextField
                               type="number"
                               label="Голы"
-                              value={playerGoals}
+                              defaultValue={0}
                               onChange={(e) =>
                                 dispatch(
                                   handleGoalsChange({
@@ -306,7 +307,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                             <StyledTextField
                               type="number"
                               label="Ассисты"
-                              value={playerAssists}
+                              defaultValue={0}
                               onChange={(e) =>
                                 dispatch(
                                   handleAssistsChange({
@@ -318,7 +319,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                               }
                               style={{ width: 60, marginLeft: 10 }}
                             />
-                          </>
+                          </div>
                         )}
                       </div>
                     );

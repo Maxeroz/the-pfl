@@ -27,10 +27,6 @@ const EmptyLink = styled(Link)`
   cursor: pointer; /* Меняем курсор на указатель */
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Добавляем анимацию для трансформации и теней */
 
-  :hover {
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
-  }
-
   :focus {
     outline: none; /* Убираем стандартный outline */
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Пользовательский фокус */
@@ -89,13 +85,13 @@ function InfoBlock({
             <InfoSpan>{dataString}</InfoSpan>
 
             {dataString === true && (
-              <Icon color="#9CD323" size="30px">
+              <Icon color="success" size="30px">
                 <HiCheckCircle />
               </Icon>
             )}
 
             {dataString === false && (
-              <Icon color="#FF4423" size="30px">
+              <Icon color="error" size="30px">
                 <HiMiniXCircle />
               </Icon>
             )}
@@ -120,13 +116,13 @@ function InfoBlock({
           <InfoSpan>{dataString}</InfoSpan>
 
           {dataString === true && (
-            <Icon color="#9CD323" size="30px">
+            <Icon color="success" size="30px">
               <HiCheckCircle />
             </Icon>
           )}
 
           {dataString === false && (
-            <Icon color="#FF4423" size="30px">
+            <Icon color="error" size="30px">
               <HiMiniXCircle />
             </Icon>
           )}

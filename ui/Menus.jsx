@@ -1,16 +1,18 @@
-import { createContext, useContext, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { createContext, useContext } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
-
 import { HiChevronDown } from "react-icons/hi2";
 
+// Стиль для меню
 const Menu = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
 `;
 
+// Стиль для переключателя
 const StyledToggle = styled.button`
   background: none;
   border: none;
@@ -30,6 +32,7 @@ const StyledToggle = styled.button`
   }
 `;
 
+// Стиль для списка
 const StyledList = styled.ul`
   position: fixed;
   background-color: var(--color-grey-0);
@@ -40,6 +43,7 @@ const StyledList = styled.ul`
   top: ${(props) => props.position.y}px;
 `;
 
+// Стиль для кнопок
 const StyledButton = styled.button`
   width: 100%;
   text-align: left;
@@ -69,7 +73,7 @@ const MenusContext = createContext();
 
 function Menus({ children }) {
   const [openId, setOpenId] = useState("");
-  const [position, setPosition] = useState(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const close = () => setOpenId("");
   const open = (id) => setOpenId(id);
@@ -86,15 +90,21 @@ function Menus({ children }) {
 function Toggle({ id }) {
   const { openId, close, open, setPosition } = useContext(MenusContext);
 
+  const updatePosition = useCallback(
+    (e) => {
+      const rect = e.target.closest("button").getBoundingClientRect();
+
+      setPosition({
+        x: window.innerWidth - rect.width - rect.x,
+        y: rect.y + rect.height + 8,
+      });
+    },
+    [setPosition]
+  );
+
   function handleClick(e) {
-    const rect = e.target.closest("button").getBoundingClientRect();
+    updatePosition(e);
 
-    setPosition({
-      x: window.innerWidth - rect.width - rect.x,
-      y: rect.y + rect.height + 8,
-    });
-
-    // Toggle behavior: if already open, close it; otherwise, open the new one
     if (openId === id) {
       close(); // Close if already open
     } else {
@@ -102,8 +112,23 @@ function Toggle({ id }) {
     }
   }
 
+  // Обновляем позицию при изменении размера окна
+  useEffect(() => {
+    function handleResize() {
+      if (openId) {
+        // Если меню открыто, обновляем его позицию при изменении размера окна
+        updatePosition({
+          target: document.querySelector(`button[data-id="${openId}"]`),
+        });
+      }
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [openId, updatePosition]);
+
   return (
-    <StyledToggle onClick={handleClick}>
+    <StyledToggle data-id={id} onClick={handleClick}>
       <HiChevronDown />
     </StyledToggle>
   );

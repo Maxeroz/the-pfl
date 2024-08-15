@@ -5,7 +5,8 @@ const IconWrapper = styled.div`
   align-items: center;
   justify-content: center;
   font-size: ${(props) => props.size || "30px"};
-  color: ${(props) => props.color || "inherit"};
+  color: ${(props) =>
+    props.color ? `var(--color-${props.color}-500)` : "inherit"};
 `;
 
 const Icon = ({ size, color, children }) => {
