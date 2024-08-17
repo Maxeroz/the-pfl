@@ -85,7 +85,9 @@ const createMatchSlice = createSlice({
 
       const playerIndex = currentPlayers.findIndex((p) => p.id === playerId);
       if (playerIndex >= 0) {
-        currentPlayers[playerIndex].assists = assists;
+        // Убедитесь, что количество ассистов не отрицательно
+        const newAssists = assists < 0 ? 0 : assists;
+        currentPlayers[playerIndex].assists = newAssists;
       }
     },
   },

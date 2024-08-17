@@ -75,7 +75,12 @@ function App() {
           gutter={12}
           containerStyle={{ margin: "8px" }}
           toastOptions={{
-            success: { duration: 3000 },
+            success: {
+              duration: 3000,
+              iconTheme: {
+                primary: "var(--color-success-500)", // Зеленый цвет иконки
+              },
+            },
             error: { duration: 5000 },
             style: {
               fontSize: "16px",

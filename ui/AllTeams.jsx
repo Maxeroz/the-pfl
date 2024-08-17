@@ -10,6 +10,7 @@ import TableTitle from "../ui/TableTitle";
 import { useTable } from "../features/table/useTable";
 import ModalNewTeam from "../features/team/ModalNewTeam";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const OperationsRow = styled.div`
   display: flex;
@@ -18,6 +19,8 @@ const OperationsRow = styled.div`
 
   border: 1px solid #fff;
 
+  background-color: var(--input-border-color);
+
   padding: 10px 20px;
   border-radius: var(--border-radius-lg-pfl);
 `;
@@ -25,6 +28,9 @@ const OperationsRow = styled.div`
 function AllTeams() {
   const { leagueId } = useParams(); // Получаем параметр
   const { isLoading, tableData: teams } = useTable();
+
+  const role = useSelector((state) => state.user.role);
+  const isAdmin = role === "admin";
 
   const [value, setValue] = useState("");
 
@@ -72,7 +78,7 @@ function AllTeams() {
                 ))}
 
             {/* Компонент для добавления новой команды в лигу */}
-            <TeamCard team={{ adding: true }} />
+            {isAdmin && <TeamCard team={{ adding: true }} />}
           </>
         </Row>
       </Row>

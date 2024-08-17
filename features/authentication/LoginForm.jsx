@@ -27,7 +27,7 @@ const Input = styled.input`
 
 function LoginForm() {
   const [email, setEmail] = useState("test@example.com");
-  const [password, setPassword] = useState("pass1221");
+  const [password, setPassword] = useState("qwerty911");
   const [error] = useState("");
 
   const { login, isPending } = useLogin();

@@ -8,7 +8,7 @@ const NavBarContainer = styled.aside`
 
   width: 15%;
 
-  background-color: #ffffff;
+  background-color: var(--color-grey-0);
 `;
 
 export default NavBarContainer;

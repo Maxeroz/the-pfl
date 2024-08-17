@@ -253,15 +253,6 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                       (p) => p.id === player.id
                     );
 
-                    // const playerGoals =
-                    //   playersScoredGoalsCurrentTeam?.find(
-                    //     (p) => p.id === player.id
-                    //   )?.scored || 0;
-                    // const playerAssists =
-                    //   playersScoredGoalsCurrentTeam?.find(
-                    //     (p) => p.id === player.id
-                    //   )?.assists || 0;
-
                     return (
                       <div
                         key={player.id}
@@ -381,7 +372,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                           </StyledMenuItem>
                           {/* Ввод количества голов */}
                           {isSelected && (
-                            <>
+                            <div>
                               <StyledTextField
                                 type="number"
                                 label="Голы"
@@ -414,7 +405,7 @@ const CreateMatchModal = ({ open, handleClose, teams }) => {
                                 }
                                 style={{ width: 60, marginLeft: 10 }}
                               />
-                            </>
+                            </div>
                           )}
                         </div>
                       );

@@ -37,7 +37,9 @@ const StatisticsDiv = styled.div`
   gap: 15px;
 
   background-color: ${(props) =>
-    props.light === "light" ? "#F5F5F7" : "#141522"};
+    props.light === "light"
+      ? `var(--color-grey-0)`
+      : `var(--color-secondary-500)`};
 
   border-radius: var(--border-radius-lg-pfl);
   position: relative;
@@ -55,7 +57,7 @@ const MatchesContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  background-color: #fff;
+  background-color: var(--input-border-color);
   padding: 14px;
 
   border-radius: var(--border-radius-lg-pfl);

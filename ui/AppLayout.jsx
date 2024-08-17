@@ -47,6 +47,10 @@
 
 // export default AppLayout;
 
+const LimitationWidthDiv = styled.div`
+  width: 730px;
+`;
+
 // Создание собственной темы с переопределением цвета primary для LinearProgress
 const theme = createTheme({
   typography: {
@@ -78,16 +82,11 @@ import {
   HiOutlineSquare3Stack3D,
   HiQueueList,
 } from "react-icons/hi2";
-import Button from "./Button";
 
 // Создание styled-components
 const Layout = styled.div`
   display: flex;
   height: 100vh;
-`;
-
-const LimitationWidthDiv = styled.div`
-  width: 730px;
 `;
 
 // Определение компонента AppLayout

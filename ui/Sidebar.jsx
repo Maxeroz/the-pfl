@@ -3,7 +3,7 @@ import StatisticsBlock from "./StatisticsBlock";
 
 const RightSidebar = styled.div`
   width: 25%;
-  background-color: #fff;
+  background-color: var(--input-border-color);
   padding: 32px;
   min-width: 450px;
 

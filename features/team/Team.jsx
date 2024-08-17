@@ -49,6 +49,8 @@ const OperationsRow = styled.div`
 
   border: 1px solid #fff;
 
+  background-color: var(--input-border-color);
+
   padding: 10px 20px;
   border-radius: var(--border-radius-lg-pfl);
 `;

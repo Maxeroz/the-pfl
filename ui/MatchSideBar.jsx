@@ -13,7 +13,7 @@ const MatchLi = styled.li`
   padding: 8px 14px;
   border-radius: var(--border-radius-lg-pfl);
 
-  background-color: #f5f5f7;
+  background-color: var(--color-grey-0);
 `;
 
 // Определение стилей для контейнера изображения команды
@@ -92,13 +92,13 @@ function MatchSideBar({ match }) {
   const team1BorderColor = isTeam1Won
     ? "#9CD323" // Зеленый для победы команды 1
     : isDraw
-    ? "#fff" // Черный для ничьей
+    ? "#000" // Черный для ничьей
     : "#FF4423"; // Красный для поражения команды 1
 
   const team2BorderColor = isTeam2Won
     ? "#9CD323" // Зеленый для победы команды 2
     : isDraw
-    ? "#fff" // Черный для ничьей
+    ? "#000" // Черный для ничьей
     : "#FF4423"; // Красный для поражения команды 2
 
   if (isLoading === "remainder") return null;

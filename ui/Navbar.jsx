@@ -1,17 +1,11 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import // HiClipboardDocumentList,
-// HiHome,
-// HiMiniTableCells,
-// HiMiniUserCircle,
-// HiOutlineNewspaper,
-// HiOutlineSquare3Stack3D,
-// HiOutlineUserGroup,
-// HiQueueList,
-"react-icons/hi2";
+
+("react-icons/hi2");
 import Icon from "./Icon";
 import Button from "./Button";
 import { useLogout } from "../features/authentication/useLogout";
+import CenterMiniSpinnerDiv from "./CenterMIniSpinnerDiv";
 
 // Стили для навигационного бара
 const Nav = styled.nav`
@@ -99,7 +93,7 @@ const LinkTitle = styled.span`
 
 // Основной компонент Navbar
 const Navbar = ({ options }) => {
-  const { logout, error, isPending } = useLogout();
+  const { logout, isPending } = useLogout();
 
   return (
     <Nav>
@@ -113,7 +107,9 @@ const Navbar = ({ options }) => {
           </Li>
         ))}
       </Ul>
-      <Button onClick={logout}>Выйти</Button>
+      <Button width={100} disabled={isPending} onClick={logout}>
+        Выйти
+      </Button>
     </Nav>
   );
 };
