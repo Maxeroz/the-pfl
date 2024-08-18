@@ -46,7 +46,7 @@ function InputFilterTeam({ value, handleChange }) {
         type="text"
         value={value}
         onChange={handleChange}
-        placeholder="Найдите команду..."
+        placeholder="Введите команду..."
       />
       <SearchIcon /> {/* Вставка иконки */}
     </InputWrapper>

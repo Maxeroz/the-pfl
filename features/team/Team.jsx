@@ -22,6 +22,11 @@ import ReusableModalWindow from "../../ui/ReusableModalWindow";
 import DeleteTeamForm from "../../ui/DeleteTeamForm";
 import ConfirmAction from "../../ui/ConfirmAction";
 import CenterSpinnerDiv from "../../ui/CenterSpinnerDiv";
+import PrepareMatchModal from "./MatchSetupModal";
+import MatchSetupModal from "./MatchSetupModal";
+import { useTable } from "../table/useTable";
+import { usePlanMatch } from "./usePlanMatch";
+import PlanMatchWrapper from "../../ui/PlanMatchWrapper";
 
 const StyledButton = styled.button`
   background: none;
@@ -74,6 +79,8 @@ function Team() {
 
   const [isPlayersOpen, setIsPlayersOpen] = useState(false);
 
+  const { tableData } = useTable();
+
   // Функция для открытия таблицы по кнопке
   function togglePlayersOpen() {
     setIsPlayersOpen((prevStae) => !prevStae);
@@ -90,6 +97,7 @@ function Team() {
 
   // Функция для удаления команды из хука
   const { deleteTeam, isPending: isDeletingTeam } = useDeleteTeam();
+  const { planMatch, isPending: isPlanningMatch } = usePlanMatch();
 
   const tableName = `league${currentLeagueId}_table`;
 
@@ -120,26 +128,22 @@ function Team() {
     }
   }, [currentLeagueId, queryLeagueId, searchParams, setSearchParams]);
 
-  // Проверка, если ли массив с сыгранными матчами, для того чтобы определить, нужно ли отображать график изменения очков команды
-
-  // useEffect(() => {
-  //   const pointsChart = teamData?.pointsChart?.length > 0; // true если есть данные
-  //   setIsPointsChart(pointsChart);
-  // }, [teamData]);
-
   return (
     <TeamChartPagination>
-      <TeamContext.Provider value={{ ...teamData, playersData, isPlayersOpen }}>
-        <Row gap={2}>
-          {isLoading ? (
-            <LoadingOperationsRow />
-          ) : (
-            <OperationsRow>
-              <TabelTitle height="small">
-                Футбольный клуб: {teamName}
-              </TabelTitle>
-              <ButtonsContainer>
-                <ReusableModalWindow>
+      <ReusableModalWindow>
+        <TeamContext.Provider
+          value={{ ...teamData, playersData, isPlayersOpen }}
+        >
+          <Row gap={2}>
+            {isLoading ? (
+              <LoadingOperationsRow />
+            ) : (
+              <OperationsRow>
+                <TabelTitle height="small">
+                  Футбольный клуб: {teamName}
+                </TabelTitle>
+                <ButtonsContainer>
+                  {/* <ReusableModalWindow> */}
                   <ReusableModalWindow.ToggleButton id="deleteTeam">
                     <Button variant="secondary">Удалить</Button>
                   </ReusableModalWindow.ToggleButton>
@@ -159,34 +163,44 @@ function Team() {
                       )}
                     </DeleteTeamForm>
                   </ReusableModalWindow.Window>
-                </ReusableModalWindow>
-                <Button onClick={handleBackClick}>Назад</Button>
-              </ButtonsContainer>
-            </OperationsRow>
-          )}
+                  {/* </ReusableModalWindow> */}
+                  <Button onClick={handleBackClick}>Назад</Button>
+                </ButtonsContainer>
+              </OperationsRow>
+            )}
 
-          <Row type="horizontal">
-            <>
-              {isLoading ? <LoadingTeamInfo /> : <TeamInfoCard />}
-              {!isLoading ? <TeamChart /> : <LoadingTeamChart />}
-            </>
-          </Row>
-
-          {playersData.length > 0 ? (
-            <Row gap={2}>
-              <PlayersRow direction="column">
-                <TabelTitle height="small">Состав </TabelTitle>
-                <StyledButton onClick={togglePlayersOpen}>
-                  <HiChevronDown />
-                </StyledButton>
-              </PlayersRow>
-              {/* Таблица с игроками */}
-              <PlayersInTeam />
+            <Row type="horizontal">
+              <>
+                {isLoading ? <LoadingTeamInfo /> : <TeamInfoCard />}
+                {!isLoading ? <TeamChart /> : <LoadingTeamChart />}
+              </>
             </Row>
-          ) : null}
-          <Row>{""}</Row>
-        </Row>
-      </TeamContext.Provider>
+
+            {playersData.length > 0 ? (
+              <Row gap={2}>
+                <PlayersRow direction="column">
+                  <TabelTitle height="small">Состав </TabelTitle>
+                  <StyledButton onClick={togglePlayersOpen}>
+                    <HiChevronDown />
+                  </StyledButton>
+                </PlayersRow>
+                {/* Таблица с игроками */}
+                <PlayersInTeam />
+              </Row>
+            ) : null}
+            <Row>
+              <ReusableModalWindow.ToggleButton id="planMatch">
+                <Button>Запланировать матч</Button>
+              </ReusableModalWindow.ToggleButton>
+              <ReusableModalWindow.Window id="planMatch">
+                <PlanMatchWrapper>
+                  <MatchSetupModal tableData={tableData} handler={planMatch} />
+                </PlanMatchWrapper>
+              </ReusableModalWindow.Window>
+            </Row>
+          </Row>
+        </TeamContext.Provider>
+      </ReusableModalWindow>
     </TeamChartPagination>
   );
 }

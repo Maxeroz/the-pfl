@@ -130,3 +130,42 @@ export async function getMatchesFromLast24Hours() {
 
   return data;
 }
+
+export async function planMatch({
+  team1,
+  team2,
+  team1ImgUrl,
+  team2ImgUrl,
+  team1Id,
+  team2Id,
+  date,
+}) {
+  try {
+    // Добавляем запись в таблицу allMatches
+    const { data: matchData, error } = await supabase
+      .from("allMatches")
+      .insert([
+        {
+          team1,
+          team2,
+          team1ImgUrl,
+          team2ImgUrl,
+          team1Id,
+          team2Id,
+          isFinished: false,
+          date,
+        },
+      ])
+      .single(); // Возвращает одну запись
+
+    if (error) {
+      throw error; // Генерируем ошибку, если что-то пошло не так
+    }
+
+    console.log("Запись успешно добавлена:", matchData);
+    return matchData;
+  } catch (error) {
+    console.error("Ошибка при добавлении записи:", error.message);
+    return null;
+  }
+}

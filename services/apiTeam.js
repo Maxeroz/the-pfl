@@ -126,21 +126,34 @@ export async function deleteTeamById({ tableName, id, imageUrl }) {
     if (!tableName || !id) {
       throw new Error("Имя таблицы и идентификатор должны быть указаны.");
     }
-    // Удаление записи из таблицы
-    const { error: deleteError } = await supabase
+
+    // Шаг 1: Удаление всех игроков, связанных с командой
+    const { error: deletePlayersError } = await supabase
+      .from("players")
+      .delete()
+      .eq("team_id", id);
+    if (deletePlayersError) {
+      console.error("Ошибка при удалении игроков:", deletePlayersError.message);
+      throw deletePlayersError;
+    }
+    console.log("Игроки успешно удалены из команды:", id);
+
+    // Шаг 2: Удаление записи из таблицы команды
+    const { error: deleteTeamError } = await supabase
       .from(tableName)
       .delete()
       .eq("id", id);
-    if (deleteError) {
-      console.error("Ошибка при удалении записи:", deleteError.message);
-      throw deleteError;
+    if (deleteTeamError) {
+      console.error(
+        "Ошибка при удалении записи команды:",
+        deleteTeamError.message
+      );
+      throw deleteTeamError;
     }
+    console.log("Запись команды успешно удалена:", id);
 
-    console.log("Запись успешно удалена:", id);
-
-    // Удаление изображения из хранилища
+    // Шаг 3: Удаление изображения из хранилища (если есть)
     if (imageUrl) {
-      // Извлечение имени файла из URL и декодирование
       const fileName = decodeURIComponent(
         imageUrl.split("/").pop().split("?")[0]
       );
@@ -156,7 +169,8 @@ export async function deleteTeamById({ tableName, id, imageUrl }) {
         console.log("Изображение успешно удалено:", fileName);
       }
     }
-    return { success: true, message: "Запись и файл успешно удалены." };
+
+    return { success: true, message: "Запись команды и файл успешно удалены." };
   } catch (error) {
     console.error("Ошибка при удалении команды:", error.message);
     return { success: false, message: error.message };

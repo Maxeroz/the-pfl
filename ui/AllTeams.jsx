@@ -26,7 +26,6 @@ const OperationsRow = styled.div`
 `;
 
 function AllTeams() {
-  const { leagueId } = useParams(); // Получаем параметр
   const { isLoading, tableData: teams } = useTable();
 
   const role = useSelector((state) => state.user.role);
@@ -64,7 +63,7 @@ function AllTeams() {
       <Row gap={2}>
         <OperationsRow>
           <TableTitle as={"h3"} height="small">
-            Лига: ПФЛ-{leagueId}
+            <span>Поиск команды:</span>
           </TableTitle>
           <InputFilterTeam value={value} handleChange={handleChange} />
         </OperationsRow>

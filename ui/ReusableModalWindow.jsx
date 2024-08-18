@@ -63,6 +63,13 @@ function Window({ children, id }) {
   );
 }
 
+export function useReusabelModal() {
+  const context = useContext(ReusableModalContext);
+  if (context === undefined)
+    throw new Error("ReusabelModal was used outside ReusabelModalProdider");
+  return context;
+}
+
 // Добавляем компоненты как свойства к ReusableModalWindow
 ReusableModalWindow.ToggleButton = ToggleButton;
 ReusableModalWindow.Window = Window;

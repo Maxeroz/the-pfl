@@ -126,7 +126,7 @@ function AddNewTeamForm() {
 
   const [logoUploaded, setLogoUploaded] = useState(false);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!data.teamLogo || data.teamLogo.length === 0) {
       setError("teamLogo", {
         type: "manual",
@@ -140,20 +140,20 @@ function AddNewTeamForm() {
     const teamLogoFile = data.teamLogo;
     const tableName = `league${leagueId}_table`;
 
-    addNewTeam({ tableName, teamName, teamLogoFile }).catch((error) => {
-      // Обработка ошибки при добавлении команды
+    try {
+      await addNewTeam({ tableName, teamName, teamLogoFile });
+    } catch (error) {
       console.error("Ошибка при добавлении команды:", error);
       setError("teamLogo", {
         type: "manual",
         message: "Не удалось добавить команду. Попробуйте снова.",
       });
-    });
+    }
   };
 
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file) {
-      // Проверка размера файла (например, 5MB)
       const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
       if (file.size > MAX_FILE_SIZE) {
         setError("teamLogo", {
