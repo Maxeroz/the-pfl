@@ -82,6 +82,8 @@ import {
   HiOutlineSquare3Stack3D,
   HiQueueList,
 } from "react-icons/hi2";
+import CenterSpinnerDiv from "./CenterSpinnerDiv";
+import { Suspense } from "react";
 
 // Создание styled-components
 const Layout = styled.div`
@@ -128,10 +130,12 @@ const AppLayout = () => {
         <MainContent>
           <LimitationWidthDiv>
             {/* Основная часть приложения */}
-            <Outlet />
+            <Suspense fallback={<CenterSpinnerDiv />}>
+              <Outlet />
+            </Suspense>
           </LimitationWidthDiv>
         </MainContent>
-        <Sidebar>{/* Дополнительная область */}</Sidebar>
+        <Sidebar />
       </Layout>
     </ThemeProvider>
   );

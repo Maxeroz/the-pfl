@@ -11,6 +11,7 @@ import { useTable } from "../features/table/useTable";
 import ModalNewTeam from "../features/team/ModalNewTeam";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { useAdmin } from "../hooks/useAdmin";
 
 const OperationsRow = styled.div`
   display: flex;
@@ -28,8 +29,7 @@ const OperationsRow = styled.div`
 function AllTeams() {
   const { isLoading, tableData: teams } = useTable();
 
-  const role = useSelector((state) => state.user.role);
-  const isAdmin = role === "admin";
+  const { isAdmin } = useAdmin();
 
   const [value, setValue] = useState("");
 

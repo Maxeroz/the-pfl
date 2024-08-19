@@ -27,6 +27,8 @@ import MatchSetupModal from "./MatchSetupModal";
 import { useTable } from "../table/useTable";
 import { usePlanMatch } from "./usePlanMatch";
 import PlanMatchWrapper from "../../ui/PlanMatchWrapper";
+import ScheduledMathes from "../../ui/ScheduledMathes";
+import MatchSetUpTableContainer from "../../ui/MatchSetUpTableContainer";
 
 const StyledButton = styled.button`
   background: none;
@@ -189,14 +191,23 @@ function Team() {
               </Row>
             ) : null}
             <Row>
-              <ReusableModalWindow.ToggleButton id="planMatch">
-                <Button>Запланировать матч</Button>
-              </ReusableModalWindow.ToggleButton>
               <ReusableModalWindow.Window id="planMatch">
                 <PlanMatchWrapper>
-                  <MatchSetupModal tableData={tableData} handler={planMatch} />
+                  <MatchSetupModal
+                    tableData={tableData}
+                    handler={planMatch}
+                    teamId={teamId}
+                  />
                 </PlanMatchWrapper>
               </ReusableModalWindow.Window>
+            </Row>
+
+            <Row>
+              <ScheduledMathes
+                light="light"
+                width="500px"
+                // isFixedHeight={true}
+              />
             </Row>
           </Row>
         </TeamContext.Provider>

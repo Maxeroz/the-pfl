@@ -79,7 +79,10 @@ const TeamScore = styled.span`
 
 function MatchSideBar({ match }) {
   const date = convertToEuropeanDate(match.created_at);
+  const planDate = convertToEuropeanDate(match.date);
   const { team1: team1Name, team2: team2Name } = match;
+
+  const isFinished = match.isFinished;
 
   // Определяем, какая команда выиграла или ничья
   const isTeam1Won = match.team1Scored > match.team2Scored;
@@ -119,7 +122,7 @@ function MatchSideBar({ match }) {
               <TeamScore>{match.team1Scored}</TeamScore>-
               <TeamScore>{match.team2Scored}</TeamScore>
             </TeamsScoredContainer>
-            <Date>{date}</Date>
+            {isFinished ? <Date>{date}</Date> : <Date>{planDate}</Date>}
           </ResultsAndDate>
           <StyledTeamInfo>
             <TeamImgContainer borderColor={team2BorderColor}>

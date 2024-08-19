@@ -40,35 +40,32 @@ function App() {
         <ReactQueryDevtools />
         <GlobalStyles />
         <BrowserRouter>
-          <Suspense fallback={<CenterSpinnerDiv />}>
-            <Routes>
-              <Route
-                element={
-                  <ProtectedRoute>
-                    <AppLayout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<Navigate to="profile" replace />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="applications" element={<Applications />} />
-                <Route path="games" element={<Games />} />
-                <Route path="table" element={<TournamentTable />} />
-                <Route path="statistics" element={<Statistics />} />
-                <Route path="news" element={<News />} />
-                <Route
-                  path="disqualifications"
-                  element={<Disqualifications />}
-                />
-                <Route path="teams" element={<Teams />}>
-                  <Route path="league/:leagueId" element={<AllTeams />} />
-                  <Route path="league/:leagueId/team/:id" element={<Team />} />
-                </Route>
+          {/* <Suspense fallback={<CenterSpinnerDiv />}> */}
+          <Routes>
+            <Route
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate to="profile" replace />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="applications" element={<Applications />} />
+              <Route path="games" element={<Games />} />
+              <Route path="table" element={<TournamentTable />} />
+              <Route path="statistics" element={<Statistics />} />
+              <Route path="news" element={<News />} />
+              <Route path="disqualifications" element={<Disqualifications />} />
+              <Route path="teams" element={<Teams />}>
+                <Route path="league/:leagueId" element={<AllTeams />} />
+                <Route path="league/:leagueId/team/:id" element={<Team />} />
               </Route>
-              <Route path="login" element={<Login />} />
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </Suspense>
+            </Route>
+            <Route path="login" element={<Login />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+          {/* </Suspense> */}
         </BrowserRouter>
         <Toaster
           position="top-center"

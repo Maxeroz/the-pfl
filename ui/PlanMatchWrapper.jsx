@@ -18,7 +18,7 @@ const MatchSetupContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 500px; /* Ширина модального окна */
+  width: 500px;
   background-color: var(--color-grey-0);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: var(--border-radius-lg-pfl);
@@ -35,7 +35,7 @@ function PlanMatchWrapper({ children }) {
 
   return (
     <>
-      <Overlay />
+      {/* <Overlay /> */}
       <MatchSetupContainer>{children}</MatchSetupContainer>
     </>
   );

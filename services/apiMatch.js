@@ -118,6 +118,7 @@ export async function getMatchesFromLast24Hours() {
   const { data, error } = await supabase
     .from("allMatches")
     .select("*")
+    .eq("isFinished", true)
     .gte(
       "created_at",
       new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
@@ -168,4 +169,23 @@ export async function planMatch({
     console.error("Ошибка при добавлении записи:", error.message);
     return null;
   }
+}
+
+export async function getFirstThreeMatchesById(id) {
+  // Выполняем запрос к таблице allMatches с фильтрацией по team1Id и isFinished
+  const { data, error } = await supabase
+    .from("allMatches")
+    .select("*")
+    .eq("team1Id", id)
+    .eq("isFinished", false) // Фильтр по isFinished === false
+    .limit(3);
+
+  // Обрабатываем возможные ошибки
+  if (error) {
+    console.error("Ошибка при получении данных:", error);
+    return null;
+  }
+
+  // Возвращаем полученные данные
+  return data;
 }

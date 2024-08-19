@@ -5,6 +5,8 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { IoMdNotifications } from "react-icons/io";
 import { HiMiniUser } from "react-icons/hi2";
 
+import { HiMiniUserCircle } from "react-icons/hi2";
+
 const UserContainer = styled.div`
   display: flex;
   align-items: center;
@@ -79,9 +81,13 @@ const StyledHiMiniUser = styled(HiMiniUser)`
   color: var(--color-primary-500);
 `;
 
+const StyledHiMiniUserCircle = styled(HiMiniUserCircle)`
+  color: var(--color-secondary-300);
+`;
+
 function User() {
   const { settings, isLoading } = useSettings();
-  const avatar = settings?.default_avatar;
+  const avatar = false;
 
   return (
     <UserContainer>
@@ -92,8 +98,8 @@ function User() {
         </NotificationButton>
       </RoundedContainer>
       <RoundedContainer>
-        {isLoading && <StyledHiMiniUser />}
-        {!isLoading && <UserAvatar src={avatar} />}
+        {isLoading && <StyledHiMiniUser size={52} />}
+        {!avatar && !isLoading && <StyledHiMiniUserCircle size={52} />}
       </RoundedContainer>
     </UserContainer>
   );

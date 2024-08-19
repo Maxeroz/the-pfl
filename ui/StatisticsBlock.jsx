@@ -225,17 +225,15 @@ function StatisticsBlock({ light, width, height }) {
             <ElementsWrapper>
               <SupportTextSpan>Сыгранные матчи:</SupportTextSpan>
               <MatchesUl fadeIn={fadeIn}>
-                {visibleMatches
-                  .filter((match) => match.isFinished === true)
-                  .map((match, index) => (
-                    <MatchLi
-                      key={match.id}
-                      isVisible={isVisible}
-                      delay={index * 0.1}
-                    >
-                      <MatchSideBar match={match} />
-                    </MatchLi>
-                  ))}
+                {visibleMatches.map((match, index) => (
+                  <MatchLi
+                    key={match.id}
+                    isVisible={isVisible}
+                    delay={index * 0.1}
+                  >
+                    <MatchSideBar match={match} />
+                  </MatchLi>
+                ))}
               </MatchesUl>
             </ElementsWrapper>
 
